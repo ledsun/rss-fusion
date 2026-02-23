@@ -20,6 +20,13 @@ READ_TIMEOUT = 20
 MAX_REDIRECTS = 3
 MAX_ITEMS = 50
 
+# Item represents a merged feed entry
+if defined?(Data) && Data.respond_to?(:define)
+  Item = Data.define(:title, :url, :published_at, :feed_name)
+else
+  Item = Struct.new(:title, :url, :published_at, :feed_name)
+end
+
 Stats = Struct.new(
   :feeds_total,
   :feeds_succeeded,
@@ -153,11 +160,11 @@ def build_rss(items)
 
     items.each do |item|
       maker.items.new_item do |entry|
-        entry.title = item[:title]
-        entry.link = item[:url]
-        entry.guid.content = item[:url]
+        entry.title = item.title
+        entry.link = item.url
+        entry.guid.content = item.url
         entry.guid.isPermaLink = true
-        entry.pubDate = item[:published_at]
+        entry.pubDate = item.published_at
       end
     end
   end.to_s
@@ -217,19 +224,19 @@ def main
       end
       seen_urls[url] = true
 
-      merged_items << {
-        title: prefixed_title(feed[:name], entry.respond_to?(:title) ? entry.title : nil),
-        url: url,
-        published_at: extract_published_at(entry, fetched_at),
-        feed_name: feed[:name]
-      }
+      merged_items << Item.new(
+        prefixed_title(feed[:name], entry.respond_to?(:title) ? entry.title : nil),
+        url,
+        extract_published_at(entry, fetched_at),
+        feed[:name]
+      )
     end
   rescue StandardError => e
     stats.feeds_failed += 1
     log "Feed fetch/parse failed: #{feed[:name]} #{feed[:url]} (#{e.class}: #{e.message})"
   end
 
-  merged_items.sort_by! { |item| item[:published_at] || Time.at(0) }
+  merged_items.sort_by! { |item| item.published_at || Time.at(0) }
   merged_items.reverse!
   merged_items = merged_items.first(MAX_ITEMS)
   stats.items_output = merged_items.length
