@@ -1,9 +1,25 @@
 feeds:
+  - name: Qiita claude
+    url: https://qiita.com/tags/claude/feed
+  - name: Qiita claudecode
+    url: https://qiita.com/tags/claudecode/feed
+  - name: Qiita codex
+    url: https://qiita.com/tags/codex/feed
+  - name: Qiita copilot
+    url: https://qiita.com/tags/copilot/feed
+  - name: Qiita gemini
+    url: https://qiita.com/tags/gemini/feed
+  - name: Qiita githubcopilot
+    url: https://qiita.com/tags/githubcopilot/feed
+  - name: Qiita openai
+    url: https://qiita.com/tags/openai/feed
   - name: Zenn ClaudeCode
     url: https://zenn.dev/topics/claudecode/feed
   - name: Zenn Codex
     url: https://zenn.dev/topics/codex/feed
-  - name: Qiita codex
-    url: https://qiita.com/tags/codex/feed
-  - name: Qiita claudecode
-    url: https://qiita.com/tags/claudecode/feed
+  - name: Zenn Gemini
+    url: https://zenn.dev/topics/gemini/feed
+  - name: Zenn GitHubCopilot
+    url: https://zenn.dev/topics/githubcopilot/feed
+  - name: Zenn OpenAI
+    url: https://zenn.dev/topics/openai/feed
