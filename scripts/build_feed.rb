@@ -146,7 +146,7 @@ end
 
 def build_rss(items)
   RSS::Maker.make("2.0") do |maker|
-    maker.channel.title = "Merged RSS"
+    maker.channel.title = "RSS Fusion"
     maker.channel.description = "Merged RSS feed generated from multiple sources"
     maker.channel.link = "https://example.invalid/merged.xml"
     maker.channel.updated = Time.now
