@@ -1,0 +1,2 @@
+# Prefix blacklist rules (one per line)
+https://qiita.com/ennagara128

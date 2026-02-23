@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RSS Fusion</title>
+    <style>
+      :root {
+        --bg: #f6f3ea;
+        --ink: #1f1c17;
+        --accent: #0f766e;
+        --card: #fffaf0;
+        --line: #d8d0bd;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100svh;
+        font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 15% 20%, #efe4b6 0, transparent 40%),
+          radial-gradient(circle at 80% 10%, #c4ebe7 0, transparent 35%),
+          linear-gradient(180deg, #f7f4ec, #efe9dd);
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+      main {
+        width: min(720px, 100%);
+        background: color-mix(in srgb, var(--card) 88%, white);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 16px 48px rgba(31, 28, 23, 0.08);
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(1.4rem, 3vw, 2rem);
+      }
+      p {
+        margin: 0 0 12px;
+        line-height: 1.6;
+      }
+      a {
+        color: var(--accent);
+        font-weight: 700;
+      }
+      code {
+        background: #efe7d6;
+        padding: 2px 6px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>RSS Fusion</h1>
+      <p>複数のRSS/Atomフィードを統合し、重複URLとブラックリストURLを除外した配信用フィードです。</p>
+      <p>購読先: <a href="./merged.xml"><code>merged.xml</code></a></p>
+      <p>更新: GitHub Actions により毎時実行（成功時に GitHub Pages へデプロイ）</p>
+    </main>
+  </body>
+</html>

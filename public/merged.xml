@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+  xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+  <channel>
+    <title>Merged RSS</title>
+    <link>https://example.invalid/merged.xml</link>
+    <description>Merged RSS feed generated from multiple sources</description>
+    <pubDate>Mon, 23 Feb 2026 09:35:02 +0900</pubDate>
+    <item>
+      <title>[Qiita claudecode] AI の苦手な仕事をスクリプトに逃がす — スキル棚卸しコマンドの設計・実装・公開の全記録</title>
+      <link>https://qiita.com/shimo4228/items/924a00bbc0760d0dfbda</link>
+      <pubDate>Mon, 23 Feb 2026 00:26:58 -0000</pubDate>
+      <guid isPermaLink="true">https://qiita.com/shimo4228/items/924a00bbc0760d0dfbda</guid>
+      <dc:date>2026-02-23T00:26:58Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] Entire.ioのコンセプトは正しい。でも今はまだ早い (2026-02-23時点)</title>
+      <link>https://zenn.dev/aromarious/articles/20260223-entire-io-review</link>
+      <pubDate>Mon, 23 Feb 2026 00:15:30 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/aromarious/articles/20260223-entire-io-review</guid>
+      <dc:date>2026-02-23T00:15:30Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] &quot;Claude Code Agent Teams: Ollama×Claude Codeで「4人の仮想チーム」を召喚して開発してみた</title>
+      <link>https://zenn.dev/lluminai_tech/articles/4a0671f8a1bb06</link>
+      <pubDate>Mon, 23 Feb 2026 00:10:24 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/lluminai_tech/articles/4a0671f8a1bb06</guid>
+      <dc:date>2026-02-23T00:10:24Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] Entire CLI を公開リポジトリで使う ― private/public 二重リモート構成</title>
+      <link>https://zenn.dev/aromarious/articles/20260223-entire-public-repo</link>
+      <pubDate>Mon, 23 Feb 2026 00:03:21 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/aromarious/articles/20260223-entire-public-repo</guid>
+      <dc:date>2026-02-23T00:03:21Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] Claude Code のSkillで自作スラッシュコマンドを作ろう</title>
+      <link>https://zenn.dev/long910/articles/2026-02-23-claude-code-skills</link>
+      <pubDate>Mon, 23 Feb 2026 00:00:01 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/long910/articles/2026-02-23-claude-code-skills</guid>
+      <dc:date>2026-02-23T00:00:01Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] AGENTS.mdの書き方完全ガイド — 実際に使っているテンプレート公開</title>
+      <link>https://zenn.dev/kenimo49/articles/agents-md-complete-guide</link>
+      <pubDate>Sun, 22 Feb 2026 23:00:11 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/kenimo49/articles/agents-md-complete-guide</guid>
+      <dc:date>2026-02-22T23:00:11Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] MulmoCast Claude Plugin - Claude Codeから動画プレゼンテーションを作成</title>
+      <link>https://zenn.dev/singularity/articles/mulmocast-claude-plugin</link>
+      <pubDate>Sun, 22 Feb 2026 22:06:12 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/singularity/articles/mulmocast-claude-plugin</guid>
+      <dc:date>2026-02-22T22:06:12Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] Claude Code の真価はコード生成ではない ── コンテキスト自律操作という本質</title>
+      <link>https://zenn.dev/shimo4228/articles/claude-code-context-orchestration</link>
+      <pubDate>Sun, 22 Feb 2026 22:00:13 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/shimo4228/articles/claude-code-context-orchestration</guid>
+      <dc:date>2026-02-22T22:00:13Z</dc:date>
+    </item>
+    <item>
+      <title>[Qiita claudecode] Claude Code の真価はコード生成ではない ── コンテキスト自律操作という本質</title>
+      <link>https://qiita.com/shimo4228/items/a14c17b40f3861d628b7</link>
+      <pubDate>Sun, 22 Feb 2026 22:00:11 -0000</pubDate>
+      <guid isPermaLink="true">https://qiita.com/shimo4228/items/a14c17b40f3861d628b7</guid>
+      <dc:date>2026-02-22T22:00:11Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] Next.js × Claude Codeで習慣アプリ「HabitBird」をつくってリリースした</title>
+      <link>https://zenn.dev/hovinci/articles/f8c4f597e052ad</link>
+      <pubDate>Sun, 22 Feb 2026 22:00:05 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/hovinci/articles/f8c4f597e052ad</guid>
+      <dc:date>2026-02-22T22:00:05Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] ISSUE駆動開発でシンプルAI活用</title>
+      <link>https://zenn.dev/tage/articles/cec8d807e8f69f</link>
+      <pubDate>Sun, 22 Feb 2026 21:30:01 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/tage/articles/cec8d807e8f69f</guid>
+      <dc:date>2026-02-22T21:30:01Z</dc:date>
+    </item>
+    <item>
+      <title>[Qiita claudecode] 「CLAUDE.mdを入れるだけで10倍」は半分本当。実は効いているのは“AIへの指示書”より“チームの運用設計”だった話</title>
+      <link>https://qiita.com/taketsuyo/items/5615f38115ca82988c72</link>
+      <pubDate>Sun, 22 Feb 2026 21:25:15 -0000</pubDate>
+      <guid isPermaLink="true">https://qiita.com/taketsuyo/items/5615f38115ca82988c72</guid>
+      <dc:date>2026-02-22T21:25:15Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] Claude Code プラグインの settings.json、期待と現実</title>
+      <link>https://zenn.dev/massy22/articles/3a610c89772a3c</link>
+      <pubDate>Sun, 22 Feb 2026 20:03:00 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/massy22/articles/3a610c89772a3c</guid>
+      <dc:date>2026-02-22T20:03:00Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] Chrome 145 のリモートデバッグが「沈黙の失敗」をする罠：--user-data-dir を忘れると何も起きない</title>
+      <link>https://zenn.dev/davidai311/articles/chrome-remote-debugging-silent-failure</link>
+      <pubDate>Sun, 22 Feb 2026 16:23:27 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/davidai311/articles/chrome-remote-debugging-silent-failure</guid>
+      <dc:date>2026-02-22T16:23:27Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] Claudeを賢く使うためのAgent Skills調査まとめ</title>
+      <link>https://zenn.dev/tukimura/articles/cce63022600667</link>
+      <pubDate>Sun, 22 Feb 2026 15:42:56 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/tukimura/articles/cce63022600667</guid>
+      <dc:date>2026-02-22T15:42:56Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] コードからFigmaへ・フィグちゃんとクロちゃんのよもやま話</title>
+      <link>https://zenn.dev/kozarusha/articles/cff65938151c31</link>
+      <pubDate>Sun, 22 Feb 2026 15:40:04 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/kozarusha/articles/cff65938151c31</guid>
+      <dc:date>2026-02-22T15:40:04Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] Claude Code時代の「許可UX」が来た話。分からないコマンドを要約して、メニューバーで判断する発想がかなり本質的だった</title>
+      <link>https://zenn.dev/taketsuyo/articles/446e5696a3f85b</link>
+      <pubDate>Sun, 22 Feb 2026 15:26:41 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/taketsuyo/articles/446e5696a3f85b</guid>
+      <dc:date>2026-02-22T15:26:41Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] Claude Code Skillを本番品質で育てる：テスト戦略・失敗パターン3選・チーム配布まで完全ガイド</title>
+      <link>https://zenn.dev/yujmatsu/articles/20260223_claude_skill_testing_distribution</link>
+      <pubDate>Sun, 22 Feb 2026 15:00:01 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/yujmatsu/articles/20260223_claude_skill_testing_distribution</guid>
+      <dc:date>2026-02-22T15:00:01Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] 【コピペ可】静的技術だけで学習サイトを、AIフル活用で立ち上げた方法</title>
+      <link>https://zenn.dev/acntechjp/articles/9b341cb42e289f</link>
+      <pubDate>Sun, 22 Feb 2026 13:18:44 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/acntechjp/articles/9b341cb42e289f</guid>
+      <dc:date>2026-02-22T13:18:44Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] 週刊AI駆動開発 - 2026年02月22日</title>
+      <link>https://zenn.dev/pppp303/articles/weekly_ai_20260222</link>
+      <pubDate>Sun, 22 Feb 2026 12:42:05 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/pppp303/articles/weekly_ai_20260222</guid>
+      <dc:date>2026-02-22T12:42:05Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] ClaudeCodeを人型銀髪ドラゴン幼女にする</title>
+      <link>https://zenn.dev/gami113/articles/20250222-claude-code-807943b37ecd9d</link>
+      <pubDate>Sun, 22 Feb 2026 12:40:21 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/gami113/articles/20250222-claude-code-807943b37ecd9d</guid>
+      <dc:date>2026-02-22T12:40:21Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] Claude Codeを無料で始める ── 最初の1プロンプトまで</title>
+      <link>https://zenn.dev/mcc_code/articles/claude-code-free-start-guide</link>
+      <pubDate>Sun, 22 Feb 2026 11:50:35 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/mcc_code/articles/claude-code-free-start-guide</guid>
+      <dc:date>2026-02-22T11:50:35Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn ClaudeCode] Claude CodeからCodexへcommands、skills、agentsを引っ越す + Codex感想</title>
+      <link>https://zenn.dev/koki_n22/articles/55349310c12638</link>
+      <pubDate>Sun, 22 Feb 2026 11:36:02 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/koki_n22/articles/55349310c12638</guid>
+      <dc:date>2026-02-22T11:36:02Z</dc:date>
+    </item>
+    <item>
+      <title>[Qiita codex] 自分の2026年2月時点でのAIを活用した個人開発スタイル</title>
+      <link>https://qiita.com/retore/items/4a31f51e82b967ef653c</link>
+      <pubDate>Sun, 22 Feb 2026 09:00:01 -0000</pubDate>
+      <guid isPermaLink="true">https://qiita.com/retore/items/4a31f51e82b967ef653c</guid>
+      <dc:date>2026-02-22T09:00:01Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] Claude Code生みの親の哲学を再現する ── 自己修正ルールとコード簡素化パイプライン</title>
+      <link>https://zenn.dev/mcc_code/articles/claude-code-boris-governance</link>
+      <pubDate>Sun, 22 Feb 2026 05:36:09 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/mcc_code/articles/claude-code-boris-governance</guid>
+      <dc:date>2026-02-22T05:36:09Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] &quot;止まらない&quot;AIエージェント並列運用基盤を本気で作った</title>
+      <link>https://zenn.dev/andyyyy64/articles/5a136c42b63a51</link>
+      <pubDate>Sun, 22 Feb 2026 04:30:34 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/andyyyy64/articles/5a136c42b63a51</guid>
+      <dc:date>2026-02-22T04:30:34Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] みんなCLAUDE.mdとかフォルダの数だけコピペしてるの?</title>
+      <link>https://zenn.dev/tacogips/articles/8bfc718416e252</link>
+      <pubDate>Sat, 21 Feb 2026 12:47:37 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/tacogips/articles/8bfc718416e252</guid>
+      <dc:date>2026-02-21T12:47:37Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] GPT-5.3-Codexの教科書</title>
+      <link>https://zenn.dev/microsoft/articles/openai_gpt_53_codex_textbook</link>
+      <pubDate>Sat, 21 Feb 2026 08:21:45 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/microsoft/articles/openai_gpt_53_codex_textbook</guid>
+      <dc:date>2026-02-21T08:21:45Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] Week:03｜AI並列開発 + Codex 4回レビューでFlutter/Firebaseを仕上げた実戦ログ</title>
+      <link>https://zenn.dev/deke_pearson700/articles/f9f406366fcc28</link>
+      <pubDate>Sat, 21 Feb 2026 05:33:39 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/deke_pearson700/articles/f9f406366fcc28</guid>
+      <dc:date>2026-02-21T05:33:39Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] Claude Code vs Codex──3ヶ月使い倒して見えた「最適な使い分け」</title>
+      <link>https://zenn.dev/kenimo49/articles/claude-code-vs-codex-practical-guide</link>
+      <pubDate>Sat, 21 Feb 2026 01:00:10 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/kenimo49/articles/claude-code-vs-codex-practical-guide</guid>
+      <dc:date>2026-02-21T01:00:10Z</dc:date>
+    </item>
+    <item>
+      <title>[Qiita codex] Claude/Codex起動時にターミナル背景色を自動変更する（AI別パレット対応）</title>
+      <link>https://qiita.com/hideto/items/adef9e04131ae1c3c7d3</link>
+      <pubDate>Fri, 20 Feb 2026 19:32:58 -0000</pubDate>
+      <guid isPermaLink="true">https://qiita.com/hideto/items/adef9e04131ae1c3c7d3</guid>
+      <dc:date>2026-02-20T19:32:58Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] AIエージェントに開発ループを全部やらせて、寝てる間に数万行のコードを書かせる「Roboppi」を作ったはなし</title>
+      <link>https://zenn.dev/reoring/articles/fb3fbf83589972</link>
+      <pubDate>Fri, 20 Feb 2026 08:06:12 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/reoring/articles/fb3fbf83589972</guid>
+      <dc:date>2026-02-20T08:06:12Z</dc:date>
+    </item>
+    <item>
+      <title>[Qiita codex] OpenAI公式「Codex Prompting Guide」を読み解く──gpt-5.2-codexを最大限活かすプロンプト設計</title>
+      <link>https://qiita.com/nogataka/items/d717d051882bfb2d2819</link>
+      <pubDate>Fri, 20 Feb 2026 06:04:12 -0000</pubDate>
+      <guid isPermaLink="true">https://qiita.com/nogataka/items/d717d051882bfb2d2819</guid>
+      <dc:date>2026-02-20T06:04:12Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] Codexにもマルチエージェント機能が登場！</title>
+      <link>https://zenn.dev/aliyell/articles/66283c210f31f5</link>
+      <pubDate>Fri, 20 Feb 2026 01:37:31 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/aliyell/articles/66283c210f31f5</guid>
+      <dc:date>2026-02-20T01:37:31Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] AIエージェント × knipで無駄コードを簡単に掃除</title>
+      <link>https://zenn.dev/knowledgework/articles/knip-with-ai-agent</link>
+      <pubDate>Thu, 19 Feb 2026 23:12:14 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/knowledgework/articles/knip-with-ai-agent</guid>
+      <dc:date>2026-02-19T23:12:14Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] dprintのシェルスクリプトプラグインを書いた（書かせた）</title>
+      <link>https://zenn.dev/hrko/articles/9ffd8d02ca5c63</link>
+      <pubDate>Thu, 19 Feb 2026 14:46:01 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/hrko/articles/9ffd8d02ca5c63</guid>
+      <dc:date>2026-02-19T14:46:01Z</dc:date>
+    </item>
+    <item>
+      <title>[Qiita codex] Codex CLIでもマルチエージェント(subagent)機能が利用可能になった</title>
+      <link>https://qiita.com/syonon/items/b75a50bf81cb723fda1c</link>
+      <pubDate>Thu, 19 Feb 2026 13:32:22 -0000</pubDate>
+      <guid isPermaLink="true">https://qiita.com/syonon/items/b75a50bf81cb723fda1c</guid>
+      <dc:date>2026-02-19T13:32:22Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] Codex に「別の観点」を与えたら、これまでのレビューでは出てこなかった問題が出てきた</title>
+      <link>https://zenn.dev/ytksato/articles/2d15afb03113f2</link>
+      <pubDate>Thu, 19 Feb 2026 12:55:30 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/ytksato/articles/2d15afb03113f2</guid>
+      <dc:date>2026-02-19T12:55:30Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] CodexでPlayfabバックエンド処理の実行テストを自動化する</title>
+      <link>https://zenn.dev/kiankinakomochi/articles/c974c334933f4c</link>
+      <pubDate>Thu, 19 Feb 2026 10:31:35 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/kiankinakomochi/articles/c974c334933f4c</guid>
+      <dc:date>2026-02-19T10:31:35Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] AIエージェント同士に判断を委任する運用設計 — レビューが必要ならまずCodex、最後の砦はClaude</title>
+      <link>https://zenn.dev/sei_ai_lab/articles/ai-agent-decision-delegation</link>
+      <pubDate>Wed, 18 Feb 2026 13:48:12 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/sei_ai_lab/articles/ai-agent-decision-delegation</guid>
+      <dc:date>2026-02-18T13:48:12Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] LLMは入れ替わる。Skillは積み上がる。— Codex × AOAIで考える分離設計</title>
+      <link>https://zenn.dev/naokky/articles/202602-agent-skills-selectedllm</link>
+      <pubDate>Wed, 18 Feb 2026 12:47:44 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/naokky/articles/202602-agent-skills-selectedllm</guid>
+      <dc:date>2026-02-18T12:47:44Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] AI エージェントのワークフローをスキルで自動化する ― Just Do It!</title>
+      <link>https://zenn.dev/kenfdev/articles/e27d49b8dc12e4</link>
+      <pubDate>Wed, 18 Feb 2026 11:00:01 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/kenfdev/articles/e27d49b8dc12e4</guid>
+      <dc:date>2026-02-18T11:00:01Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] Codex v0.102 Multi-Agent 動作検証</title>
+      <link>https://zenn.dev/optiverse_now/articles/28d5a30f240b8e</link>
+      <pubDate>Wed, 18 Feb 2026 00:17:05 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/optiverse_now/articles/28d5a30f240b8e</guid>
+      <dc:date>2026-02-18T00:17:05Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] Codex 5.3 と Opus 4.6 どう使い分ける？実務で使って分かったこと</title>
+      <link>https://zenn.dev/ichigoooo/articles/327c52983b18a3</link>
+      <pubDate>Tue, 17 Feb 2026 15:41:30 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/ichigoooo/articles/327c52983b18a3</guid>
+      <dc:date>2026-02-17T15:41:30Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] TAKTが素晴らしかった、なぜコーディングエージェントのオーケストレーションが必要なのか</title>
+      <link>https://zenn.dev/ito/articles/472d6f11023eed</link>
+      <pubDate>Tue, 17 Feb 2026 15:17:23 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/ito/articles/472d6f11023eed</guid>
+      <dc:date>2026-02-17T15:17:23Z</dc:date>
+    </item>
+    <item>
+      <title>[Zenn Codex] Codex CLIのテレメトリデータをSigNozに流してダッシュボードで見る</title>
+      <link>https://zenn.dev/asahima/articles/048f049b1bc3c7</link>
+      <pubDate>Tue, 17 Feb 2026 15:15:06 -0000</pubDate>
+      <guid isPermaLink="true">https://zenn.dev/asahima/articles/048f049b1bc3c7</guid>
+      <dc:date>2026-02-17T15:15:06Z</dc:date>
+    </item>
+    <dc:date>2026-02-23T09:35:02.80483+09:00</dc:date>
+  </channel>
+</rss>

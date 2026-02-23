@@ -1,0 +1,9 @@
+feeds:
+  - name: Zenn ClaudeCode
+    url: https://zenn.dev/topics/claudecode/feed
+  - name: Zenn Codex
+    url: https://zenn.dev/topics/codex/feed
+  - name: Qiita codex
+    url: https://qiita.com/tags/codex/feed
+  - name: Qiita claudecode
+    url: https://qiita.com/tags/claudecode/feed
