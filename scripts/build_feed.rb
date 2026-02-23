@@ -21,11 +21,7 @@ MAX_REDIRECTS = 3
 MAX_ITEMS = 50
 
 # Item represents a merged feed entry
-if defined?(Data) && Data.respond_to?(:define)
-  Item = Data.define(:title, :url, :published_at, :feed_name)
-else
-  Item = Struct.new(:title, :url, :published_at, :feed_name)
-end
+Item = Data.define(:title, :url, :published_at, :feed_name)
 
 Stats = Struct.new(
   :feeds_total,
