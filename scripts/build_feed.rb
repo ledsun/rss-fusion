@@ -23,7 +23,7 @@ MAX_ITEMS = 50
 # Item represents a merged feed entry
 Item = Data.define(:title, :url, :published_at, :feed_name)
 
-Stats = Data.define(
+class Stats < Data.define(
   :feeds_total,
   :feeds_succeeded,
   :feeds_failed,
@@ -33,6 +33,13 @@ Stats = Data.define(
   :items_skipped_duplicate,
   :items_output
 )
+  def summary
+    [
+      "feeds total=#{feeds_total} success=#{feeds_succeeded} failed=#{feeds_failed}",
+      "items fetched=#{items_fetched} skipped_no_url=#{items_skipped_no_url} skipped_blacklist=#{items_skipped_blacklist} skipped_duplicate=#{items_skipped_duplicate} output=#{items_output}"
+    ]
+  end
+end
 
 def log(msg)
   puts "[build_feed] #{msg}"
@@ -239,8 +246,7 @@ def main
   content = build_rss(merged_items)
   write_atomically(OUTPUT_PATH, TMP_OUTPUT_PATH, content)
 
-  log "Summary feeds total=#{stats.feeds_total} success=#{stats.feeds_succeeded} failed=#{stats.feeds_failed}"
-  log "Summary items fetched=#{stats.items_fetched} skipped_no_url=#{stats.items_skipped_no_url} skipped_blacklist=#{stats.items_skipped_blacklist} skipped_duplicate=#{stats.items_skipped_duplicate} output=#{stats.items_output}"
+  stats.summary.each { |line| log "Summary #{line}" }
   log "Wrote #{OUTPUT_PATH}"
 end
 
