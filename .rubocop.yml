@@ -1,0 +1,23 @@
+AllCops:
+  NewCops: disable
+  TargetRubyVersion: 4.0
+
+Metrics/MethodLength:
+  Max: 25
+  Exclude:
+    - 'scripts/build_feed.rb'
+
+Metrics/AbcSize:
+  Max: 30
+  Exclude:
+    - 'scripts/build_feed.rb'
+
+Metrics/CyclomaticComplexity:
+  Max: 12
+
+Metrics/PerceivedComplexity:
+  Max: 13
+
+Naming/MethodName:
+  Exclude:
+    - 'test/feed_test.rb'

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Stats tracks counters for fetch/build processing and renders summary lines.
 class Stats
   attr_reader :feeds_total, :feeds_succeeded, :feeds_failed,
               :items_fetched, :items_skipped_no_url, :items_skipped_blacklist,
@@ -34,7 +35,13 @@ class Stats
   def summary
     [
       "feeds total=#{feeds_total} success=#{feeds_succeeded} failed=#{feeds_failed}",
-      "items fetched=#{items_fetched} skipped_no_url=#{items_skipped_no_url} skipped_blacklist=#{items_skipped_blacklist} skipped_duplicate=#{items_skipped_duplicate} output=#{items_output}"
+      [
+        "items fetched=#{items_fetched}",
+        "skipped_no_url=#{items_skipped_no_url}",
+        "skipped_blacklist=#{items_skipped_blacklist}",
+        "skipped_duplicate=#{items_skipped_duplicate}",
+        "output=#{items_output}"
+      ].join(' ')
     ]
   end
 end

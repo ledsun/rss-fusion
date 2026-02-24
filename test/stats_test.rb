@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "minitest/autorun"
-require_relative "../scripts/stats"
+require 'minitest/autorun'
+require_relative '../scripts/stats'
 
 class StatsTest < Minitest::Test
   def setup
@@ -88,14 +88,14 @@ class StatsTest < Minitest::Test
   def test_summary_feeds_line
     3.times { @stats.feed_succeeded }
     2.times { @stats.feed_failed }
-    assert_equal "feeds total=5 success=3 failed=2", @stats.summary[0]
+    assert_equal 'feeds total=5 success=3 failed=2', @stats.summary[0]
   end
 
   def test_summary_items_line
     10.times { @stats.item_fetched }
     @stats.item_skipped_no_url
     @stats.finalize(output: 4, blacklisted: 2, duplicate: 3)
-    assert_equal "items fetched=10 skipped_no_url=1 skipped_blacklist=2 skipped_duplicate=3 output=4", @stats.summary[1]
+    assert_equal 'items fetched=10 skipped_no_url=1 skipped_blacklist=2 skipped_duplicate=3 output=4', @stats.summary[1]
   end
 
   def test_summary_returns_two_lines

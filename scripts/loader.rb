@@ -2,6 +2,7 @@
 
 require 'yaml'
 
+# Loader reads and validates feeds.yml and exposes feed rows via Enumerable.
 class Loader
   class ConfigFormatError < StandardError; end
 
@@ -29,15 +30,11 @@ class Loader
   private
 
   def build_item(row)
-    unless row.is_a?(Hash)
-      raise ConfigFormatError, "Invalid feed row: expected mapping (#{row.inspect})"
-    end
+    raise ConfigFormatError, "Invalid feed row: expected mapping (#{row.inspect})" unless row.is_a?(Hash)
 
     name = row['name'].to_s.strip
     url = row['url'].to_s.strip
-    if name.empty? || url.empty?
-      raise ConfigFormatError, "Invalid feed row: name and url are required (#{row.inspect})"
-    end
+    raise ConfigFormatError, "Invalid feed row: name and url are required (#{row.inspect})" if name.empty? || url.empty?
 
     { name: name, url: url }
   end

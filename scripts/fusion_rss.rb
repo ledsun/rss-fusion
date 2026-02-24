@@ -3,6 +3,7 @@
 require 'rss'
 require_relative 'feed'
 
+# FusionRss collects entries and builds the final merged RSS payload.
 class FusionRss
   def initialize(blacklist_rules:, max_feeds:)
     @blacklist_rules    = blacklist_rules
