@@ -1,0 +1,4 @@
+interface:
+  display_name: "RSS Fusion Blacklist"
+  short_description: "Maintain blacklist prefixes in blacklist.txt"
+  default_prompt: "Update blacklist.txt by adding URL prefixes, avoid duplicates, keep rules sorted, and commit/push if requested."
