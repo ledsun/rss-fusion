@@ -65,14 +65,24 @@ class StatsTest < Minitest::Test
   end
 
   def test_finalize
-    @stats.finalize(10)
+    @stats.finalize(output: 10, blacklisted: 0, duplicate: 0)
     assert_equal 10, @stats.items_output
   end
 
   def test_finalize_overwrites
-    @stats.finalize(10)
-    @stats.finalize(7)
+    @stats.finalize(output: 10, blacklisted: 0, duplicate: 0)
+    @stats.finalize(output: 7, blacklisted: 0, duplicate: 0)
     assert_equal 7, @stats.items_output
+  end
+
+  def test_finalize_updates_blacklisted
+    @stats.finalize(output: 5, blacklisted: 3, duplicate: 0)
+    assert_equal 3, @stats.items_skipped_blacklist
+  end
+
+  def test_finalize_updates_duplicate
+    @stats.finalize(output: 5, blacklisted: 0, duplicate: 2)
+    assert_equal 2, @stats.items_skipped_duplicate
   end
 
   def test_summary_feeds_line
@@ -84,9 +94,7 @@ class StatsTest < Minitest::Test
   def test_summary_items_line
     10.times { @stats.item_fetched }
     @stats.item_skipped_no_url
-    2.times { @stats.item_skipped_blacklist }
-    3.times { @stats.item_skipped_duplicate }
-    @stats.finalize(4)
+    @stats.finalize(output: 4, blacklisted: 2, duplicate: 3)
     assert_equal "items fetched=10 skipped_no_url=1 skipped_blacklist=2 skipped_duplicate=3 output=4", @stats.summary[1]
   end
 
@@ -99,8 +107,7 @@ class StatsTest < Minitest::Test
     @stats.feed_failed
     @stats.item_fetched
     @stats.item_skipped_no_url
-    @stats.item_skipped_blacklist
-    @stats.item_skipped_duplicate
+    @stats.finalize(output: 0, blacklisted: 1, duplicate: 1)
 
     assert_equal 1, @stats.feeds_succeeded
     assert_equal 1, @stats.feeds_failed

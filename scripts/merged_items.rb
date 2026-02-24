@@ -25,13 +25,11 @@ class MergedItems
   end
 
   def finalized(stats)
-    @blacklisted_count.times { stats.item_skipped_blacklist }
-    @duplicate_count.times   { stats.item_skipped_duplicate }
     items = @items
       .sort_by { |item| item.published_at || Time.at(0) }
       .reverse
       .first(@max_items)
-    stats.finalize(items.length)
+    stats.finalize(output: items.length, blacklisted: @blacklisted_count, duplicate: @duplicate_count)
     items
   end
 end
