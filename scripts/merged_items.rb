@@ -12,14 +12,14 @@ class MergedItems
   end
 
   # Returns :added, :blacklisted, or :duplicate
-  def add(item)
-    if @blacklist_rules.any? { |prefix| item.url.start_with?(prefix) }
+  def add(title:, url:, published_at:, feed_name:)
+    if @blacklist_rules.any? { |prefix| url.start_with?(prefix) }
       :blacklisted
-    elsif @seen_urls[item.url]
+    elsif @seen_urls[url]
       :duplicate
     else
-      @seen_urls[item.url] = true
-      @items << item
+      @seen_urls[url] = true
+      @items << Item.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
       :added
     end
   end

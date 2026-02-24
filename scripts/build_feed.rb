@@ -189,13 +189,12 @@ def main
         next
       end
 
-      item = Item.new(
-        prefixed_title(feed[:name], entry.respond_to?(:title) ? entry.title : nil),
-        url,
-        extract_published_at(entry, fetched_at),
-        feed[:name]
+      case merged_items.add(
+        title: prefixed_title(feed[:name], entry.respond_to?(:title) ? entry.title : nil),
+        url: url,
+        published_at: extract_published_at(entry, fetched_at),
+        feed_name: feed[:name]
       )
-      case merged_items.add(item)
       when :blacklisted then stats.item_skipped_blacklist
       when :duplicate   then stats.item_skipped_duplicate
       end
