@@ -23,7 +23,7 @@ MAX_ITEMS = 50
 # Item represents a merged feed entry
 Item = Data.define(:title, :url, :published_at, :feed_name)
 
-Stats = Struct.new(
+Stats = Data.define(
   :feeds_total,
   :feeds_succeeded,
   :feeds_failed,
@@ -31,8 +31,7 @@ Stats = Struct.new(
   :items_skipped_no_url,
   :items_skipped_blacklist,
   :items_skipped_duplicate,
-  :items_output,
-  keyword_init: true
+  :items_output
 )
 
 def log(msg)
@@ -197,25 +196,25 @@ def main
     body = http_get(feed[:url])
     parsed = Feedjira.parse(body)
     entries = feed_entries(parsed)
-    stats.feeds_succeeded += 1
+    stats = stats.with(feeds_succeeded: stats.feeds_succeeded + 1)
 
     log "Fetched #{feed[:name]} (#{feed[:url]}) entries=#{entries.length}"
 
     entries.each do |entry|
-      stats.items_fetched += 1
+      stats = stats.with(items_fetched: stats.items_fetched + 1)
       url = extract_url(entry)
       if url.to_s.empty?
-        stats.items_skipped_no_url += 1
+        stats = stats.with(items_skipped_no_url: stats.items_skipped_no_url + 1)
         next
       end
 
       if blacklist_rules.any? { |prefix| url.start_with?(prefix) }
-        stats.items_skipped_blacklist += 1
+        stats = stats.with(items_skipped_blacklist: stats.items_skipped_blacklist + 1)
         next
       end
 
       if seen_urls[url]
-        stats.items_skipped_duplicate += 1
+        stats = stats.with(items_skipped_duplicate: stats.items_skipped_duplicate + 1)
         next
       end
       seen_urls[url] = true
@@ -228,14 +227,14 @@ def main
       )
     end
   rescue StandardError => e
-    stats.feeds_failed += 1
+    stats = stats.with(feeds_failed: stats.feeds_failed + 1)
     log "Feed fetch/parse failed: #{feed[:name]} #{feed[:url]} (#{e.class}: #{e.message})"
   end
 
   merged_items.sort_by! { |item| item.published_at || Time.at(0) }
   merged_items.reverse!
   merged_items = merged_items.first(MAX_ITEMS)
-  stats.items_output = merged_items.length
+  stats = stats.with(items_output: merged_items.length)
 
   content = build_rss(merged_items)
   write_atomically(OUTPUT_PATH, TMP_OUTPUT_PATH, content)
