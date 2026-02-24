@@ -22,6 +22,7 @@ class Stats
   def item_skipped_no_url    = tap { @items_skipped_no_url += 1 }
   def item_skipped_blacklist = tap { @items_skipped_blacklist += 1 }
   def item_skipped_duplicate = tap { @items_skipped_duplicate += 1 }
+
   def finalize(output:, blacklisted:, duplicate:)
     tap do
       @items_skipped_blacklist += blacklisted
