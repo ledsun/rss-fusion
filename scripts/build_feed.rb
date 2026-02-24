@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require "yaml"
 require "net/http"
 require "uri"
 require "time"
@@ -22,35 +21,12 @@ MAX_ITEMS = 50
 
 require_relative "stats"
 require_relative "fusion_rss"
+require_relative "loader"
 
 
 
 def log(msg)
   puts "[build_feed] #{msg}"
-end
-
-def load_feeds(path)
-  data = YAML.load_file(path)
-  feeds = data.is_a?(Hash) ? data["feeds"] : nil
-  unless feeds.is_a?(Array)
-    raise "Invalid feeds.yml: top-level 'feeds' array is required"
-  end
-
-  feeds.filter_map do |row|
-    unless row.is_a?(Hash)
-      log "Skipping invalid feed row: #{row.inspect}"
-      next
-    end
-
-    name = row["name"].to_s.strip
-    url = row["url"].to_s.strip
-    if name.empty? || url.empty?
-      log "Skipping feed row with missing name/url: #{row.inspect}"
-      next
-    end
-
-    { name: name, url: url }
-  end
 end
 
 def load_blacklist(path)
@@ -146,7 +122,7 @@ def write_atomically(path, tmp_path, content)
 end
 
 def main
-  feeds = load_feeds(FEEDS_PATH)
+  feeds = Loader.new(FEEDS_PATH)
   blacklist_rules = load_blacklist(BLACKLIST_PATH)
   stats = Stats.new(feeds_total: feeds.length)
 
@@ -191,6 +167,9 @@ def main
 
   stats.summary.each { |line| log "Summary #{line}" }
   log "Wrote #{OUTPUT_PATH}"
+rescue Loader::ConfigFormatError => e
+  log "Feed config load failed: #{FEEDS_PATH} (#{e.class}: #{e.message})"
+  raise
 end
 
 main
