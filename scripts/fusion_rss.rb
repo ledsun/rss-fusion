@@ -6,9 +6,9 @@ require 'rss'
 Item = Data.define(:title, :url, :published_at, :feed_name)
 
 class FusionRss
-  def initialize(blacklist_rules:, max_items:)
+  def initialize(blacklist_rules:, max_feeds:)
     @blacklist_rules    = blacklist_rules
-    @max_items          = max_items
+    @max_feeds          = max_feeds
     @feeds              = []
     @blacklisted_count  = 0
     @duplicate_count    = 0
@@ -27,7 +27,7 @@ class FusionRss
   def finalized(stats)
     @finalized_feeds = @feeds.sort_by { |feed| feed.published_at || Time.at(0) }
                              .reverse
-                             .first(@max_items)
+                             .first(@max_feeds)
     stats.finalize(output: @finalized_feeds.length, blacklisted: @blacklisted_count, duplicate: @duplicate_count)
     @finalized_feeds
   end
