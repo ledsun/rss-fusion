@@ -52,7 +52,3 @@ class FusionRss
       end
     end.to_s
   end
-end
-
-# Backward compatibility: keep the old constant name for callers that still reference it
-MergedItems = FusionRss
