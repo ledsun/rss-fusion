@@ -52,3 +52,4 @@ class FusionRss
       end
     end.to_s
   end
+end
