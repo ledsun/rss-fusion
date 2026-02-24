@@ -5,29 +5,33 @@ Item = Data.define(:title, :url, :published_at, :feed_name)
 
 class MergedItems
   def initialize(blacklist_rules:, max_items:)
-    @blacklist_rules = blacklist_rules
-    @max_items       = max_items
-    @seen_urls       = {}
-    @items           = []
+    @blacklist_rules    = blacklist_rules
+    @max_items          = max_items
+    @seen_urls          = {}
+    @items              = []
+    @blacklisted_count  = 0
+    @duplicate_count    = 0
   end
 
-  # Returns :added, :blacklisted, or :duplicate
   def add(title:, url:, published_at:, feed_name:)
     if @blacklist_rules.any? { |prefix| url.start_with?(prefix) }
-      :blacklisted
+      @blacklisted_count += 1
     elsif @seen_urls[url]
-      :duplicate
+      @duplicate_count += 1
     else
       @seen_urls[url] = true
       @items << Item.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
-      :added
     end
   end
 
-  def finalized
-    @items
+  def finalized(stats)
+    @blacklisted_count.times { stats.item_skipped_blacklist }
+    @duplicate_count.times   { stats.item_skipped_duplicate }
+    items = @items
       .sort_by { |item| item.published_at || Time.at(0) }
       .reverse
       .first(@max_items)
+    stats.finalize(items.length)
+    items
   end
 end

@@ -189,23 +189,19 @@ def main
         next
       end
 
-      case merged_items.add(
+      merged_items.add(
         title: prefixed_title(feed[:name], entry.respond_to?(:title) ? entry.title : nil),
         url: url,
         published_at: extract_published_at(entry, fetched_at),
         feed_name: feed[:name]
       )
-      when :blacklisted then stats.item_skipped_blacklist
-      when :duplicate   then stats.item_skipped_duplicate
-      end
     end
   rescue StandardError => e
     stats.feed_failed
     log "Feed fetch/parse failed: #{feed[:name]} #{feed[:url]} (#{e.class}: #{e.message})"
   end
 
-  items = merged_items.finalized
-  stats.finalize(items.length)
+  items = merged_items.finalized(stats)
 
   content = build_rss(items)
   write_atomically(OUTPUT_PATH, TMP_OUTPUT_PATH, content)
