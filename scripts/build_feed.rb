@@ -21,7 +21,7 @@ MAX_REDIRECTS = 3
 MAX_ITEMS = 50
 
 require_relative "stats"
-require_relative "merged_items"
+require_relative "fusion_rss"
 
 
 
