@@ -125,7 +125,7 @@ def main
   log "Loaded #{feeds.length} feeds"
   log "Loaded #{blacklist_rules.length} blacklist rules"
 
-  merged_items = FusionRss.new(blacklist_rules: blacklist_rules, max_items: MAX_ITEMS)
+  merged_items = FusionRss.new(blacklist_rules: blacklist_rules, max_feeds: MAX_ITEMS)
 
   feeds.each do |feed|
     fetched_at = Time.now
