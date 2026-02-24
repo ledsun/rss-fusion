@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require "minitest/autorun"
-require_relative "fusion_rss"
-require_relative "stats"
+require_relative "../scripts/fusion_rss"
+require_relative "../scripts/stats"
 
 class FusionRssTest < Minitest::Test
   def test_finalize_updates_items_output_and_rss_order

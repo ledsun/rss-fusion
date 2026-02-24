@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "minitest/autorun"
-require_relative "feed"
+require_relative "../scripts/feed"
 
 class FeedTest < Minitest::Test
   FakeGuid = Struct.new(:content, :isPermaLink)

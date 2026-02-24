@@ -44,6 +44,24 @@ bundle exec ruby scripts/build_feed.rb
 
 - `public/merged.xml`
 
+## テスト
+
+テストコードは `test/` ディレクトリにあります。
+
+個別実行:
+
+```bash
+ruby test/feed_test.rb
+ruby test/fusion_rss_test.rb
+ruby test/stats_test.rb
+```
+
+一括実行（シェル展開を使う例）:
+
+```bash
+ruby test/*_test.rb
+```
+
 ## 設定方法
 
 ### `feeds.yml`
