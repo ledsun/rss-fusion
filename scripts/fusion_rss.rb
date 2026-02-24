@@ -62,9 +62,7 @@ class FusionRss
       maker.channel.link = 'https://example.invalid/merged.xml'
       maker.channel.updated = Time.now
 
-      @finalized_feeds.each do |feed|
-        feed.to_rss_entry(maker)
-      end
+      @finalized_feeds.each { |feed| feed.to_rss_entry(maker) }
     end.to_s
   end
 end
