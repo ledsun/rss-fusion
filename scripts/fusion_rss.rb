@@ -2,8 +2,8 @@
 
 require 'rss'
 
-# Item represents a merged feed entry
-class Item
+# Feed represents a merged feed entry
+class Feed
   attr_reader :title, :url, :published_at, :feed_name
 
   def initialize(title:, url:, published_at:, feed_name:)
@@ -43,7 +43,7 @@ class FusionRss
     elsif @feeds.any? { |it| it.url == url }
       @duplicate_count += 1
     else
-      @feeds << Item.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
+      @feeds << Feed.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
     end
   end
 
