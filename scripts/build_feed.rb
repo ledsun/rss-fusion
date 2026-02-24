@@ -21,6 +21,7 @@ MAX_REDIRECTS = 3
 MAX_ITEMS = 50
 
 require_relative "stats"
+require_relative "merged_items"
 
 # Item represents a merged feed entry
 Item = Data.define(:title, :url, :published_at, :feed_name)
@@ -170,8 +171,7 @@ def main
   log "Loaded #{feeds.length} feeds"
   log "Loaded #{blacklist_rules.length} blacklist rules"
 
-  seen_urls = {}
-  merged_items = []
+  merged_items = MergedItems.new(blacklist_rules: blacklist_rules, max_items: MAX_ITEMS)
 
   feeds.each do |feed|
     fetched_at = Time.now
@@ -190,35 +190,26 @@ def main
         next
       end
 
-      if blacklist_rules.any? { |prefix| url.start_with?(prefix) }
-        stats.item_skipped_blacklist
-        next
-      end
-
-      if seen_urls[url]
-        stats.item_skipped_duplicate
-        next
-      end
-      seen_urls[url] = true
-
-      merged_items << Item.new(
+      item = Item.new(
         prefixed_title(feed[:name], entry.respond_to?(:title) ? entry.title : nil),
         url,
         extract_published_at(entry, fetched_at),
         feed[:name]
       )
+      case merged_items.add(item)
+      when :blacklisted then stats.item_skipped_blacklist
+      when :duplicate   then stats.item_skipped_duplicate
+      end
     end
   rescue StandardError => e
     stats.feed_failed
     log "Feed fetch/parse failed: #{feed[:name]} #{feed[:url]} (#{e.class}: #{e.message})"
   end
 
-  merged_items.sort_by! { |item| item.published_at || Time.at(0) }
-  merged_items.reverse!
-  merged_items = merged_items.first(MAX_ITEMS)
-  stats.finalize(merged_items.length)
+  items = merged_items.finalized
+  stats.finalize(items.length)
 
-  content = build_rss(merged_items)
+  content = build_rss(items)
   write_atomically(OUTPUT_PATH, TMP_OUTPUT_PATH, content)
 
   stats.summary.each { |line| log "Summary #{line}" }
