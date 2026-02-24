@@ -17,7 +17,7 @@ class FusionRss
   def add(title:, url:, published_at:, feed_name:)
     if @blacklist_rules.any? { |prefix| url.start_with?(prefix) }
       @blacklisted_count += 1
-    elsif @items.any? { |it| it.url == url }
+    elsif @items.any? { it.url == url }
       @duplicate_count += 1
     else
       @items << Item.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
