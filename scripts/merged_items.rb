@@ -27,21 +27,21 @@ class MergedItems
   end
 
   def finalized(stats)
-    items = @items.sort_by { |item| item.published_at || Time.at(0) }
-                  .reverse
-                  .first(@max_items)
-    stats.finalize(output: items.length, blacklisted: @blacklisted_count, duplicate: @duplicate_count)
-    items
+    @finalized_items = @items.sort_by { |item| item.published_at || Time.at(0) }
+                             .reverse
+                             .first(@max_items)
+    stats.finalize(output: @finalized_items.length, blacklisted: @blacklisted_count, duplicate: @duplicate_count)
+    @finalized_items
   end
 
-  def to_rss(items)
+  def to_rss
     RSS::Maker.make("2.0") do |maker|
       maker.channel.title = "RSS Fusion"
       maker.channel.description = "Merged RSS feed generated from multiple sources"
       maker.channel.link = "https://example.invalid/merged.xml"
       maker.channel.updated = Time.now
 
-      items.each do |item|
+      @finalized_items.each do |item|
         maker.items.new_item do |entry|
           entry.title = item.title
           entry.link = item.url

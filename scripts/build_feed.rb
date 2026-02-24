@@ -184,9 +184,9 @@ def main
     log "Feed fetch/parse failed: #{feed[:name]} #{feed[:url]} (#{e.class}: #{e.message})"
   end
 
-  items = merged_items.finalized(stats)
+  merged_items.finalized(stats)
 
-  content = merged_items.to_rss(items)
+  content = merged_items.to_rss
   write_atomically(OUTPUT_PATH, TMP_OUTPUT_PATH, content)
 
   stats.summary.each { |line| log "Summary #{line}" }
