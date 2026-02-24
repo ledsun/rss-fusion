@@ -137,24 +137,7 @@ def prefixed_title(feed_name, original_title)
   "[#{feed_name}] #{base}"
 end
 
-def build_rss(items)
-  RSS::Maker.make("2.0") do |maker|
-    maker.channel.title = "RSS Fusion"
-    maker.channel.description = "Merged RSS feed generated from multiple sources"
-    maker.channel.link = "https://example.invalid/merged.xml"
-    maker.channel.updated = Time.now
 
-    items.each do |item|
-      maker.items.new_item do |entry|
-        entry.title = item.title
-        entry.link = item.url
-        entry.guid.content = item.url
-        entry.guid.isPermaLink = true
-        entry.pubDate = item.published_at
-      end
-    end
-  end.to_s
-end
 
 def write_atomically(path, tmp_path, content)
   FileUtils.mkdir_p(File.dirname(path))
@@ -203,7 +186,7 @@ def main
 
   items = merged_items.finalized(stats)
 
-  content = build_rss(items)
+  content = merged_items.to_rss(items)
   write_atomically(OUTPUT_PATH, TMP_OUTPUT_PATH, content)
 
   stats.summary.each { |line| log "Summary #{line}" }

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "rss"
+
 # Item represents a merged feed entry
 Item = Data.define(:title, :url, :published_at, :feed_name)
 
@@ -30,5 +32,24 @@ class MergedItems
                   .first(@max_items)
     stats.finalize(output: items.length, blacklisted: @blacklisted_count, duplicate: @duplicate_count)
     items
+  end
+
+  def to_rss(items)
+    RSS::Maker.make("2.0") do |maker|
+      maker.channel.title = "RSS Fusion"
+      maker.channel.description = "Merged RSS feed generated from multiple sources"
+      maker.channel.link = "https://example.invalid/merged.xml"
+      maker.channel.updated = Time.now
+
+      items.each do |item|
+        maker.items.new_item do |entry|
+          entry.title = item.title
+          entry.link = item.url
+          entry.guid.content = item.url
+          entry.guid.isPermaLink = true
+          entry.pubDate = item.published_at
+        end
+      end
+    end.to_s
   end
 end
