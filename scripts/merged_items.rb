@@ -25,10 +25,9 @@ class MergedItems
   end
 
   def finalized(stats)
-    items = @items
-      .sort_by { |item| item.published_at || Time.at(0) }
-      .reverse
-      .first(@max_items)
+    items = @items.sort_by { |item| item.published_at || Time.at(0) }
+                  .reverse
+                  .first(@max_items)
     stats.finalize(output: items.length, blacklisted: @blacklisted_count, duplicate: @duplicate_count)
     items
   end
