@@ -9,7 +9,6 @@ class FusionRss
   def initialize(blacklist_rules:, max_items:)
     @blacklist_rules    = blacklist_rules
     @max_items          = max_items
-    @seen_urls          = {}
     @items              = []
     @blacklisted_count  = 0
     @duplicate_count    = 0
@@ -18,10 +17,9 @@ class FusionRss
   def add(title:, url:, published_at:, feed_name:)
     if @blacklist_rules.any? { |prefix| url.start_with?(prefix) }
       @blacklisted_count += 1
-    elsif @seen_urls[url]
+    elsif @items.any? { |it| it.url == url }
       @duplicate_count += 1
     else
-      @seen_urls[url] = true
       @items << Item.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
     end
   end
