@@ -23,8 +23,7 @@ MAX_ITEMS = 50
 require_relative "stats"
 require_relative "merged_items"
 
-# Item represents a merged feed entry
-Item = Data.define(:title, :url, :published_at, :feed_name)
+
 
 def log(msg)
   puts "[build_feed] #{msg}"

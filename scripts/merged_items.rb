@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Item represents a merged feed entry
+Item = Data.define(:title, :url, :published_at, :feed_name)
+
 class MergedItems
   def initialize(blacklist_rules:, max_items:)
     @blacklist_rules = blacklist_rules
