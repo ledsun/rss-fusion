@@ -6,7 +6,7 @@ require "net/http"
 require "uri"
 require "time"
 require "fileutils"
-require "rss"
+
 require "feedjira"
 
 FEEDS_PATH = "feeds.yml"
