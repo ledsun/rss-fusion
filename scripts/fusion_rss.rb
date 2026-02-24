@@ -9,7 +9,7 @@ class FusionRss
   def initialize(blacklist_rules:, max_items:)
     @blacklist_rules    = blacklist_rules
     @max_items          = max_items
-    @items              = []
+    @feeds              = []
     @blacklisted_count  = 0
     @duplicate_count    = 0
   end
@@ -17,19 +17,19 @@ class FusionRss
   def add(title:, url:, published_at:, feed_name:)
     if @blacklist_rules.any? { |prefix| url.start_with?(prefix) }
       @blacklisted_count += 1
-    elsif @items.any? { it.url == url }
+    elsif @feeds.any? { |it| it.url == url }
       @duplicate_count += 1
     else
-      @items << Item.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
+      @feeds << Item.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
     end
   end
 
   def finalized(stats)
-    @finalized_items = @items.sort_by { |item| item.published_at || Time.at(0) }
+    @finalized_feeds = @feeds.sort_by { |feed| feed.published_at || Time.at(0) }
                              .reverse
                              .first(@max_items)
-    stats.finalize(output: @finalized_items.length, blacklisted: @blacklisted_count, duplicate: @duplicate_count)
-    @finalized_items
+    stats.finalize(output: @finalized_feeds.length, blacklisted: @blacklisted_count, duplicate: @duplicate_count)
+    @finalized_feeds
   end
 
   def to_rss
@@ -39,13 +39,13 @@ class FusionRss
       maker.channel.link = 'https://example.invalid/merged.xml'
       maker.channel.updated = Time.now
 
-      @finalized_items.each do |item|
+      @finalized_feeds.each do |feed|
         maker.items.new_item do |entry|
-          entry.title = item.title
-          entry.link = item.url
-          entry.guid.content = item.url
+          entry.title = feed.title
+          entry.link = feed.url
+          entry.guid.content = feed.url
           entry.guid.isPermaLink = true
-          entry.pubDate = item.published_at
+          entry.pubDate = feed.published_at
         end
       end
     end.to_s
