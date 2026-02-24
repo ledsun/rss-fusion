@@ -1,0 +1,4 @@
+interface:
+  display_name: "RSS Fusion Post-Push Check"
+  short_description: "Verify Actions and Pages after pushing to main"
+  default_prompt: "After pushing to main, verify the latest GitHub Actions run succeeded, Pages deploy completed, and merged.xml is publicly updated."
