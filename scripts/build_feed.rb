@@ -33,6 +33,14 @@ class Stats < Data.define(
   :items_skipped_duplicate,
   :items_output
 )
+  def feed_succeeded = with(feeds_succeeded: feeds_succeeded + 1)
+  def feed_failed    = with(feeds_failed: feeds_failed + 1)
+  def item_fetched   = with(items_fetched: items_fetched + 1)
+  def item_skipped_no_url    = with(items_skipped_no_url: items_skipped_no_url + 1)
+  def item_skipped_blacklist = with(items_skipped_blacklist: items_skipped_blacklist + 1)
+  def item_skipped_duplicate = with(items_skipped_duplicate: items_skipped_duplicate + 1)
+  def finalize(count) = with(items_output: count)
+
   def summary
     [
       "feeds total=#{feeds_total} success=#{feeds_succeeded} failed=#{feeds_failed}",
@@ -203,25 +211,25 @@ def main
     body = http_get(feed[:url])
     parsed = Feedjira.parse(body)
     entries = feed_entries(parsed)
-    stats = stats.with(feeds_succeeded: stats.feeds_succeeded + 1)
+    stats = stats.feed_succeeded
 
     log "Fetched #{feed[:name]} (#{feed[:url]}) entries=#{entries.length}"
 
     entries.each do |entry|
-      stats = stats.with(items_fetched: stats.items_fetched + 1)
+      stats = stats.item_fetched
       url = extract_url(entry)
       if url.to_s.empty?
-        stats = stats.with(items_skipped_no_url: stats.items_skipped_no_url + 1)
+        stats = stats.item_skipped_no_url
         next
       end
 
       if blacklist_rules.any? { |prefix| url.start_with?(prefix) }
-        stats = stats.with(items_skipped_blacklist: stats.items_skipped_blacklist + 1)
+        stats = stats.item_skipped_blacklist
         next
       end
 
       if seen_urls[url]
-        stats = stats.with(items_skipped_duplicate: stats.items_skipped_duplicate + 1)
+        stats = stats.item_skipped_duplicate
         next
       end
       seen_urls[url] = true
@@ -234,14 +242,14 @@ def main
       )
     end
   rescue StandardError => e
-    stats = stats.with(feeds_failed: stats.feeds_failed + 1)
+    stats = stats.feed_failed
     log "Feed fetch/parse failed: #{feed[:name]} #{feed[:url]} (#{e.class}: #{e.message})"
   end
 
   merged_items.sort_by! { |item| item.published_at || Time.at(0) }
   merged_items.reverse!
   merged_items = merged_items.first(MAX_ITEMS)
-  stats = stats.with(items_output: merged_items.length)
+  stats = stats.finalize(merged_items.length)
 
   content = build_rss(merged_items)
   write_atomically(OUTPUT_PATH, TMP_OUTPUT_PATH, content)
