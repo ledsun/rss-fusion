@@ -5,7 +5,7 @@ require "rss"
 # Item represents a merged feed entry
 Item = Data.define(:title, :url, :published_at, :feed_name)
 
-class MergedItems
+class FusionRss
   def initialize(blacklist_rules:, max_items:)
     @blacklist_rules    = blacklist_rules
     @max_items          = max_items
@@ -53,3 +53,6 @@ class MergedItems
     end.to_s
   end
 end
+
+# Backward compatibility: keep the old constant name for callers that still reference it
+MergedItems = FusionRss
