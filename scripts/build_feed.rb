@@ -23,23 +23,29 @@ MAX_ITEMS = 50
 # Item represents a merged feed entry
 Item = Data.define(:title, :url, :published_at, :feed_name)
 
-class Stats < Data.define(
-  :feeds_total,
-  :feeds_succeeded,
-  :feeds_failed,
-  :items_fetched,
-  :items_skipped_no_url,
-  :items_skipped_blacklist,
-  :items_skipped_duplicate,
-  :items_output
-)
-  def feed_succeeded = with(feeds_succeeded: feeds_succeeded + 1)
-  def feed_failed    = with(feeds_failed: feeds_failed + 1)
-  def item_fetched   = with(items_fetched: items_fetched + 1)
-  def item_skipped_no_url    = with(items_skipped_no_url: items_skipped_no_url + 1)
-  def item_skipped_blacklist = with(items_skipped_blacklist: items_skipped_blacklist + 1)
-  def item_skipped_duplicate = with(items_skipped_duplicate: items_skipped_duplicate + 1)
-  def finalize(count) = with(items_output: count)
+class Stats
+  attr_reader :feeds_total, :feeds_succeeded, :feeds_failed,
+              :items_fetched, :items_skipped_no_url, :items_skipped_blacklist,
+              :items_skipped_duplicate, :items_output
+
+  def initialize(feeds_total:)
+    @feeds_total           = feeds_total
+    @feeds_succeeded       = 0
+    @feeds_failed          = 0
+    @items_fetched         = 0
+    @items_skipped_no_url  = 0
+    @items_skipped_blacklist = 0
+    @items_skipped_duplicate = 0
+    @items_output          = 0
+  end
+
+  def feed_succeeded    = tap { @feeds_succeeded += 1 }
+  def feed_failed       = tap { @feeds_failed += 1 }
+  def item_fetched      = tap { @items_fetched += 1 }
+  def item_skipped_no_url    = tap { @items_skipped_no_url += 1 }
+  def item_skipped_blacklist = tap { @items_skipped_blacklist += 1 }
+  def item_skipped_duplicate = tap { @items_skipped_duplicate += 1 }
+  def finalize(count)   = tap { @items_output = count }
 
   def summary
     [
@@ -189,16 +195,7 @@ end
 def main
   feeds = load_feeds(FEEDS_PATH)
   blacklist_rules = load_blacklist(BLACKLIST_PATH)
-  stats = Stats.new(
-    feeds_total: feeds.length,
-    feeds_succeeded: 0,
-    feeds_failed: 0,
-    items_fetched: 0,
-    items_skipped_no_url: 0,
-    items_skipped_blacklist: 0,
-    items_skipped_duplicate: 0,
-    items_output: 0
-  )
+  stats = Stats.new(feeds_total: feeds.length)
 
   log "Loaded #{feeds.length} feeds"
   log "Loaded #{blacklist_rules.length} blacklist rules"
@@ -211,25 +208,25 @@ def main
     body = http_get(feed[:url])
     parsed = Feedjira.parse(body)
     entries = feed_entries(parsed)
-    stats = stats.feed_succeeded
+    stats.feed_succeeded
 
     log "Fetched #{feed[:name]} (#{feed[:url]}) entries=#{entries.length}"
 
     entries.each do |entry|
-      stats = stats.item_fetched
+      stats.item_fetched
       url = extract_url(entry)
       if url.to_s.empty?
-        stats = stats.item_skipped_no_url
+        stats.item_skipped_no_url
         next
       end
 
       if blacklist_rules.any? { |prefix| url.start_with?(prefix) }
-        stats = stats.item_skipped_blacklist
+        stats.item_skipped_blacklist
         next
       end
 
       if seen_urls[url]
-        stats = stats.item_skipped_duplicate
+        stats.item_skipped_duplicate
         next
       end
       seen_urls[url] = true
@@ -242,14 +239,14 @@ def main
       )
     end
   rescue StandardError => e
-    stats = stats.feed_failed
+    stats.feed_failed
     log "Feed fetch/parse failed: #{feed[:name]} #{feed[:url]} (#{e.class}: #{e.message})"
   end
 
   merged_items.sort_by! { |item| item.published_at || Time.at(0) }
   merged_items.reverse!
   merged_items = merged_items.first(MAX_ITEMS)
-  stats = stats.finalize(merged_items.length)
+  stats.finalize(merged_items.length)
 
   content = build_rss(merged_items)
   write_atomically(OUTPUT_PATH, TMP_OUTPUT_PATH, content)
