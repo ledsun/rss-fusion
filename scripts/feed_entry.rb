@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Feed represents a merged feed entry
-class Feed
+class FeedEntry
   attr_reader :title, :url, :published_at, :feed_name
 
   def initialize(title:, url:, published_at:, feed_name:)

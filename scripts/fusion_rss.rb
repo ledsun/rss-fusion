@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rss'
-require_relative 'feed'
+require_relative 'feed_entry'
 
 # FusionRss collects entries and builds the final merged RSS payload.
 class FusionRss
@@ -19,7 +19,7 @@ class FusionRss
     elsif @feeds.any? { |it| it.url == url }
       @duplicate_count += 1
     else
-      @feeds << Feed.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
+      @feeds << FeedEntry.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
     end
   end
 
