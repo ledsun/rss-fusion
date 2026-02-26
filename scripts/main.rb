@@ -20,6 +20,29 @@ def log(msg)
   puts "[main] #{msg}"
 end
 
+def process_entries(entries, fusion_rss, stats)
+  entries.each do |entry|
+    stats.item_fetched
+    if entry.url.to_s.empty?
+      stats.item_skipped_no_url
+      next
+    end
+
+    fusion_rss.add(entry.to_fusion_entry)
+  end
+end
+
+def process_feed(subscribe_rss, fusion_rss, stats)
+  entries = subscribe_rss.fetch_entries
+  stats.feed_succeeded
+
+  log "Fetched #{subscribe_rss.name} (#{subscribe_rss.url}) entries=#{entries.length}"
+  process_entries(entries, fusion_rss, stats)
+rescue StandardError => e
+  stats.feed_failed
+  log "Feed fetch/parse failed: #{subscribe_rss.name} #{subscribe_rss.url} (#{e.class}: #{e.message})"
+end
+
 def main
   loader = Loader.new(FEEDS_PATH)
   blacklist = BlackList.new(BLACKLIST_PATH)
@@ -31,23 +54,7 @@ def main
   fusion_rss = FusionRss.new(blacklist, MAX_ITEMS)
 
   loader.each do |subscribe_rss|
-    entries = subscribe_rss.fetch_entries
-    stats.feed_succeeded
-
-    log "Fetched #{subscribe_rss.name} (#{subscribe_rss.url}) entries=#{entries.length}"
-
-    entries.each do |entry|
-      stats.item_fetched
-      if entry.url.to_s.empty?
-        stats.item_skipped_no_url
-        next
-      end
-
-      fusion_rss.add(entry.to_fusion_entry)
-    end
-  rescue StandardError => e
-    stats.feed_failed
-    log "Feed fetch/parse failed: #{subscribe_rss.name} #{subscribe_rss.url} (#{e.class}: #{e.message})"
+    process_feed(subscribe_rss, fusion_rss, stats)
   end
 
   fusion_rss.finalize(stats)
