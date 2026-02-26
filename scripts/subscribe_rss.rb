@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'open-uri'
+require 'feedjira'
 
 # SubscribeRss represents a feed source and provides HTTP fetching.
 class SubscribeRss
@@ -14,6 +15,14 @@ class SubscribeRss
     @name = name
     @url = url
   end
+
+  def entries
+    parsed = Feedjira.parse(http_get)
+    raw = parsed.respond_to?(:entries) ? parsed.entries : nil
+    raw.is_a?(Array) ? raw : []
+  end
+
+  private
 
   def http_get
     # rubocop:disable Security/Open

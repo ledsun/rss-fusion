@@ -4,8 +4,6 @@
 require 'time'
 require 'fileutils'
 
-require 'feedjira'
-
 FEEDS_PATH = 'feeds.yml'
 BLACKLIST_PATH = 'blacklist.txt'
 OUTPUT_DIR = 'public'
@@ -31,11 +29,6 @@ def load_blacklist(path)
 
     rule
   end
-end
-
-def feed_entries(parsed_feed)
-  entries = parsed_feed.respond_to?(:entries) ? parsed_feed.entries : nil
-  entries.is_a?(Array) ? entries : []
 end
 
 def extract_url(entry)
@@ -91,9 +84,7 @@ def main
 
   loader.each do |subscribe_rss|
     fetched_at = Time.now
-    body = subscribe_rss.http_get
-    parsed = Feedjira.parse(body)
-    entries = feed_entries(parsed)
+    entries = subscribe_rss.entries
     stats.feed_succeeded
 
     log "Fetched #{subscribe_rss.name} (#{subscribe_rss.url}) entries=#{entries.length}"
