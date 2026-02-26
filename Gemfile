@@ -1,8 +1,10 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
 
-ruby ">= 4.0.1"
+source 'https://rubygems.org'
 
-gem "feedjira"
-gem "rss"
-gem "rubocop", require: false
-gem "minitest", group: :development
+ruby '>= 4.0.1'
+
+gem 'feedjira'
+gem 'minitest', group: :development
+gem 'rss'
+gem 'rubocop', require: false
