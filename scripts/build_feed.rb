@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'net/http'
-require 'uri'
 require 'time'
 require 'fileutils'
 
@@ -13,10 +11,7 @@ BLACKLIST_PATH = 'blacklist.txt'
 OUTPUT_DIR = 'public'
 OUTPUT_PATH = File.join(OUTPUT_DIR, 'merged.xml')
 TMP_OUTPUT_PATH = "#{OUTPUT_PATH}.tmp".freeze
-USER_AGENT = 'rss-merge-bot/0.1'
-OPEN_TIMEOUT = 10
-READ_TIMEOUT = 20
-MAX_REDIRECTS = 3
+
 MAX_ITEMS = 50
 
 require_relative 'stats'
@@ -35,39 +30,6 @@ def load_blacklist(path)
     next if rule.empty? || rule.start_with?('#')
 
     rule
-  end
-end
-
-def http_get(url, limit: MAX_REDIRECTS)
-  raise "Too many redirects while fetching #{url}" if limit.negative?
-
-  uri = URI.parse(url)
-  raise "Unsupported URL scheme for #{url}" unless %w[http https].include?(uri.scheme)
-
-  request = Net::HTTP::Get.new(uri)
-  request['User-Agent'] = USER_AGENT
-
-  response = Net::HTTP.start(
-    uri.host,
-    uri.port,
-    use_ssl: uri.scheme == 'https',
-    open_timeout: OPEN_TIMEOUT,
-    read_timeout: READ_TIMEOUT
-  ) do |http|
-    http.request(request)
-  end
-
-  case response
-  when Net::HTTPSuccess
-    response.body.to_s
-  when Net::HTTPRedirection
-    location = response['location']
-    raise "Redirect response without Location for #{url}" if location.to_s.strip.empty?
-
-    redirected = URI.join(url, location).to_s
-    http_get(redirected, limit: limit - 1)
-  else
-    raise "HTTP #{response.code} #{response.message} for #{url}"
   end
 end
 
@@ -129,7 +91,7 @@ def main
 
   loader.each do |subscribe_rss|
     fetched_at = Time.now
-    body = http_get(subscribe_rss.url)
+    body = subscribe_rss.http_get
     parsed = Feedjira.parse(body)
     entries = feed_entries(parsed)
     stats.feed_succeeded

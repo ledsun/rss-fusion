@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require_relative 'subscribe_rss'
 
 # Loader reads and validates feeds.yml and exposes feed rows via Enumerable.
 class Loader
-  SubscribeRss = Data.define(:name, :url)
-
   class ConfigFormatError < StandardError; end
 
   include Enumerable
