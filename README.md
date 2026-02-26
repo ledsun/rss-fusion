@@ -48,18 +48,19 @@ bundle exec ruby scripts/build_feed.rb
 
 テストコードは `test/` ディレクトリにあります。
 
+一括実行:
+
+```bash
+bundle exec ruby -Itest test/all.rb
+```
+
 個別実行:
 
 ```bash
-ruby test/feed_test.rb
-ruby test/fusion_rss_test.rb
-ruby test/stats_test.rb
-```
-
-一括実行（シェル展開を使う例）:
-
-```bash
-ruby test/*_test.rb
+bundle exec ruby -Itest test/feed_test.rb
+bundle exec ruby -Itest test/fusion_rss_test.rb
+bundle exec ruby -Itest test/loader_test.rb
+bundle exec ruby -Itest test/stats_test.rb
 ```
 
 ## RuboCop

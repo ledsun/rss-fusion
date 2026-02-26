@@ -22,7 +22,7 @@ jobs:
         run: bundle install
 
       - name: Run tests
-        run: ruby test/*_test.rb
+        run: bundle exec ruby -Itest test/all.rb
 
       - name: Run RuboCop
         run: bundle exec rubocop
