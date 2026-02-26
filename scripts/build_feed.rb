@@ -60,10 +60,10 @@ def main
       end
 
       fusion_rss.add(
-        title: prefixed_title(subscribe_rss.name, entry.title),
+        title: prefixed_title(entry.feed_name, entry.title),
         url: entry.url,
         published_at: entry.published_at,
-        feed_name: subscribe_rss.name
+        feed_name: entry.feed_name
       )
     end
   rescue StandardError => e

@@ -6,7 +6,7 @@ require 'time'
 
 # SubscribeRss represents a feed source and provides HTTP fetching and parsing.
 class SubscribeRss
-  FeedEntry = Data.define(:title, :url, :published_at)
+  FeedEntry = Data.define(:title, :url, :published_at, :feed_name)
 
   USER_AGENT = 'rss-merge-bot/0.1'
   OPEN_TIMEOUT = 10
@@ -27,7 +27,8 @@ class SubscribeRss
       FeedEntry.new(
         title: entry.respond_to?(:title) ? entry.title : nil,
         url: extract_url(entry),
-        published_at: extract_published_at(entry, fetched_at)
+        published_at: extract_published_at(entry, fetched_at),
+        feed_name: name
       )
     end
   end
