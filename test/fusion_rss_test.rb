@@ -16,7 +16,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_finalize_updates_items_output_and_rss_order
-    fusion = FusionRss.new(blacklist: make_blacklist, max_feeds: 10)
+    fusion = FusionRss.new(make_blacklist, 10)
 
     now = Time.now
     fusion.add(make_entry(title: 'old', url: 'https://a.example/', published_at: now - 60, feed_name: 'feedA'))
@@ -37,7 +37,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_blacklist_and_duplicate_counting
-    fusion = FusionRss.new(blacklist: make_blacklist('https://spam.example/'), max_feeds: 10)
+    fusion = FusionRss.new(make_blacklist('https://spam.example/'), 10)
 
     now = Time.now
     # added item
@@ -62,7 +62,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_max_items_truncation
-    fusion = FusionRss.new(blacklist: make_blacklist, max_feeds: 2)
+    fusion = FusionRss.new(make_blacklist, 2)
 
     now = Time.now
     fusion.add(make_entry(title: 'one',   url: 'https://one.example/',   published_at: now - 30))
@@ -82,7 +82,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_adding_duplicates_across_calls
-    fusion = FusionRss.new(blacklist: make_blacklist, max_feeds: 10)
+    fusion = FusionRss.new(make_blacklist, 10)
 
     now = Time.now
     fusion.add(make_entry(title: 'first',  url: 'https://dup.example/',   published_at: now - 5))
@@ -102,7 +102,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_to_rss_requires_finalize_first
-    fusion = FusionRss.new(blacklist: make_blacklist, max_feeds: 10)
+    fusion = FusionRss.new(make_blacklist, 10)
     now = Time.now
     fusion.add(make_entry(title: 'x', url: 'https://x.example/', published_at: now))
 

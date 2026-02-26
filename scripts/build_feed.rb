@@ -28,7 +28,7 @@ def main
   log "Loaded #{loader.length} feeds"
   log "Loaded #{blacklist.length} blacklist rules"
 
-  fusion_rss = FusionRss.new(blacklist: blacklist, max_feeds: MAX_ITEMS)
+  fusion_rss = FusionRss.new(blacklist, MAX_ITEMS)
 
   loader.each do |subscribe_rss|
     entries = subscribe_rss.entries
