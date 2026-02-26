@@ -14,13 +14,13 @@ class FusionRss
     @duplicate_count    = 0
   end
 
-  def add(title:, url:, published_at:, feed_name:)
-    if @blacklist_rules.any? { |prefix| url.start_with?(prefix) }
+  def add(feed_entry)
+    if @blacklist_rules.any? { |prefix| feed_entry.url.start_with?(prefix) }
       @blacklisted_count += 1
-    elsif @feeds.any? { |it| it.url == url }
+    elsif @feeds.any? { |it| it.url == feed_entry.url }
       @duplicate_count += 1
     else
-      @feeds << FeedEntry.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
+      @feeds << feed_entry
     end
   end
 

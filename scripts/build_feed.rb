@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 require 'time'
-require 'fileutils'
 
 FEEDS_PATH = 'feeds.yml'
 BLACKLIST_PATH = 'blacklist.txt'
@@ -14,6 +13,7 @@ MAX_ITEMS = 50
 require_relative 'stats'
 require_relative 'fusion_rss'
 require_relative 'loader'
+require_relative 'subscribe_rss'
 
 def log(msg)
   puts "[build_feed] #{msg}"
@@ -28,12 +28,6 @@ def load_blacklist(path)
 
     rule
   end
-end
-
-def prefixed_title(feed_name, original_title)
-  base = original_title.to_s.strip
-  base = '(no title)' if base.empty?
-  "[#{feed_name}] #{base}"
 end
 
 def main
@@ -59,12 +53,7 @@ def main
         next
       end
 
-      fusion_rss.add(
-        title: prefixed_title(entry.feed_name, entry.title),
-        url: entry.url,
-        published_at: entry.published_at,
-        feed_name: entry.feed_name
-      )
+      fusion_rss.add(entry.to_fusion_entry)
     end
   rescue StandardError => e
     stats.feed_failed
