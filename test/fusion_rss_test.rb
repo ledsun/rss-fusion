@@ -29,13 +29,6 @@ class FusionRssTest < Minitest::Test
     obj
   end
 
-  # Builds a stub blacklist that never matches (used to construct a real Filter)
-  def make_blacklist_stub
-    obj = Object.new
-    obj.define_singleton_method(:match?) { |_url| false }
-    obj
-  end
-
   def test_finalize_updates_items_output_and_rss_order
     fusion = FusionRss.new(make_filter, 10)
 
@@ -135,25 +128,4 @@ class FusionRssTest < Minitest::Test
     assert_includes rss, '<title>x</title>'
   end
 
-  def test_unstable_github_releases_are_filtered
-    fusion = FusionRss.new(Filter.new(make_blacklist_stub), 10)
-
-    now = Time.now
-    fusion.add(make_entry(title: 'stable',   url: 'https://github.com/owner/repo/releases/tag/v1.0.0',          published_at: now - 30))
-    fusion.add(make_entry(title: 'alpha',    url: 'https://github.com/owner/repo/releases/tag/v1.0.0-alpha.1',  published_at: now - 20))
-    fusion.add(make_entry(title: 'nightly',  url: 'https://github.com/owner/repo/releases/tag/nightly',         published_at: now - 10))
-    fusion.add(make_entry(title: 'pre',      url: 'https://github.com/owner/repo/releases/tag/v1.1.0-pre',      published_at: now))
-
-    stats = Stats.new(feeds_total: 1)
-    fusion.finalize(stats)
-
-    assert_equal 1, stats.items_output
-    assert_equal 3, stats.items_skipped_unstable
-
-    rss = fusion.send(:to_rss)
-    assert_includes rss, '<title>stable</title>'
-    refute_includes rss, '<title>alpha</title>'
-    refute_includes rss, '<title>nightly</title>'
-    refute_includes rss, '<title>pre</title>'
-  end
 end

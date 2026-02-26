@@ -101,7 +101,9 @@ class StatsTest < Minitest::Test
     10.times { @stats.item_fetched }
     @stats.item_skipped_no_url
     @stats.finalize(output: 4, blacklisted: 2, duplicate: 3, unstable: 1)
-    assert_equal 'items fetched=10 skipped_no_url=1 skipped_blacklist=2 skipped_duplicate=3 skipped_unstable=1 output=4', @stats.summary[1]
+    summary = 'items fetched=10 skipped_no_url=1 skipped_blacklist=2 ' \
+              'skipped_duplicate=3 skipped_unstable=1 output=4'
+    assert_equal summary, @stats.summary[1]
   end
 
   def test_summary_returns_two_lines
