@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require_relative '../scripts/feed_entry'
+require_relative '../scripts/fusion_rss/feed_entry'
 
 class FeedTest < Minitest::Test
   FakeGuid = Struct.new(:content, :isPermaLink)
@@ -26,7 +26,7 @@ class FeedTest < Minitest::Test
 
   def test_initializes_attributes
     published_at = Time.utc(2026, 2, 24, 5, 0, 0)
-    feed = FeedEntry.new(
+    feed = FusionRss::FeedEntry.new(
       title: 'hello',
       url: 'https://example.com/post',
       published_at: published_at,
@@ -41,7 +41,7 @@ class FeedTest < Minitest::Test
 
   def test_populate_entry_sets_rss_fields
     published_at = Time.utc(2026, 2, 24, 5, 0, 0)
-    feed = FeedEntry.new(
+    feed = FusionRss::FeedEntry.new(
       title: 'hello',
       url: 'https://example.com/post',
       published_at: published_at,
@@ -60,7 +60,7 @@ class FeedTest < Minitest::Test
 
   def test_to_rss_entry_adds_new_item_and_populates_fields
     published_at = Time.utc(2026, 2, 24, 5, 0, 0)
-    feed = FeedEntry.new(
+    feed = FusionRss::FeedEntry.new(
       title: 'hello',
       url: 'https://example.com/post',
       published_at: published_at,

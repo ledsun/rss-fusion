@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rss'
-require_relative 'feed_entry'
+require_relative 'fusion_rss/feed_entry'
 
 # FusionRss collects entries and builds the final merged RSS payload.
 class FusionRss

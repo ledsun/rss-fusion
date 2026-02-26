@@ -31,35 +31,6 @@ def load_blacklist(path)
   end
 end
 
-def extract_url(entry)
-  candidates = []
-  candidates << entry.url if entry.respond_to?(:url)
-  candidates << entry.link if entry.respond_to?(:link)
-  candidates << entry.links&.first if entry.respond_to?(:links)
-
-  candidates.map { |v| v.to_s.strip }.find { |v| !v.empty? }
-end
-
-def extract_published_at(entry, fallback_time)
-  value =
-    if entry.respond_to?(:published) && entry.published
-      entry.published
-    elsif entry.respond_to?(:updated) && entry.updated
-      entry.updated
-    elsif entry.respond_to?(:last_modified) && entry.last_modified
-      entry.last_modified
-    elsif entry.respond_to?(:published_at) && entry.published_at
-      entry.published_at
-    end
-
-  return fallback_time if value.nil?
-  return value if value.is_a?(Time)
-
-  Time.parse(value.to_s)
-rescue StandardError
-  fallback_time
-end
-
 def prefixed_title(feed_name, original_title)
   base = original_title.to_s.strip
   base = '(no title)' if base.empty?
@@ -83,7 +54,6 @@ def main
   merged_items = FusionRss.new(blacklist_rules: blacklist_rules, max_feeds: MAX_ITEMS)
 
   loader.each do |subscribe_rss|
-    fetched_at = Time.now
     entries = subscribe_rss.entries
     stats.feed_succeeded
 
@@ -91,16 +61,15 @@ def main
 
     entries.each do |entry|
       stats.item_fetched
-      url = extract_url(entry)
-      if url.to_s.empty?
+      if entry.url.to_s.empty?
         stats.item_skipped_no_url
         next
       end
 
       merged_items.add(
-        title: prefixed_title(subscribe_rss.name, entry.respond_to?(:title) ? entry.title : nil),
-        url: url,
-        published_at: extract_published_at(entry, fetched_at),
+        title: prefixed_title(subscribe_rss.name, entry.title),
+        url: entry.url,
+        published_at: entry.published_at,
         feed_name: subscribe_rss.name
       )
     end
