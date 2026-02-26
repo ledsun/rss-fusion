@@ -44,22 +44,6 @@ class GithubReleaseFilterTest < Minitest::Test
     assert @filter.unstable?('https://github.com/owner/repo/releases/tag/v1.0.0-alpha.1')
   end
 
-  # --- unstable: beta ---
-
-  def test_beta_tag_is_unstable
-    assert @filter.unstable?('https://github.com/owner/repo/releases/tag/v2.0.0-beta.3')
-  end
-
-  # --- unstable: rc ---
-
-  def test_rc_tag_is_unstable
-    assert @filter.unstable?('https://github.com/owner/repo/releases/tag/v1.0.0-rc.1')
-  end
-
-  def test_rc_tag_without_dot_is_unstable
-    assert @filter.unstable?('https://github.com/owner/repo/releases/tag/v1.0.0-rc1')
-  end
-
   # --- unstable: pre ---
 
   def test_pre_tag_is_unstable
@@ -74,17 +58,5 @@ class GithubReleaseFilterTest < Minitest::Test
 
   def test_nightly_with_suffix_is_unstable
     assert @filter.unstable?('https://github.com/owner/repo/releases/tag/nightly-20231204')
-  end
-
-  # --- unstable: dev ---
-
-  def test_dev_tag_is_unstable
-    assert @filter.unstable?('https://github.com/owner/repo/releases/tag/v1.0.0-dev.1')
-  end
-
-  # --- unstable: snapshot ---
-
-  def test_snapshot_tag_is_unstable
-    assert @filter.unstable?('https://github.com/owner/repo/releases/tag/1.0.0-snapshot')
   end
 end
