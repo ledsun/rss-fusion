@@ -32,6 +32,15 @@ class FusionRss
     @finalized_feeds
   end
 
+  def write_atomically(path, content = to_rss)
+    tmp_path = "#{path}.tmp"
+    FileUtils.mkdir_p(File.dirname(path))
+    File.write(tmp_path, content)
+    File.rename(tmp_path, path)
+  end
+
+  private
+
   def to_rss
     RSS::Maker.make('2.0') do |maker|
       maker.channel.title = 'RSS Fusion'
@@ -41,12 +50,5 @@ class FusionRss
 
       @finalized_feeds.each { |feed| feed.to_rss_entry(maker) }
     end.to_s
-  end
-
-  def write_atomically(path, content = to_rss)
-    tmp_path = "#{path}.tmp"
-    FileUtils.mkdir_p(File.dirname(path))
-    File.write(tmp_path, content)
-    File.rename(tmp_path, path)
   end
 end
