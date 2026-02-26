@@ -65,7 +65,7 @@ class SubscribeRss
     candidates << entry.link if entry.respond_to?(:link)
     candidates << entry.links&.first if entry.respond_to?(:links)
 
-    candidates.map { |v| v.to_s.strip }.find { |v| !v.empty? }
+    candidates.map { it.to_s.strip }.find { !it.empty? }
   end
 
   def extract_published_at(entry, fallback_time)
