@@ -37,12 +37,6 @@ def prefixed_title(feed_name, original_title)
   "[#{feed_name}] #{base}"
 end
 
-def write_atomically(path, tmp_path, content)
-  FileUtils.mkdir_p(File.dirname(path))
-  File.write(tmp_path, content)
-  File.rename(tmp_path, path)
-end
-
 def main
   loader = Loader.new(FEEDS_PATH)
   blacklist_rules = load_blacklist(BLACKLIST_PATH)
@@ -79,9 +73,7 @@ def main
   end
 
   fusion_rss.finalized(stats)
-
-  content = fusion_rss.to_rss
-  write_atomically(OUTPUT_PATH, TMP_OUTPUT_PATH, content)
+  fusion_rss.write_atomically(OUTPUT_PATH, TMP_OUTPUT_PATH)
 
   stats.summary.each { |line| log "Summary #{line}" }
   log "Wrote #{OUTPUT_PATH}"

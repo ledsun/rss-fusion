@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rss'
+require 'fileutils'
 require_relative 'fusion_rss/feed_entry'
 
 # FusionRss collects entries and builds the final merged RSS payload.
@@ -40,5 +41,11 @@ class FusionRss
 
       @finalized_feeds.each { |feed| feed.to_rss_entry(maker) }
     end.to_s
+  end
+
+  def write_atomically(path, tmp_path, content = to_rss)
+    FileUtils.mkdir_p(File.dirname(path))
+    File.write(tmp_path, content)
+    File.rename(tmp_path, path)
   end
 end
