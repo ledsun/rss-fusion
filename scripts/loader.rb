@@ -4,7 +4,7 @@ require 'yaml'
 
 # Loader reads and validates feeds.yml and exposes feed rows via Enumerable.
 class Loader
-  FeedEntry = Data.define(:name, :url)
+  SubscribeRss = Data.define(:name, :url)
 
   class ConfigFormatError < StandardError; end
 
@@ -38,6 +38,6 @@ class Loader
     url = row['url'].to_s.strip
     raise ConfigFormatError, "Invalid feed row: name and url are required (#{row.inspect})" if name.empty? || url.empty?
 
-    FeedEntry.new(name:, url:)
+    SubscribeRss.new(name:, url:)
   end
 end
