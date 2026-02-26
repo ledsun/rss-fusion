@@ -31,7 +31,7 @@ class SubscribeRss
     @url = url
   end
 
-  def entries
+  def fetch_entries
     fetched_at = Time.now
     parsed = Feedjira.parse(http_get)
     raw = parsed.respond_to?(:entries) ? parsed.entries : nil

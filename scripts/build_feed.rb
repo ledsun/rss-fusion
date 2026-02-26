@@ -31,7 +31,7 @@ def main
   fusion_rss = FusionRss.new(blacklist, MAX_ITEMS)
 
   loader.each do |subscribe_rss|
-    entries = subscribe_rss.entries
+    entries = subscribe_rss.fetch_entries
     stats.feed_succeeded
 
     log "Fetched #{subscribe_rss.name} (#{subscribe_rss.url}) entries=#{entries.length}"
