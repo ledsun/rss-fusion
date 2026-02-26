@@ -129,12 +129,12 @@ def main
 
   feeds.each do |feed|
     fetched_at = Time.now
-    body = http_get(feed[:url])
+    body = http_get(feed.url)
     parsed = Feedjira.parse(body)
     entries = feed_entries(parsed)
     stats.feed_succeeded
 
-    log "Fetched #{feed[:name]} (#{feed[:url]}) entries=#{entries.length}"
+    log "Fetched #{feed.name} (#{feed.url}) entries=#{entries.length}"
 
     entries.each do |entry|
       stats.item_fetched
@@ -145,15 +145,15 @@ def main
       end
 
       merged_items.add(
-        title: prefixed_title(feed[:name], entry.respond_to?(:title) ? entry.title : nil),
+        title: prefixed_title(feed.name, entry.respond_to?(:title) ? entry.title : nil),
         url: url,
         published_at: extract_published_at(entry, fetched_at),
-        feed_name: feed[:name]
+        feed_name: feed.name
       )
     end
   rescue StandardError => e
     stats.feed_failed
-    log "Feed fetch/parse failed: #{feed[:name]} #{feed[:url]} (#{e.class}: #{e.message})"
+    log "Feed fetch/parse failed: #{feed.name} #{feed.url} (#{e.class}: #{e.message})"
   end
 
   merged_items.finalized(stats)
