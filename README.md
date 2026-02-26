@@ -62,6 +62,14 @@ ruby test/stats_test.rb
 ruby test/*_test.rb
 ```
 
+## RuboCop
+
+静的解析は RuboCop で実行できます。
+
+```bash
+bundle exec rubocop
+```
+
 ## 設定方法
 
 ### `feeds.yml`
