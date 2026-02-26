@@ -51,7 +51,7 @@ def main
   log "Loaded #{loader.length} feeds"
   log "Loaded #{blacklist_rules.length} blacklist rules"
 
-  merged_items = FusionRss.new(blacklist_rules: blacklist_rules, max_feeds: MAX_ITEMS)
+  fusion_rss = FusionRss.new(blacklist_rules: blacklist_rules, max_feeds: MAX_ITEMS)
 
   loader.each do |subscribe_rss|
     entries = subscribe_rss.entries
@@ -66,7 +66,7 @@ def main
         next
       end
 
-      merged_items.add(
+      fusion_rss.add(
         title: prefixed_title(subscribe_rss.name, entry.title),
         url: entry.url,
         published_at: entry.published_at,
@@ -78,9 +78,9 @@ def main
     log "Feed fetch/parse failed: #{subscribe_rss.name} #{subscribe_rss.url} (#{e.class}: #{e.message})"
   end
 
-  merged_items.finalized(stats)
+  fusion_rss.finalized(stats)
 
-  content = merged_items.to_rss
+  content = fusion_rss.to_rss
   write_atomically(OUTPUT_PATH, TMP_OUTPUT_PATH, content)
 
   stats.summary.each { |line| log "Summary #{line}" }
