@@ -15,11 +15,11 @@ class SubscribeRss
     @url = url
   end
 
-  def http_get(target_url = url)
+  def http_get
     # rubocop:disable Security/Open
     # open-uri is acceptable here because URLs are sourced from feeds.yml only.
     URI.open(
-      target_url,
+      url,
       'User-Agent' => USER_AGENT,
       open_timeout: OPEN_TIMEOUT,
       read_timeout: READ_TIMEOUT
