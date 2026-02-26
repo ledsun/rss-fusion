@@ -118,16 +118,16 @@ def write_atomically(path, tmp_path, content)
 end
 
 def main
-  feeds = Loader.new(FEEDS_PATH)
+  loader = Loader.new(FEEDS_PATH)
   blacklist_rules = load_blacklist(BLACKLIST_PATH)
-  stats = Stats.new(feeds_total: feeds.length)
+  stats = Stats.new(feeds_total: loader.length)
 
-  log "Loaded #{feeds.length} feeds"
+  log "Loaded #{loader.length} feeds"
   log "Loaded #{blacklist_rules.length} blacklist rules"
 
   merged_items = FusionRss.new(blacklist_rules: blacklist_rules, max_feeds: MAX_ITEMS)
 
-  feeds.each do |feed|
+  loader.each do |feed|
     fetched_at = Time.now
     body = http_get(feed.url)
     parsed = Feedjira.parse(body)
