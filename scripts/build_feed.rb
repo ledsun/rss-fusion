@@ -127,14 +127,14 @@ def main
 
   merged_items = FusionRss.new(blacklist_rules: blacklist_rules, max_feeds: MAX_ITEMS)
 
-  loader.each do |feed|
+  loader.each do |subscribe_rss|
     fetched_at = Time.now
-    body = http_get(feed.url)
+    body = http_get(subscribe_rss.url)
     parsed = Feedjira.parse(body)
     entries = feed_entries(parsed)
     stats.feed_succeeded
 
-    log "Fetched #{feed.name} (#{feed.url}) entries=#{entries.length}"
+    log "Fetched #{subscribe_rss.name} (#{subscribe_rss.url}) entries=#{entries.length}"
 
     entries.each do |entry|
       stats.item_fetched
@@ -145,15 +145,15 @@ def main
       end
 
       merged_items.add(
-        title: prefixed_title(feed.name, entry.respond_to?(:title) ? entry.title : nil),
+        title: prefixed_title(subscribe_rss.name, entry.respond_to?(:title) ? entry.title : nil),
         url: url,
         published_at: extract_published_at(entry, fetched_at),
-        feed_name: feed.name
+        feed_name: subscribe_rss.name
       )
     end
   rescue StandardError => e
     stats.feed_failed
-    log "Feed fetch/parse failed: #{feed.name} #{feed.url} (#{e.class}: #{e.message})"
+    log "Feed fetch/parse failed: #{subscribe_rss.name} #{subscribe_rss.url} (#{e.class}: #{e.message})"
   end
 
   merged_items.finalized(stats)
