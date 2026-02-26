@@ -32,7 +32,7 @@ class FusionRss
     @finalized_feeds
   end
 
-  def write_atomically(path)
+  def write(path)
     tmp_path = "#{path}.tmp"
     FileUtils.mkdir_p(File.dirname(path))
     File.write(tmp_path, to_rss)

@@ -61,7 +61,7 @@ def main
   end
 
   fusion_rss.finalize(stats)
-  fusion_rss.write_atomically(OUTPUT_PATH)
+  fusion_rss.write(OUTPUT_PATH)
 
   stats.summary.each { |line| log "Summary #{line}" }
   log "Wrote #{OUTPUT_PATH}"
