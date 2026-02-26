@@ -35,11 +35,11 @@ class SubscribeRss
     fetched_at = Time.now
     parsed = Feedjira.parse(http_get)
     raw = parsed.respond_to?(:entries) ? parsed.entries : nil
-    (raw.is_a?(Array) ? raw : []).map do |entry|
+    (raw.is_a?(Array) ? raw : []).map do
       FeedEntry.new(
-        title: entry.respond_to?(:title) ? entry.title : nil,
-        url: extract_url(entry),
-        published_at: extract_published_at(entry, fetched_at),
+        title: it.respond_to?(:title) ? it.title : nil,
+        url: extract_url(it),
+        published_at: extract_published_at(it, fetched_at),
         feed_name: name
       )
     end
