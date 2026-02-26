@@ -18,7 +18,7 @@
 
 - `feeds.yml`: フィード一覧（`name`, `url`）
 - `blacklist.txt`: 除外URL prefix一覧（1行1ルール）
-- `scripts/build_feed.rb`: 統合RSS生成スクリプト
+- `scripts/main.rb`: 統合RSS生成スクリプト
 - `public/merged.xml`: 生成される統合RSS
 - `public/index.html`: Pages 用案内ページ
 - `.github/workflows/build-and-deploy.yml`: 毎時実行 + Pages デプロイ
@@ -37,7 +37,7 @@ bundle install
 ## ローカル実行
 
 ```bash
-bundle exec ruby scripts/build_feed.rb
+bundle exec ruby scripts/main.rb
 ```
 
 実行後に以下が生成・更新されます。

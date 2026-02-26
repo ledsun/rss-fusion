@@ -17,7 +17,7 @@ require_relative 'black_list'
 require_relative 'subscribe_rss'
 
 def log(msg)
-  puts "[build_feed] #{msg}"
+  puts "[main] #{msg}"
 end
 
 def main
