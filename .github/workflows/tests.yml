@@ -23,3 +23,6 @@ jobs:
 
       - name: Run tests
         run: ruby test/*_test.rb
+
+      - name: Run RuboCop
+        run: bundle exec rubocop
