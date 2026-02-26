@@ -5,21 +5,16 @@ require 'fileutils'
 
 # FusionRss collects entries and builds the final merged RSS payload.
 class FusionRss
-  def initialize(blacklist, max_feeds, github_release_filter: nil)
-    @blacklist               = blacklist
-    @max_feeds               = max_feeds
-    @github_release_filter   = github_release_filter
-    @feeds                   = []
-    @blacklisted_count       = 0
-    @duplicate_count         = 0
-    @unstable_count          = 0
+  def initialize(filter, max_feeds)
+    @filter          = filter
+    @max_feeds       = max_feeds
+    @feeds           = []
+    @duplicate_count = 0
   end
 
   def add(feed_entry)
-    if @blacklist.match?(feed_entry.url)
-      @blacklisted_count += 1
-    elsif @github_release_filter&.unstable?(feed_entry.url)
-      @unstable_count += 1
+    if @filter.match?(feed_entry.url)
+      # filtered (counted inside Filter)
     elsif @feeds.any? { |it| it.url == feed_entry.url }
       @duplicate_count += 1
     else
@@ -31,8 +26,8 @@ class FusionRss
     @finalized_feeds = @feeds.sort_by { |feed| feed.published_at || Time.at(0) }
                              .reverse
                              .first(@max_feeds)
-    stats.finalize(output: @finalized_feeds.length, blacklisted: @blacklisted_count,
-                   duplicate: @duplicate_count, unstable: @unstable_count)
+    stats.finalize(output: @finalized_feeds.length, blacklisted: @filter.blacklisted_count,
+                   duplicate: @duplicate_count, unstable: @filter.unstable_count)
     @finalized_feeds
   end
 

@@ -3,6 +3,7 @@
 require 'minitest/autorun'
 require_relative '../scripts/fusion_rss'
 require_relative '../scripts/stats'
+require_relative '../scripts/filter'
 require_relative '../scripts/github_release_filter'
 
 class FusionRssTest < Minitest::Test
@@ -10,14 +11,16 @@ class FusionRssTest < Minitest::Test
     FusionRss::FeedEntry.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
   end
 
-  def make_blacklist(*prefixes)
-    obj = Object.new
-    obj.define_singleton_method(:match?) { |url| prefixes.any? { |p| url.start_with?(p) } }
-    obj
+  def make_filter(*prefixes, unstable_urls: [])
+    bl_obj = Object.new
+    bl_obj.define_singleton_method(:match?) { |url| prefixes.any? { |p| url.start_with?(p) } }
+    gh_obj = Object.new
+    gh_obj.define_singleton_method(:unstable?) { |url| unstable_urls.include?(url) }
+    Filter.new(bl_obj, gh_obj)
   end
 
   def test_finalize_updates_items_output_and_rss_order
-    fusion = FusionRss.new(make_blacklist, 10)
+    fusion = FusionRss.new(make_filter, 10)
 
     now = Time.now
     fusion.add(make_entry(title: 'old', url: 'https://a.example/', published_at: now - 60, feed_name: 'feedA'))
@@ -38,7 +41,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_blacklist_and_duplicate_counting
-    fusion = FusionRss.new(make_blacklist('https://spam.example/'), 10)
+    fusion = FusionRss.new(make_filter('https://spam.example/'), 10)
 
     now = Time.now
     # added item
@@ -63,7 +66,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_max_items_truncation
-    fusion = FusionRss.new(make_blacklist, 2)
+    fusion = FusionRss.new(make_filter, 2)
 
     now = Time.now
     fusion.add(make_entry(title: 'one',   url: 'https://one.example/',   published_at: now - 30))
@@ -83,7 +86,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_adding_duplicates_across_calls
-    fusion = FusionRss.new(make_blacklist, 10)
+    fusion = FusionRss.new(make_filter, 10)
 
     now = Time.now
     fusion.add(make_entry(title: 'first',  url: 'https://dup.example/',   published_at: now - 5))
@@ -103,7 +106,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_to_rss_requires_finalize_first
-    fusion = FusionRss.new(make_blacklist, 10)
+    fusion = FusionRss.new(make_filter, 10)
     now = Time.now
     fusion.add(make_entry(title: 'x', url: 'https://x.example/', published_at: now))
 
@@ -116,8 +119,12 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_unstable_github_releases_are_filtered
-    filter = GithubReleaseFilter.new
-    fusion = FusionRss.new(make_blacklist, 10, github_release_filter: filter)
+    filter = make_filter(unstable_urls: [
+      'https://github.com/owner/repo/releases/tag/v1.0.0-alpha.1',
+      'https://github.com/owner/repo/releases/tag/nightly',
+      'https://github.com/owner/repo/releases/tag/v1.1.0-pre'
+    ])
+    fusion = FusionRss.new(filter, 10)
 
     now = Time.now
     fusion.add(make_entry(title: 'stable',   url: 'https://github.com/owner/repo/releases/tag/v1.0.0',          published_at: now - 30))

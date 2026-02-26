@@ -16,6 +16,7 @@ require_relative 'loader'
 require_relative 'black_list'
 require_relative 'subscribe_rss'
 require_relative 'github_release_filter'
+require_relative 'filter'
 
 def log(msg)
   puts "[main] #{msg}"
@@ -29,7 +30,7 @@ def main
   log "Loaded #{loader.length} feeds"
   log "Loaded #{blacklist.length} blacklist rules"
 
-  fusion_rss = FusionRss.new(blacklist, MAX_ITEMS, github_release_filter: GithubReleaseFilter.new)
+  fusion_rss = FusionRss.new(Filter.new(blacklist, GithubReleaseFilter.new), MAX_ITEMS)
 
   loader.each do |subscribe_rss|
     entries = subscribe_rss.fetch_entries
