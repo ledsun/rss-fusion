@@ -9,8 +9,14 @@ class FusionRssTest < Minitest::Test
     FusionRss::FeedEntry.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
   end
 
+  def make_blacklist(*prefixes)
+    obj = Object.new
+    obj.define_singleton_method(:match?) { |url| prefixes.any? { |p| url.start_with?(p) } }
+    obj
+  end
+
   def test_finalize_updates_items_output_and_rss_order
-    fusion = FusionRss.new(blacklist_rules: [], max_feeds: 10)
+    fusion = FusionRss.new(blacklist: make_blacklist, max_feeds: 10)
 
     now = Time.now
     fusion.add(make_entry(title: 'old', url: 'https://a.example/', published_at: now - 60, feed_name: 'feedA'))
@@ -31,7 +37,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_blacklist_and_duplicate_counting
-    fusion = FusionRss.new(blacklist_rules: ['https://spam.example/'], max_feeds: 10)
+    fusion = FusionRss.new(blacklist: make_blacklist('https://spam.example/'), max_feeds: 10)
 
     now = Time.now
     # added item
@@ -56,7 +62,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_max_items_truncation
-    fusion = FusionRss.new(blacklist_rules: [], max_feeds: 2)
+    fusion = FusionRss.new(blacklist: make_blacklist, max_feeds: 2)
 
     now = Time.now
     fusion.add(make_entry(title: 'one',   url: 'https://one.example/',   published_at: now - 30))
@@ -76,7 +82,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_adding_duplicates_across_calls
-    fusion = FusionRss.new(blacklist_rules: [], max_feeds: 10)
+    fusion = FusionRss.new(blacklist: make_blacklist, max_feeds: 10)
 
     now = Time.now
     fusion.add(make_entry(title: 'first',  url: 'https://dup.example/',   published_at: now - 5))
@@ -96,7 +102,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_to_rss_requires_finalize_first
-    fusion = FusionRss.new(blacklist_rules: [], max_feeds: 10)
+    fusion = FusionRss.new(blacklist: make_blacklist, max_feeds: 10)
     now = Time.now
     fusion.add(make_entry(title: 'x', url: 'https://x.example/', published_at: now))
 

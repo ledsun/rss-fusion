@@ -27,13 +27,10 @@ class LoaderTest < Minitest::Test
 
       assert_equal 2, loader.length
       assert_equal 2, loader.size
-      assert_equal(
-        [
-          { name: 'Zenn', url: 'https://zenn.dev/topics/codex/feed' },
-          { name: 'Qiita', url: 'https://qiita.com/tags/codex/feed' }
-        ],
-        loader.to_a
-      )
+      assert_equal 'Zenn',                                loader.to_a[0].name
+      assert_equal 'https://zenn.dev/topics/codex/feed',  loader.to_a[0].url
+      assert_equal 'Qiita',                               loader.to_a[1].name
+      assert_equal 'https://qiita.com/tags/codex/feed',   loader.to_a[1].url
     end
   end
 

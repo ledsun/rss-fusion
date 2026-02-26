@@ -19,26 +19,43 @@ def log(msg)
   puts "[build_feed] #{msg}"
 end
 
-def load_blacklist(path)
-  return [] unless File.exist?(path)
+# BlackList loads URL prefix rules from a file and checks URLs against them.
+class BlackList
+  def initialize(path)
+    @rules = load_blacklist(path)
+  end
 
-  File.readlines(path, chomp: true).filter_map do |line|
-    rule = line.strip
-    next if rule.empty? || rule.start_with?('#')
+  def length
+    @rules.length
+  end
 
-    rule
+  def match?(url)
+    @rules.any? { |rule| url.start_with?(rule) }
+  end
+
+  private
+
+  def load_blacklist(path)
+    return [] unless File.exist?(path)
+
+    File.readlines(path, chomp: true).filter_map do |line|
+      rule = line.strip
+      next if rule.empty? || rule.start_with?('#')
+
+      rule
+    end
   end
 end
 
 def main
   loader = Loader.new(FEEDS_PATH)
-  blacklist_rules = load_blacklist(BLACKLIST_PATH)
+  blacklist = BlackList.new(BLACKLIST_PATH)
   stats = Stats.new(feeds_total: loader.length)
 
   log "Loaded #{loader.length} feeds"
-  log "Loaded #{blacklist_rules.length} blacklist rules"
+  log "Loaded #{blacklist.length} blacklist rules"
 
-  fusion_rss = FusionRss.new(blacklist_rules: blacklist_rules, max_feeds: MAX_ITEMS)
+  fusion_rss = FusionRss.new(blacklist: blacklist, max_feeds: MAX_ITEMS)
 
   loader.each do |subscribe_rss|
     entries = subscribe_rss.entries

@@ -6,8 +6,8 @@ require_relative 'fusion_rss/feed_entry'
 
 # FusionRss collects entries and builds the final merged RSS payload.
 class FusionRss
-  def initialize(blacklist_rules:, max_feeds:)
-    @blacklist_rules    = blacklist_rules
+  def initialize(blacklist:, max_feeds:)
+    @blacklist          = blacklist
     @max_feeds          = max_feeds
     @feeds              = []
     @blacklisted_count  = 0
@@ -15,7 +15,7 @@ class FusionRss
   end
 
   def add(feed_entry)
-    if @blacklist_rules.any? { |prefix| feed_entry.url.start_with?(prefix) }
+    if @blacklist.match?(feed_entry.url)
       @blacklisted_count += 1
     elsif @feeds.any? { |it| it.url == feed_entry.url }
       @duplicate_count += 1
