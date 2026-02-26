@@ -1,6 +1,6 @@
 ---
 name: rss-fusion-post-push-check
-description: Verify rss-fusion deployment after pushing to `main`. Use when checking the latest GitHub Actions run status, build/deploy job results, GitHub Pages availability, and whether `merged.xml` is publicly updated after a push.
+description: Verify rss-fusion deployment after pushing to `main`. Use when checking the latest GitHub Actions run status, build/deploy job results, tests/lint workflow results, GitHub Pages availability, and whether `merged.xml` is publicly updated after a push.
 ---
 
 # Rss Fusion Post Push Check
@@ -8,23 +8,27 @@ description: Verify rss-fusion deployment after pushing to `main`. Use when chec
 ## Overview
 
 Run the standard post-push verification flow for this repository.
-Confirm that GitHub Actions completed successfully and GitHub Pages is serving the updated `merged.xml`.
+Confirm that GitHub Actions completed successfully (both deploy and tests/lint workflows) and GitHub Pages is serving the updated `merged.xml`.
 
 ## Workflow
 
 1. Confirm the push succeeded (if not already shown by the session).
-2. Inspect the latest workflow run triggered by `push`.
-3. Watch the run until completion.
-4. If failed, inspect failing step/logs and report the concrete cause.
-5. If successful, confirm Pages URL and fetch `merged.xml` (or at least its header) to verify public output.
+2. Inspect the latest `push` runs for both target workflows.
+3. Watch the runs until completion.
+4. If any run fails, inspect failing step/logs and report the concrete cause.
+5. If both runs succeed, confirm Pages URL and fetch `merged.xml` (or at least its header) to verify public output.
 
 ## Repository-Specific Targets
 
-- Workflow name: `Build and Deploy Merged RSS`
+- Workflow names:
+  - `Build and Deploy Merged RSS`
+  - `Run Tests and Lint`
 - Branch: `main`
-- Expected jobs:
+- Expected jobs (`Build and Deploy Merged RSS`):
   - `build`
   - `deploy`
+- Expected jobs (`Run Tests and Lint`):
+  - `tests` (includes unit tests + RuboCop step)
 - Expected public URLs:
   - Site: `https://ledsun.github.io/rss-fusion/`
   - Feed: `https://ledsun.github.io/rss-fusion/merged.xml`
@@ -34,11 +38,13 @@ Confirm that GitHub Actions completed successfully and GitHub Pages is serving t
 Use `gh` CLI and `curl` for verification.
 
 - List recent runs:
-  - `gh run list --limit 5 --json databaseId,workflowName,status,conclusion,event,createdAt,url`
+  - `gh run list --limit 10 --branch main --event push --json databaseId,workflowName,status,conclusion,event,createdAt,url`
 - Watch a run:
   - `gh run watch <run_id> --exit-status`
 - View details:
   - `gh run view <run_id>`
+- View job summary in JSON (useful for checking expected jobs):
+  - `gh run view <run_id> --json jobs`
 - View failed logs (if needed):
   - `gh run view <run_id> --log-failed`
 - Get Pages URL:
@@ -58,18 +64,25 @@ When a run fails, report:
 Common historical issue in this repo:
 - `actions/configure-pages` can fail with `Get Pages site failed ... Not Found` when Pages is not enabled in repository settings.
 
+When `Run Tests and Lint` fails, also call out whether the failure came from:
+- `Run tests`
+- `Run RuboCop`
+
 ## Success Criteria
 
 Treat post-push verification as complete when:
 
 1. Latest `push` run for `Build and Deploy Merged RSS` is `success`
-2. `build` and `deploy` jobs both succeeded
-3. Pages URL resolves
-4. `merged.xml` is fetchable and contains expected channel metadata (for example `<title>RSS Fusion</title>`)
+2. Latest `push` run for `Run Tests and Lint` is `success`
+3. `build` and `deploy` jobs both succeeded
+4. `tests` job succeeded (including `Run tests` and `Run RuboCop` steps)
+5. Pages URL resolves
+6. `merged.xml` is fetchable and contains expected channel metadata (for example `<title>RSS Fusion</title>`)
 
 ## Example User Requests
 
 - "push後のActions確認して"
 - "GitHub Pagesへの反映が成功しているか見て"
+- "push後の lint workflow も含めて確認して"
 - "最新runの失敗原因を調べて"
 - "公開merged.xmlに title が反映されているか確認して"
