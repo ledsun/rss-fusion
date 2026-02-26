@@ -8,7 +8,6 @@ FEEDS_PATH = 'feeds.yml'
 BLACKLIST_PATH = 'blacklist.txt'
 OUTPUT_DIR = 'public'
 OUTPUT_PATH = File.join(OUTPUT_DIR, 'merged.xml')
-TMP_OUTPUT_PATH = "#{OUTPUT_PATH}.tmp".freeze
 
 MAX_ITEMS = 50
 
@@ -73,7 +72,7 @@ def main
   end
 
   fusion_rss.finalized(stats)
-  fusion_rss.write_atomically(OUTPUT_PATH, TMP_OUTPUT_PATH)
+  fusion_rss.write_atomically(OUTPUT_PATH)
 
   stats.summary.each { |line| log "Summary #{line}" }
   log "Wrote #{OUTPUT_PATH}"
