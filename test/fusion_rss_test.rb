@@ -4,19 +4,36 @@ require 'minitest/autorun'
 require_relative '../scripts/fusion_rss'
 require_relative '../scripts/stats'
 require_relative '../scripts/filter'
-require_relative '../scripts/github_release_filter'
 
 class FusionRssTest < Minitest::Test
   def make_entry(title:, url:, published_at:, feed_name: 'f')
     FusionRss::FeedEntry.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
   end
 
-  def make_filter(*prefixes, unstable_urls: [])
-    bl_obj = Object.new
-    bl_obj.define_singleton_method(:match?) { |url| prefixes.any? { |p| url.start_with?(p) } }
-    gh_obj = Object.new
-    gh_obj.define_singleton_method(:unstable?) { |url| unstable_urls.include?(url) }
-    Filter.new(bl_obj, gh_obj)
+  # Builds a duck-typed stub that satisfies the Filter interface expected by FusionRss.
+  # Blacklists URLs that start with any of the given prefixes (if provided).
+  def make_filter(*prefixes)
+    obj = Object.new
+    obj.instance_variable_set(:@prefixes, prefixes)
+    obj.instance_variable_set(:@bl_count, 0)
+    obj.define_singleton_method(:match?) do |url|
+      if @prefixes.any? { |p| url.start_with?(p) }
+        @bl_count += 1
+        true
+      else
+        false
+      end
+    end
+    obj.define_singleton_method(:blacklisted_count) { @bl_count }
+    obj.define_singleton_method(:unstable_count) { 0 }
+    obj
+  end
+
+  # Builds a stub blacklist that never matches (used to construct a real Filter)
+  def make_blacklist_stub
+    obj = Object.new
+    obj.define_singleton_method(:match?) { |_url| false }
+    obj
   end
 
   def test_finalize_updates_items_output_and_rss_order
@@ -119,12 +136,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_unstable_github_releases_are_filtered
-    filter = make_filter(unstable_urls: [
-      'https://github.com/owner/repo/releases/tag/v1.0.0-alpha.1',
-      'https://github.com/owner/repo/releases/tag/nightly',
-      'https://github.com/owner/repo/releases/tag/v1.1.0-pre'
-    ])
-    fusion = FusionRss.new(filter, 10)
+    fusion = FusionRss.new(Filter.new(make_blacklist_stub), 10)
 
     now = Time.now
     fusion.add(make_entry(title: 'stable',   url: 'https://github.com/owner/repo/releases/tag/v1.0.0',          published_at: now - 30))
