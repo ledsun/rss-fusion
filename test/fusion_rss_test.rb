@@ -13,7 +13,7 @@ class FusionRssTest < Minitest::Test
     fusion.add(title: 'new', url: 'https://b.example/', published_at: now, feed_name: 'feedB')
 
     stats = Stats.new(feeds_total: 1)
-    fusion.finalized(stats)
+    fusion.finalize(stats)
 
     assert_equal 2, stats.items_output
 
@@ -38,7 +38,7 @@ class FusionRssTest < Minitest::Test
     fusion.add(title: 'spam', url: 'https://spam.example/1', published_at: now - 10, feed_name: 'f')
 
     stats = Stats.new(feeds_total: 1)
-    fusion.finalized(stats)
+    fusion.finalize(stats)
 
     assert_equal 1, stats.items_skipped_blacklist
     assert_equal 1, stats.items_skipped_duplicate
@@ -60,7 +60,7 @@ class FusionRssTest < Minitest::Test
     fusion.add(title: 'three', url: 'https://three.example/', published_at: now - 10, feed_name: 'f')
 
     stats = Stats.new(feeds_total: 1)
-    fusion.finalized(stats)
+    fusion.finalize(stats)
 
     # should be truncated to 2 items
     assert_equal 2, stats.items_output
@@ -80,7 +80,7 @@ class FusionRssTest < Minitest::Test
     fusion.add(title: 'third', url: 'https://other.example/', published_at: now + 5, feed_name: 'f')
 
     stats = Stats.new(feeds_total: 1)
-    fusion.finalized(stats)
+    fusion.finalize(stats)
 
     # one duplicate should be counted
     assert_equal 1, stats.items_skipped_duplicate
@@ -97,7 +97,7 @@ class FusionRssTest < Minitest::Test
     fusion.add(title: 'x', url: 'https://x.example/', published_at: now, feed_name: 'f')
 
     stats = Stats.new(feeds_total: 1)
-    fusion.finalized(stats)
+    fusion.finalize(stats)
 
     # should not raise and should produce rss containing item title
     rss = fusion.to_rss

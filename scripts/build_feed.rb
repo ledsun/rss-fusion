@@ -71,7 +71,7 @@ def main
     log "Feed fetch/parse failed: #{subscribe_rss.name} #{subscribe_rss.url} (#{e.class}: #{e.message})"
   end
 
-  fusion_rss.finalized(stats)
+  fusion_rss.finalize(stats)
   fusion_rss.write_atomically(OUTPUT_PATH)
 
   stats.summary.each { |line| log "Summary #{line}" }

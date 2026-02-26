@@ -24,7 +24,7 @@ class FusionRss
     end
   end
 
-  def finalized(stats)
+  def finalize(stats)
     @finalized_feeds = @feeds.sort_by { |feed| feed.published_at || Time.at(0) }
                              .reverse
                              .first(@max_feeds)
