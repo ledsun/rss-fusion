@@ -21,7 +21,7 @@ class FusionRssUnstableFilterTest < Minitest::Test
 
     now = Time.now
     base = 'https://github.com/owner/repo/releases/tag/'
-    fusion.add(make_entry(title: 'stable',  url: "#{base}v1.0.0",        published_at: now - 30))
+    fusion.add(make_entry(title: 'stable', url: "#{base}v1.0.0", published_at: now - 30))
     fusion.add(make_entry(title: 'alpha',   url: "#{base}v1.0.0-alpha.1", published_at: now - 20))
     fusion.add(make_entry(title: 'nightly', url: "#{base}nightly",        published_at: now - 10))
     fusion.add(make_entry(title: 'pre',     url: "#{base}v1.1.0-pre",     published_at: now))

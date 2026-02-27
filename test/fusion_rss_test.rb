@@ -127,5 +127,4 @@ class FusionRssTest < Minitest::Test
     rss = fusion.send(:to_rss)
     assert_includes rss, '<title>x</title>'
   end
-
 end

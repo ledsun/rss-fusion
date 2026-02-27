@@ -20,13 +20,9 @@ class StatsTest < Minitest::Test
     assert_equal 0, @stats.items_output
   end
 
-  def test_feed_succeeded
+  def test_feed_succeeded_and_multiple
     @stats.feed_succeeded
-    assert_equal 1, @stats.feeds_succeeded
-  end
-
-  def test_feed_succeeded_multiple
-    3.times { @stats.feed_succeeded }
+    2.times { @stats.feed_succeeded }
     assert_equal 3, @stats.feeds_succeeded
   end
 
