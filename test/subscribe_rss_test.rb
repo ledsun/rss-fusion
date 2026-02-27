@@ -1,0 +1,57 @@
+# frozen_string_literal: true
+
+require 'minitest/autorun'
+require 'stringio'
+require_relative '../scripts/subscribe_rss'
+
+class SubscribeRssTest < Minitest::Test
+  def sample_xml
+    <<~XML
+      <?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0">
+        <channel>
+          <title>Sample Feed</title>
+          <item>
+            <title>Hello</title>
+            <link>https://example.com/hello</link>
+            <pubDate>Fri, 27 Feb 2026 00:00:00 +0000</pubDate>
+          </item>
+        </channel>
+      </rss>
+    XML
+  end
+
+  def test_fetch_entries_reads_response_and_parses_fields
+    rss = SubscribeRss.new(name: 'Sample', url: 'https://example.com/feed')
+    with_stubbed_uri_open(sample_xml) do |probe|
+      entries = rss.fetch_entries
+      assert_equal 1, entries.length
+      assert_equal 'Hello', entries[0].title
+      assert_equal 'https://example.com/hello', entries[0].url
+      assert_equal 'Sample', entries[0].feed_name
+      assert_instance_of Time, entries[0].published_at
+
+      assert_equal true, probe[:called]
+      assert_equal 'https://example.com/feed', probe[:url]
+      assert_equal true, probe[:has_block]
+    end
+  end
+
+  private
+
+  def with_stubbed_uri_open(xml)
+    original_open = URI.method(:open)
+    probe = { called: false, url: nil, has_block: false }
+
+    URI.define_singleton_method(:open) do |*args, &block|
+      probe[:called] = true
+      probe[:url] = args[0]
+      probe[:has_block] = !block.nil?
+      block.call(StringIO.new(xml))
+    end
+
+    yield probe
+  ensure
+    URI.define_singleton_method(:open, original_open)
+  end
+end

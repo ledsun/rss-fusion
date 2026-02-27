@@ -59,6 +59,9 @@ def main
   end
 
   fusion_rss.finalize(stats)
+  raise 'No feeds fetched successfully; aborting build' if stats.feeds_succeeded.zero?
+  raise 'No items produced; aborting build' if stats.items_output.zero?
+
   fusion_rss.write(OUTPUT_PATH)
 
   stats.summary.each { |line| log "Summary #{line}" }
