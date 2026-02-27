@@ -13,6 +13,14 @@ feeds:
     url: https://qiita.com/tags/githubcopilot/feed
   - name: Qiita openai
     url: https://qiita.com/tags/openai/feed
+  - name: GitHub Releases Zed
+    url: https://github.com/zed-industries/zed/releases.atom
+  - name: GitHub Releases Codex
+    url: https://github.com/openai/codex/releases.atom
+  - name: GitHub Releases Copilot CLI
+    url: https://github.com/github/copilot-cli/releases.atom
+  - name: GitHub Releases Claude Code
+    url: https://github.com/anthropics/claude-code/releases.atom
   - name: Zenn ClaudeCode
     url: https://zenn.dev/topics/claudecode/feed
   - name: Zenn Codex
