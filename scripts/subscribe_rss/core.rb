@@ -40,8 +40,9 @@ class SubscribeRss
       url,
       'User-Agent' => USER_AGENT,
       open_timeout: OPEN_TIMEOUT,
-      read_timeout: READ_TIMEOUT
-    ).call(&:read)
+      read_timeout: READ_TIMEOUT,
+      &:read
+    )
     # rubocop:enable Security/Open
   end
 
