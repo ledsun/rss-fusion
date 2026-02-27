@@ -15,6 +15,7 @@ require_relative 'fusion_rss'
 require_relative 'loader'
 require_relative 'black_list'
 require_relative 'subscribe_rss'
+require_relative 'filter'
 
 def log(msg)
   puts "[main] #{msg}"
@@ -51,7 +52,7 @@ def main
   log "Loaded #{loader.length} feeds"
   log "Loaded #{blacklist.length} blacklist rules"
 
-  fusion_rss = FusionRss.new(blacklist, MAX_ITEMS)
+  fusion_rss = FusionRss.new(Filter.new(blacklist), MAX_ITEMS)
 
   loader.each do |subscribe_rss|
     process_feed(subscribe_rss, fusion_rss, stats)

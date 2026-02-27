@@ -16,16 +16,13 @@ class StatsTest < Minitest::Test
     assert_equal 0, @stats.items_skipped_no_url
     assert_equal 0, @stats.items_skipped_blacklist
     assert_equal 0, @stats.items_skipped_duplicate
+    assert_equal 0, @stats.items_skipped_unstable
     assert_equal 0, @stats.items_output
   end
 
-  def test_feed_succeeded
+  def test_feed_succeeded_and_multiple
     @stats.feed_succeeded
-    assert_equal 1, @stats.feeds_succeeded
-  end
-
-  def test_feed_succeeded_multiple
-    3.times { @stats.feed_succeeded }
+    2.times { @stats.feed_succeeded }
     assert_equal 3, @stats.feeds_succeeded
   end
 
@@ -85,6 +82,11 @@ class StatsTest < Minitest::Test
     assert_equal 2, @stats.items_skipped_duplicate
   end
 
+  def test_finalize_updates_unstable
+    @stats.finalize(output: 5, blacklisted: 0, duplicate: 0, unstable: 4)
+    assert_equal 4, @stats.items_skipped_unstable
+  end
+
   def test_summary_feeds_line
     3.times { @stats.feed_succeeded }
     2.times { @stats.feed_failed }
@@ -94,8 +96,10 @@ class StatsTest < Minitest::Test
   def test_summary_items_line
     10.times { @stats.item_fetched }
     @stats.item_skipped_no_url
-    @stats.finalize(output: 4, blacklisted: 2, duplicate: 3)
-    assert_equal 'items fetched=10 skipped_no_url=1 skipped_blacklist=2 skipped_duplicate=3 output=4', @stats.summary[1]
+    @stats.finalize(output: 4, blacklisted: 2, duplicate: 3, unstable: 1)
+    summary = 'items fetched=10 skipped_no_url=1 skipped_blacklist=2 ' \
+              'skipped_duplicate=3 skipped_unstable=1 output=4'
+    assert_equal summary, @stats.summary[1]
   end
 
   def test_summary_returns_two_lines
@@ -107,7 +111,7 @@ class StatsTest < Minitest::Test
     @stats.feed_failed
     @stats.item_fetched
     @stats.item_skipped_no_url
-    @stats.finalize(output: 0, blacklisted: 1, duplicate: 1)
+    @stats.finalize(output: 0, blacklisted: 1, duplicate: 1, unstable: 2)
 
     assert_equal 1, @stats.feeds_succeeded
     assert_equal 1, @stats.feeds_failed
@@ -115,5 +119,6 @@ class StatsTest < Minitest::Test
     assert_equal 1, @stats.items_skipped_no_url
     assert_equal 1, @stats.items_skipped_blacklist
     assert_equal 1, @stats.items_skipped_duplicate
+    assert_equal 2, @stats.items_skipped_unstable
   end
 end

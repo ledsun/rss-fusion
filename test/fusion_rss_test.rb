@@ -3,20 +3,34 @@
 require 'minitest/autorun'
 require_relative '../scripts/fusion_rss'
 require_relative '../scripts/stats'
+require_relative '../scripts/filter'
 
 class FusionRssTest < Minitest::Test
   def make_entry(title:, url:, published_at:, feed_name: 'f')
     FusionRss::FeedEntry.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
   end
 
-  def make_blacklist(*prefixes)
+  # Builds a duck-typed stub that satisfies the Filter interface expected by FusionRss.
+  # Blacklists URLs that start with any of the given prefixes (if provided).
+  def make_filter(*prefixes)
     obj = Object.new
-    obj.define_singleton_method(:match?) { |url| prefixes.any? { |p| url.start_with?(p) } }
+    obj.instance_variable_set(:@prefixes, prefixes)
+    obj.instance_variable_set(:@bl_count, 0)
+    obj.define_singleton_method(:match?) do |url|
+      if @prefixes.any? { |p| url.start_with?(p) }
+        @bl_count += 1
+        true
+      else
+        false
+      end
+    end
+    obj.define_singleton_method(:blacklisted_count) { @bl_count }
+    obj.define_singleton_method(:unstable_count) { 0 }
     obj
   end
 
   def test_finalize_updates_items_output_and_rss_order
-    fusion = FusionRss.new(make_blacklist, 10)
+    fusion = FusionRss.new(make_filter, 10)
 
     now = Time.now
     fusion.add(make_entry(title: 'old', url: 'https://a.example/', published_at: now - 60, feed_name: 'feedA'))
@@ -37,7 +51,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_blacklist_and_duplicate_counting
-    fusion = FusionRss.new(make_blacklist('https://spam.example/'), 10)
+    fusion = FusionRss.new(make_filter('https://spam.example/'), 10)
 
     now = Time.now
     # added item
@@ -62,7 +76,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_max_items_truncation
-    fusion = FusionRss.new(make_blacklist, 2)
+    fusion = FusionRss.new(make_filter, 2)
 
     now = Time.now
     fusion.add(make_entry(title: 'one',   url: 'https://one.example/',   published_at: now - 30))
@@ -82,7 +96,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_adding_duplicates_across_calls
-    fusion = FusionRss.new(make_blacklist, 10)
+    fusion = FusionRss.new(make_filter, 10)
 
     now = Time.now
     fusion.add(make_entry(title: 'first',  url: 'https://dup.example/',   published_at: now - 5))
@@ -102,7 +116,7 @@ class FusionRssTest < Minitest::Test
   end
 
   def test_to_rss_requires_finalize_first
-    fusion = FusionRss.new(make_blacklist, 10)
+    fusion = FusionRss.new(make_filter, 10)
     now = Time.now
     fusion.add(make_entry(title: 'x', url: 'https://x.example/', published_at: now))
 
