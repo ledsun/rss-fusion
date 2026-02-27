@@ -52,6 +52,21 @@ Use `gh` CLI and `curl` for verification.
 - Check public feed header:
   - `curl -fsSL https://ledsun.github.io/rss-fusion/merged.xml | sed -n '1,20p'`
 
+## Local RuboCop Reproduction
+
+When `Run Tests and Lint` fails on RuboCop, reproduce locally without writing outside the workspace.
+
+- Use workspace-local cache root:
+  - `mkdir -p tmp/rubocop_cache`
+  - `RUBOCOP_CACHE_ROOT=/home/ledsun/rss-fusion/tmp/rubocop_cache bundle exec rubocop`
+- For single-file checks:
+  - `RUBOCOP_CACHE_ROOT=/home/ledsun/rss-fusion/tmp/rubocop_cache bundle exec rubocop <path>`
+- Temporary file handling:
+  - Keep cache under `tmp/rubocop_cache` only.
+  - Do not commit files under `tmp/`.
+  - Remove cache after verification when no longer needed:
+    - `rm -rf tmp/rubocop_cache`
+
 ## Failure Handling
 
 When a run fails, report:
