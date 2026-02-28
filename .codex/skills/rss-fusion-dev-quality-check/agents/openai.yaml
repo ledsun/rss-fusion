@@ -1,0 +1,4 @@
+interface:
+  display_name: "RSS Fusion Dev Quality"
+  short_description: "Run local tests/lint safely"
+  default_prompt: "Run rss-fusion local tests and RuboCop, keep default .rubocop_cache usage, and report concrete findings."

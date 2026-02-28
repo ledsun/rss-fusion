@@ -54,18 +54,10 @@ Use `gh` CLI and `curl` for verification.
 
 ## Local RuboCop Reproduction
 
-When `Run Tests and Lint` fails on RuboCop, reproduce locally without writing outside the workspace.
+When `Run Tests and Lint` fails on RuboCop, use the `rss-fusion-dev-quality-check` skill for local reproduction and fix verification.
 
-- Use workspace-local cache root:
-  - `mkdir -p tmp/rubocop_cache`
-  - `RUBOCOP_CACHE_ROOT=/home/ledsun/rss-fusion/tmp/rubocop_cache bundle exec rubocop`
-- For single-file checks:
-  - `RUBOCOP_CACHE_ROOT=/home/ledsun/rss-fusion/tmp/rubocop_cache bundle exec rubocop <path>`
-- Temporary file handling:
-  - Keep cache under `tmp/rubocop_cache` only.
-  - Do not commit files under `tmp/`.
-  - Remove cache after verification when no longer needed:
-    - `rm -rf tmp/rubocop_cache`
+- This post-push skill focuses on GitHub Actions and Pages verification only.
+- Local test/lint procedure and cache policy (`.rubocop_cache/`) live in the dev-quality skill.
 
 ## Failure Handling
 

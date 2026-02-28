@@ -1,6 +1,7 @@
 AllCops:
   NewCops: disable
   TargetRubyVersion: 4.0
+  CacheRootDirectory: .rubocop_cache
 
 Metrics/MethodLength:
   Max: 25

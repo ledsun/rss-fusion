@@ -74,6 +74,8 @@ bundle exec ruby -Itest test/stats_test.rb
 bundle exec rubocop
 ```
 
+- RuboCop のキャッシュは標準の `.rubocop_cache/` を使用します（`.gitignore` 済み）。
+
 ## 設定方法
 
 ### `feeds.yml`
