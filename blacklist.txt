@@ -1,6 +1,7 @@
 # Prefix blacklist rules (one per line)
 https://qiita.com/GeneLab_999
 https://qiita.com/cvusk
+https://qiita.com/emi_ndk
 https://qiita.com/ennagara128
 https://qiita.com/hiropon122
 https://qiita.com/kenimo49/
