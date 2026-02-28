@@ -10,8 +10,6 @@ class FusionRssTest < Minitest::Test
     FusionRss::FeedEntry.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
   end
 
-  # Builds a duck-typed stub that satisfies the Filter interface expected by FusionRss.
-  # Blacklists URLs that start with any of the given prefixes (if provided).
   def make_filter(*prefixes)
     obj = Object.new
     obj.instance_variable_set(:@prefixes, prefixes)
@@ -106,9 +104,7 @@ class FusionRssTest < Minitest::Test
     stats = Stats.new(feeds_total: 1)
     fusion.finalize(stats)
 
-    # one duplicate should be counted
     assert_equal 1, stats.items_skipped_duplicate
-    # output should include non-duplicate items only
     assert_equal 2, stats.items_output
     rss = fusion.send(:to_rss)
     assert_includes rss, '<title>third</title>'

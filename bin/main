@@ -27,7 +27,7 @@ def process_entries(entries, fusion_rss, stats)
   stats.item_fetched(entries.size)
   stats.item_skipped_no_url(skipped.size)
 
-  valid.each { |entry| fusion_rss.add(entry.to_fusion_entry) }
+  fusion_rss.add(*valid.map(&:to_fusion_entry))
 end
 
 def process_feed(feed_source, fusion_rss, stats)
