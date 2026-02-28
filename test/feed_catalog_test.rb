@@ -2,11 +2,11 @@
 
 require 'minitest/autorun'
 require 'tmpdir'
-require_relative '../lib/loader'
+require_relative '../lib/feed_catalog'
 
-class LoaderTest < Minitest::Test
+class FeedCatalogTest < Minitest::Test
   def with_temp_feeds_file(content)
-    Dir.mktmpdir('loader-test-') do |dir|
+    Dir.mktmpdir('feed-catalog-test-') do |dir|
       path = File.join(dir, 'feeds.yml')
       File.write(path, content)
       yield path
@@ -23,20 +23,20 @@ class LoaderTest < Minitest::Test
     YAML
 
     with_temp_feeds_file(yaml) do |path|
-      loader = Loader.new(path)
+      feed_catalog = FeedCatalog.new(path)
 
-      assert_equal 2, loader.length
-      assert_equal 2, loader.size
-      assert_equal 'Zenn',                                loader.to_a[0].name
-      assert_equal 'https://zenn.dev/topics/codex/feed',  loader.to_a[0].url
-      assert_equal 'Qiita',                               loader.to_a[1].name
-      assert_equal 'https://qiita.com/tags/codex/feed',   loader.to_a[1].url
+      assert_equal 2, feed_catalog.length
+      assert_equal 2, feed_catalog.size
+      assert_equal 'Zenn',                                feed_catalog.to_a[0].name
+      assert_equal 'https://zenn.dev/topics/codex/feed',  feed_catalog.to_a[0].url
+      assert_equal 'Qiita',                               feed_catalog.to_a[1].name
+      assert_equal 'https://qiita.com/tags/codex/feed',   feed_catalog.to_a[1].url
     end
   end
 
   def test_raises_when_top_level_feeds_is_missing
     with_temp_feeds_file("not_feeds: []\n") do |path|
-      error = assert_raises(Loader::ConfigFormatError) { Loader.new(path) }
+      error = assert_raises(FeedCatalog::ConfigFormatError) { FeedCatalog.new(path) }
       assert_includes error.message, "top-level 'feeds' array is required"
     end
   end
@@ -48,7 +48,7 @@ class LoaderTest < Minitest::Test
     YAML
 
     with_temp_feeds_file(yaml) do |path|
-      error = assert_raises(Loader::ConfigFormatError) { Loader.new(path) }
+      error = assert_raises(FeedCatalog::ConfigFormatError) { FeedCatalog.new(path) }
       assert_includes error.message, 'expected mapping'
     end
   end
@@ -60,7 +60,7 @@ class LoaderTest < Minitest::Test
     YAML
 
     with_temp_feeds_file(yaml) do |path|
-      error = assert_raises(Loader::ConfigFormatError) { Loader.new(path) }
+      error = assert_raises(FeedCatalog::ConfigFormatError) { FeedCatalog.new(path) }
       assert_includes error.message, 'name and url are required'
     end
   end
@@ -74,7 +74,7 @@ class LoaderTest < Minitest::Test
     YAML
 
     with_temp_feeds_file(yaml) do |path|
-      error = assert_raises(Loader::ConfigFormatError) { Loader.new(path) }
+      error = assert_raises(FeedCatalog::ConfigFormatError) { FeedCatalog.new(path) }
       assert_includes error.message, 'YAML syntax'
     end
   end

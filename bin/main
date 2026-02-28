@@ -12,7 +12,7 @@ MAX_ITEMS = 50
 
 require_relative '../lib/stats'
 require_relative '../lib/fusion_rss'
-require_relative '../lib/loader'
+require_relative '../lib/feed_catalog'
 require_relative '../lib/black_list'
 require_relative '../lib/subscribe_rss'
 require_relative '../lib/filter'
@@ -45,16 +45,16 @@ rescue StandardError => e
 end
 
 def main
-  loader = Loader.new(FEEDS_PATH)
+  feed_catalog = FeedCatalog.new(FEEDS_PATH)
   blacklist = BlackList.new(BLACKLIST_PATH)
-  stats = Stats.new(feeds_total: loader.length)
+  stats = Stats.new(feeds_total: feed_catalog.length)
 
-  log "Loaded #{loader.length} feeds"
+  log "Loaded #{feed_catalog.length} feeds"
   log "Loaded #{blacklist.length} blacklist rules"
 
   fusion_rss = FusionRss.new(Filter.new(blacklist), MAX_ITEMS)
 
-  loader.each do |subscribe_rss|
+  feed_catalog.each do |subscribe_rss|
     process_feed(subscribe_rss, fusion_rss, stats)
   end
 
@@ -66,7 +66,7 @@ def main
 
   stats.summary.each { |line| log "Summary #{line}" }
   log "Wrote #{OUTPUT_PATH}"
-rescue Loader::ConfigFormatError => e
+rescue FeedCatalog::ConfigFormatError => e
   log "Feed config load failed: #{FEEDS_PATH} (#{e.class}: #{e.message})"
   raise
 end

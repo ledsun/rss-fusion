@@ -61,7 +61,7 @@ bundle exec ruby -Itest test/all.rb
 ```bash
 bundle exec ruby -Itest test/feed_test.rb
 bundle exec ruby -Itest test/fusion_rss_test.rb
-bundle exec ruby -Itest test/loader_test.rb
+bundle exec ruby -Itest test/feed_catalog_test.rb
 bundle exec ruby -Itest test/stats_test.rb
 ```
 

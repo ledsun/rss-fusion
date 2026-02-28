@@ -3,8 +3,8 @@
 require 'yaml'
 require_relative 'subscribe_rss'
 
-# Loader reads and validates feeds.yml and exposes feed rows via Enumerable.
-class Loader
+# FeedCatalog reads and validates feeds.yml and exposes feed rows via Enumerable.
+class FeedCatalog
   class ConfigFormatError < StandardError; end
 
   include Enumerable
