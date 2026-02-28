@@ -37,7 +37,26 @@ class FeedSourceTest < Minitest::Test
     end
   end
 
+  def test_feed_entry_url_blank_is_true_for_nil_or_blank_like_values
+    assert_equal true, build_feed_entry(url: nil).url_blank?
+    assert_equal true, build_feed_entry(url: '').url_blank?
+    assert_equal true, build_feed_entry(url: '   ').url_blank?
+  end
+
+  def test_feed_entry_url_blank_is_false_for_non_blank_url
+    assert_equal false, build_feed_entry(url: 'https://example.com/post').url_blank?
+  end
+
   private
+
+  def build_feed_entry(url:)
+    FeedSource::FeedEntry.new(
+      title: 'Title',
+      url: url,
+      published_at: Time.utc(2026, 2, 28, 0, 0, 0),
+      feed_name: 'Sample'
+    )
+  end
 
   def with_stubbed_uri_open(xml)
     original_open = URI.method(:open)
