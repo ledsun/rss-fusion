@@ -59,4 +59,10 @@ class GithubReleaseFilterTest < Minitest::Test
   def test_nightly_with_suffix_is_unstable
     assert @filter.unstable?('https://github.com/owner/repo/releases/tag/nightly-20231204')
   end
+
+  # --- unstable: collab- ---
+
+  def test_collab_tag_is_unstable
+    assert @filter.unstable?('https://github.com/owner/repo/releases/tag/collab-feature-2026-02-28')
+  end
 end
