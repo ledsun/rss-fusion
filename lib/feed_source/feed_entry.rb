@@ -14,5 +14,9 @@ class FeedSource
         feed_name: feed_name
       )
     end
+
+    def url_blank?
+      url.to_s.strip.empty?
+    end
   end
 end

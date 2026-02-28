@@ -24,7 +24,7 @@ end
 def process_entries(entries, fusion_rss, stats)
   entries.each do |entry|
     stats.item_fetched
-    if entry.url.to_s.empty?
+    if entry.url_blank?
       stats.item_skipped_no_url
       next
     end
