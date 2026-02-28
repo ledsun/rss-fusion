@@ -18,7 +18,7 @@
 
 - `feeds.yml`: フィード一覧（`name`, `url`）
 - `blacklist.txt`: 除外URL prefix一覧（1行1ルール）
-- `scripts/main.rb`: 統合RSS生成スクリプト
+- `bin/main`: 統合RSS生成の実行エントリ
 - `lib/*.rb`: フィルタ/ローダ/統計などのライブラリ本体
 - `lib/fusion_rss/*`, `lib/subscribe_rss/*`: ドメイン別の実装詳細
 - `public/merged.xml`: 生成される統合RSS
@@ -39,7 +39,7 @@ bundle install
 ## ローカル実行
 
 ```bash
-bundle exec ruby scripts/main.rb
+bundle exec ruby bin/main
 ```
 
 実行後に以下が生成・更新されます。

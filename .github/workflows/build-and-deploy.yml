@@ -32,7 +32,7 @@ jobs:
         run: bundle install
 
       - name: Build merged RSS
-        run: bundle exec ruby scripts/main.rb
+        run: bundle exec ruby bin/main
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
