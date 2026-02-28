@@ -2,7 +2,7 @@
 
 require 'minitest/autorun'
 require 'stringio'
-require_relative '../scripts/subscribe_rss'
+require_relative '../lib/subscribe_rss'
 
 class SubscribeRssTest < Minitest::Test
   def sample_xml

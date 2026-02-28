@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require_relative '../scripts/stats'
+require_relative '../lib/stats'
 
 class StatsTest < Minitest::Test
   def setup

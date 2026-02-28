@@ -2,8 +2,8 @@
 
 require 'minitest/autorun'
 require_relative '../lib/fusion_rss'
-require_relative '../scripts/stats'
-require_relative '../scripts/filter'
+require_relative '../lib/stats'
+require_relative '../lib/filter'
 
 class FusionRssUnstableFilterTest < Minitest::Test
   def make_entry(title:, url:, published_at:, feed_name: 'f')

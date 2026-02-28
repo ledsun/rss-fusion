@@ -2,7 +2,7 @@
 
 require 'minitest/autorun'
 require 'tmpdir'
-require_relative '../scripts/loader'
+require_relative '../lib/loader'
 
 class LoaderTest < Minitest::Test
   def with_temp_feeds_file(content)

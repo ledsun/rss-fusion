@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require_relative '../scripts/filter'
+require_relative '../lib/filter'
 
 class FilterTest < Minitest::Test
   STABLE_URL   = 'https://github.com/owner/repo/releases/tag/v1.0.0'
