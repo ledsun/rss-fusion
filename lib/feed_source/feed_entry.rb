@@ -2,7 +2,7 @@
 
 require_relative '../fusion_rss/feed_entry'
 
-class SubscribeRss
+class FeedSource
   FeedEntry = Data.define(:title, :url, :published_at, :feed_name) do
     def to_fusion_entry
       base = title.to_s.strip

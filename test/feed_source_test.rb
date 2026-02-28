@@ -2,9 +2,9 @@
 
 require 'minitest/autorun'
 require 'stringio'
-require_relative '../lib/subscribe_rss'
+require_relative '../lib/feed_source'
 
-class SubscribeRssTest < Minitest::Test
+class FeedSourceTest < Minitest::Test
   def sample_xml
     <<~XML
       <?xml version="1.0" encoding="UTF-8"?>
@@ -22,7 +22,7 @@ class SubscribeRssTest < Minitest::Test
   end
 
   def test_fetch_entries_reads_response_and_parses_fields
-    rss = SubscribeRss.new(name: 'Sample', url: 'https://example.com/feed')
+    rss = FeedSource.new(name: 'Sample', url: 'https://example.com/feed')
     with_stubbed_uri_open(sample_xml) do |probe|
       entries = rss.fetch_entries
       assert_equal 1, entries.length

@@ -14,7 +14,7 @@ require_relative '../lib/stats'
 require_relative '../lib/fusion_rss'
 require_relative '../lib/feed_catalog'
 require_relative '../lib/black_list'
-require_relative '../lib/subscribe_rss'
+require_relative '../lib/feed_source'
 require_relative '../lib/filter'
 
 def log(msg)
@@ -33,15 +33,15 @@ def process_entries(entries, fusion_rss, stats)
   end
 end
 
-def process_feed(subscribe_rss, fusion_rss, stats)
-  entries = subscribe_rss.fetch_entries
+def process_feed(feed_source, fusion_rss, stats)
+  entries = feed_source.fetch_entries
   stats.feed_succeeded
 
-  log "Fetched #{subscribe_rss.name} (#{subscribe_rss.url}) entries=#{entries.length}"
+  log "Fetched #{feed_source.name} (#{feed_source.url}) entries=#{entries.length}"
   process_entries(entries, fusion_rss, stats)
 rescue StandardError => e
   stats.feed_failed
-  log "Feed fetch/parse failed: #{subscribe_rss.name} #{subscribe_rss.url} (#{e.class}: #{e.message})"
+  log "Feed fetch/parse failed: #{feed_source.name} #{feed_source.url} (#{e.class}: #{e.message})"
 end
 
 def main
@@ -54,8 +54,8 @@ def main
 
   fusion_rss = FusionRss.new(Filter.new(blacklist), MAX_ITEMS)
 
-  feed_catalog.each do |subscribe_rss|
-    process_feed(subscribe_rss, fusion_rss, stats)
+  feed_catalog.each do |feed_source|
+    process_feed(feed_source, fusion_rss, stats)
   end
 
   fusion_rss.finalize(stats)

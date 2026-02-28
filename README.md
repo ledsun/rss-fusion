@@ -20,7 +20,7 @@
 - `blacklist.txt`: 除外URL prefix一覧（1行1ルール）
 - `bin/main`: 統合RSS生成の実行エントリ
 - `lib/*.rb`: フィルタ/ローダ/統計などのライブラリ本体
-- `lib/fusion_rss/*`, `lib/subscribe_rss/*`: ドメイン別の実装詳細
+- `lib/fusion_rss/*`, `lib/feed_source/*`: ドメイン別の実装詳細
 - `public/merged.xml`: 生成される統合RSS
 - `public/index.html`: Pages 用案内ページ
 - `.github/workflows/build-and-deploy.yml`: 毎時実行 + Pages デプロイ
@@ -62,6 +62,7 @@ bundle exec ruby -Itest test/all.rb
 bundle exec ruby -Itest test/feed_test.rb
 bundle exec ruby -Itest test/fusion_rss_test.rb
 bundle exec ruby -Itest test/feed_catalog_test.rb
+bundle exec ruby -Itest test/feed_source_test.rb
 bundle exec ruby -Itest test/stats_test.rb
 ```
 

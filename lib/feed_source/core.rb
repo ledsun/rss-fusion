@@ -4,8 +4,8 @@ require 'open-uri'
 require 'feedjira'
 require 'time'
 
-# SubscribeRss represents a feed source and provides HTTP fetching and parsing.
-class SubscribeRss
+# FeedSource represents a feed source and provides HTTP fetching and parsing.
+class FeedSource
   USER_AGENT = 'rss-merge-bot/0.1'
   OPEN_TIMEOUT = 10
   READ_TIMEOUT = 20

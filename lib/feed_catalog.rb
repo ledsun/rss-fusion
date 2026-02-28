@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'yaml'
-require_relative 'subscribe_rss'
+require_relative 'feed_source'
 
 # FeedCatalog reads and validates feeds.yml and exposes feed rows via Enumerable.
 class FeedCatalog
@@ -37,6 +37,6 @@ class FeedCatalog
     url = row['url'].to_s.strip
     raise ConfigFormatError, "Invalid feed row: name and url are required (#{row.inspect})" if name.empty? || url.empty?
 
-    SubscribeRss.new(name:, url:)
+    FeedSource.new(name:, url:)
   end
 end
