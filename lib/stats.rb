@@ -20,8 +20,8 @@ class Stats
 
   def feed_succeeded    = tap { @feeds_succeeded += 1 }
   def feed_failed       = tap { @feeds_failed += 1 }
-  def item_fetched      = tap { @items_fetched += 1 }
-  def item_skipped_no_url    = tap { @items_skipped_no_url += 1 }
+  def item_fetched(count) = tap { @items_fetched += count }
+  def item_skipped_no_url(count) = tap { @items_skipped_no_url += count }
   def item_skipped_blacklist = tap { @items_skipped_blacklist += 1 }
   def item_skipped_duplicate = tap { @items_skipped_duplicate += 1 }
 

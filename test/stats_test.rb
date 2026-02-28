@@ -37,18 +37,18 @@ class StatsTest < Minitest::Test
   end
 
   def test_item_fetched
-    @stats.item_fetched
+    @stats.item_fetched(1)
     assert_equal 1, @stats.items_fetched
   end
 
-  def test_item_fetched_multiple
-    5.times { @stats.item_fetched }
-    assert_equal 5, @stats.items_fetched
+  def test_item_fetched_with_count
+    @stats.item_fetched(7)
+    assert_equal 7, @stats.items_fetched
   end
 
-  def test_item_skipped_no_url
-    @stats.item_skipped_no_url
-    assert_equal 1, @stats.items_skipped_no_url
+  def test_item_skipped_no_url_with_count
+    @stats.item_skipped_no_url(4)
+    assert_equal 4, @stats.items_skipped_no_url
   end
 
   def test_item_skipped_blacklist
@@ -94,8 +94,8 @@ class StatsTest < Minitest::Test
   end
 
   def test_summary_items_line
-    10.times { @stats.item_fetched }
-    @stats.item_skipped_no_url
+    @stats.item_fetched(10)
+    @stats.item_skipped_no_url(1)
     @stats.finalize(output: 4, blacklisted: 2, duplicate: 3, unstable: 1)
     summary = 'items fetched=10 skipped_no_url=1 skipped_blacklist=2 ' \
               'skipped_duplicate=3 skipped_unstable=1 output=4'
@@ -109,8 +109,8 @@ class StatsTest < Minitest::Test
   def test_counters_are_independent
     @stats.feed_succeeded
     @stats.feed_failed
-    @stats.item_fetched
-    @stats.item_skipped_no_url
+    @stats.item_fetched(1)
+    @stats.item_skipped_no_url(1)
     @stats.finalize(output: 0, blacklisted: 1, duplicate: 1, unstable: 2)
 
     assert_equal 1, @stats.feeds_succeeded
