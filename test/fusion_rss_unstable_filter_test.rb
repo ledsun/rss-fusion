@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require_relative '../scripts/fusion_rss'
+require_relative '../lib/fusion_rss'
 require_relative '../scripts/stats'
 require_relative '../scripts/filter'
 

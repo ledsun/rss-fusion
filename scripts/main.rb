@@ -11,7 +11,7 @@ OUTPUT_PATH = File.join(OUTPUT_DIR, 'merged.xml')
 MAX_ITEMS = 50
 
 require_relative 'stats'
-require_relative 'fusion_rss'
+require_relative '../lib/fusion_rss'
 require_relative 'loader'
 require_relative 'black_list'
 require_relative 'subscribe_rss'

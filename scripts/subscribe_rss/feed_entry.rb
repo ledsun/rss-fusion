@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../fusion_rss/feed_entry'
+require_relative '../../lib/fusion_rss/feed_entry'
 
 class SubscribeRss
   FeedEntry = Data.define(:title, :url, :published_at, :feed_name) do

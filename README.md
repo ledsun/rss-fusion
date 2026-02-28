@@ -19,6 +19,7 @@
 - `feeds.yml`: フィード一覧（`name`, `url`）
 - `blacklist.txt`: 除外URL prefix一覧（1行1ルール）
 - `scripts/main.rb`: 統合RSS生成スクリプト
+- `lib/fusion_rss.rb`: 統合処理のエントリ（`lib/fusion_rss/*` を読み込み）
 - `public/merged.xml`: 生成される統合RSS
 - `public/index.html`: Pages 用案内ページ
 - `.github/workflows/build-and-deploy.yml`: 毎時実行 + Pages デプロイ
