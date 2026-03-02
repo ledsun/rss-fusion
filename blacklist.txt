@@ -1,9 +1,12 @@
 # Prefix blacklist rules (one per line)
 https://qiita.com/GeneLab_999
+https://qiita.com/YujiNaramoto
+https://qiita.com/akahara-studyroom
 https://qiita.com/cvusk
 https://qiita.com/dosanko_tousan
 https://qiita.com/emi_ndk
 https://qiita.com/ennagara128
+https://qiita.com/hibiki_hangai
 https://qiita.com/hiropon122
 https://qiita.com/kenimo49/
 https://qiita.com/kotaro_ai_lab
@@ -11,10 +14,13 @@ https://qiita.com/mk18
 https://qiita.com/mhamadajp
 https://qiita.com/nogataka
 https://qiita.com/nori-channel
+https://qiita.com/noujiru
+https://qiita.com/orsonamiri
 https://qiita.com/pythonista0328
 https://qiita.com/shimo4228
 https://qiita.com/takao-shimizu
 https://qiita.com/taketsuyo
+https://qiita.com/toarusyakaijin
 https://qiita.com/ysshin
 https://qiita.com/yuto0623
 https://zenn.dev/joinclass
