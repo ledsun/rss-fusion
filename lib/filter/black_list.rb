@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Filter::BlackList loads URL prefix rules from a file and checks URLs against them.
 class Filter
+  # Loads URL prefix rules from a file and checks URLs against them.
   class BlackList
     def initialize(path)
       @rules = load_blacklist(path)

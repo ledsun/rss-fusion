@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-# Filter::GithubReleaseFilter detects non-stable GitHub release URLs.
-# A release is considered unstable when its URL contains a pre-release
-# identifier such as alpha, pre, nightly, or collab-.
 class Filter
+  # Detects non-stable GitHub release URLs.
+  # A release is considered unstable when its URL contains a pre-release
+  # identifier such as alpha, pre, nightly, or collab-.
   class GithubReleaseFilter
     GITHUB_URL_PREFIX = 'https://github.com/'
     UNSTABLE_PATTERN = /alpha|pre|nightly|collab-/i
