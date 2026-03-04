@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'github_release_filter'
+require_relative 'filter/black_list'
+require_relative 'filter/github_release_filter'
 
 # Filter combines BlackList and GithubReleaseFilter into a single filter.
 # FusionRss calls match? once per entry; counts for each category are
