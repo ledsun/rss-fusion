@@ -4,9 +4,15 @@ require 'minitest/autorun'
 require_relative '../lib/filter'
 
 class FilterTest < Minitest::Test
+  EntryStub = Struct.new(:url, :title, :summary)
+
   STABLE_URL   = 'https://github.com/owner/repo/releases/tag/v1.0.0'
   UNSTABLE_URL = 'https://github.com/owner/repo/releases/tag/v1.0.0-alpha.1'
   NIGHTLY_URL  = 'https://github.com/owner/repo/releases/tag/nightly'
+
+  def make_entry(url, title: '', summary: nil)
+    EntryStub.new(url, title, summary)
+  end
 
   def make_blacklist(*prefixes)
     obj = Object.new
@@ -16,47 +22,47 @@ class FilterTest < Minitest::Test
 
   def test_non_matching_url_returns_false
     filter = Filter.new(make_blacklist)
-    refute filter.match?('https://example.com/some/page')
+    refute filter.match?(make_entry('https://example.com/some/page'))
   end
 
   def test_stable_github_release_url_returns_false
     filter = Filter.new(make_blacklist)
-    refute filter.match?(STABLE_URL)
+    refute filter.match?(make_entry(STABLE_URL))
   end
 
   def test_blacklisted_url_returns_true
     filter = Filter.new(make_blacklist('https://spam.example/'))
-    assert filter.match?('https://spam.example/post')
+    assert filter.match?(make_entry('https://spam.example/post'))
   end
 
   def test_unstable_github_release_url_returns_true
     filter = Filter.new(make_blacklist)
-    assert filter.match?(UNSTABLE_URL)
+    assert filter.match?(make_entry(UNSTABLE_URL))
   end
 
   def test_nightly_github_release_url_returns_true
     filter = Filter.new(make_blacklist)
-    assert filter.match?(NIGHTLY_URL)
+    assert filter.match?(make_entry(NIGHTLY_URL))
   end
 
   def test_blacklisted_increments_blacklisted_count
     filter = Filter.new(make_blacklist('https://spam.example/'))
-    filter.match?('https://spam.example/1')
-    filter.match?('https://spam.example/2')
+    filter.match?(make_entry('https://spam.example/1'))
+    filter.match?(make_entry('https://spam.example/2'))
     assert_equal 2, filter.blacklisted_count
     assert_equal 0, filter.unstable_count
   end
 
   def test_unstable_increments_unstable_count
     filter = Filter.new(make_blacklist)
-    filter.match?(UNSTABLE_URL)
+    filter.match?(make_entry(UNSTABLE_URL))
     assert_equal 0, filter.blacklisted_count
     assert_equal 1, filter.unstable_count
   end
 
   def test_non_matching_does_not_increment_counts
     filter = Filter.new(make_blacklist)
-    filter.match?('https://good.example/post')
+    filter.match?(make_entry('https://good.example/post'))
     assert_equal 0, filter.blacklisted_count
     assert_equal 0, filter.unstable_count
   end
@@ -65,7 +71,7 @@ class FilterTest < Minitest::Test
     # A blacklisted URL that also looks unstable should be counted as blacklisted
     url = 'https://spam.example/releases/tag/nightly'
     filter = Filter.new(make_blacklist('https://spam.example/'))
-    assert filter.match?(url)
+    assert filter.match?(make_entry(url))
     assert_equal 1, filter.blacklisted_count
     assert_equal 0, filter.unstable_count
   end
@@ -74,5 +80,29 @@ class FilterTest < Minitest::Test
     filter = Filter.new(make_blacklist)
     assert_equal 0, filter.blacklisted_count
     assert_equal 0, filter.unstable_count
+  end
+
+  def test_gihyo_entry_without_keyword_is_filtered
+    filter = Filter.new(make_blacklist)
+    entry = make_entry('https://gihyo.jp/article/123', title: 'Rubyの新機能', summary: 'Rubyについての記事')
+    assert filter.match?(entry)
+  end
+
+  def test_gihyo_entry_with_keyword_in_title_passes
+    filter = Filter.new(make_blacklist)
+    entry = make_entry('https://gihyo.jp/article/456', title: 'Claude 3の使い方', summary: 'AI記事')
+    refute filter.match?(entry)
+  end
+
+  def test_gihyo_entry_with_keyword_in_summary_passes
+    filter = Filter.new(make_blacklist)
+    entry = make_entry('https://gihyo.jp/article/789', title: '最新AI情報', summary: 'ChatGPTの活用事例')
+    refute filter.match?(entry)
+  end
+
+  def test_non_gihyo_entry_without_keyword_passes
+    filter = Filter.new(make_blacklist)
+    entry = make_entry('https://example.com/article', title: 'Some Article', summary: 'Some content')
+    refute filter.match?(entry)
   end
 end

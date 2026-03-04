@@ -12,7 +12,7 @@ class FusionRss
   end
 
   def add(*feed_entries)
-    @feeds.concat(feed_entries.reject { |e| @filter.match?(e.url) })
+    @feeds.concat(feed_entries.reject { |e| @filter.match?(e) })
   end
 
   def finalize(stats)
