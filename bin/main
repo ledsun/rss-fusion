@@ -13,7 +13,6 @@ MAX_ITEMS = 50
 require_relative '../lib/stats'
 require_relative '../lib/fusion_rss'
 require_relative '../lib/feed_catalog'
-require_relative '../lib/black_list'
 require_relative '../lib/feed_source'
 require_relative '../lib/filter'
 
@@ -43,7 +42,7 @@ end
 
 def main
   feed_catalog = FeedCatalog.new(FEEDS_PATH)
-  blacklist = BlackList.new(BLACKLIST_PATH)
+  blacklist = Filter::BlackList.new(BLACKLIST_PATH)
   stats = Stats.new(feeds_total: feed_catalog.length)
 
   log "Loaded #{feed_catalog.length} feeds"

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require_relative '../lib/github_release_filter'
+require_relative '../lib/filter'
 
 class GithubReleaseFilterTest < Minitest::Test
   def setup
-    @filter = GithubReleaseFilter.new
+    @filter = Filter::GithubReleaseFilter.new
   end
 
   # --- stable releases (should return false) ---
