@@ -12,7 +12,7 @@ class FusionRssUnstableFilterTest < Minitest::Test
 
   def make_blacklist_stub
     obj = Object.new
-    obj.define_singleton_method(:match?) { false }
+    obj.define_singleton_method(:match?) { |_entry| false }
     obj
   end
 
