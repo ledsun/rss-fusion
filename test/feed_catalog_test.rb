@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require 'minitest/autorun'
+require_relative 'test_helper'
 require 'tmpdir'
-require_relative '../lib/feed_catalog'
 
 class FeedCatalogTest < Minitest::Test
   def with_temp_feeds_file(content)

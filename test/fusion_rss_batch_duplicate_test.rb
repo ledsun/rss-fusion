@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-require 'minitest/autorun'
-require_relative '../lib/fusion_rss'
-require_relative '../lib/stats'
-require_relative '../lib/filter'
+require_relative 'test_helper'
 
 class FusionRssBatchDuplicateTest < Minitest::Test
   def make_entry(title:, url:, published_at:, feed_name: 'f')

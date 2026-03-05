@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'minitest/autorun'
-require_relative '../lib/filter'
+require_relative 'test_helper'
 
 class GihyoFilterTest < Minitest::Test
   EntryStub = Struct.new(:url, :title, :summary)
