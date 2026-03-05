@@ -25,18 +25,8 @@ class FeedSourceTest < Minitest::Test
     rss = FeedSource.new(name: 'Sample', url: 'https://example.com/feed')
     with_stubbed_uri_open(sample_xml) do
       entries = rss.fetch_entries
-      assert_equal 1, entries.length
-      assert_equal 'Hello', entries[0].title
-      assert_equal 'https://example.com/hello', entries[0].url
-      assert_equal 'Sample', entries[0].feed_name
-      assert_instance_of Time, entries[0].published_at
-
-      assert_equal true, it[:called]
-      assert_equal 'https://example.com/feed', it[:url]
-      assert_equal true, it[:has_block]
-      assert_equal 'rss-merge-bot/0.1', it[:options]['User-Agent']
-      assert_equal 'no-cache', it[:options]['Cache-Control']
-      assert_equal 'no-cache', it[:options]['Pragma']
+      assert_entry(entries[0])
+      assert_probe(it)
     end
   end
 
@@ -59,6 +49,22 @@ class FeedSourceTest < Minitest::Test
       published_at: Time.utc(2026, 2, 28, 0, 0, 0),
       feed_name: 'Sample'
     )
+  end
+
+  def assert_entry(entry)
+    assert_equal 'Hello', entry.title
+    assert_equal 'https://example.com/hello', entry.url
+    assert_equal 'Sample', entry.feed_name
+    assert_instance_of Time, entry.published_at
+  end
+
+  def assert_probe(probe)
+    assert_equal true, probe[:called]
+    assert_equal 'https://example.com/feed', probe[:url]
+    assert_equal true, probe[:has_block]
+    assert_equal 'rss-merge-bot/0.1', probe[:options]['User-Agent']
+    assert_equal 'no-cache', probe[:options]['Cache-Control']
+    assert_equal 'no-cache', probe[:options]['Pragma']
   end
 
   def with_stubbed_uri_open(xml)
