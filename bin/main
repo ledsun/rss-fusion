@@ -31,6 +31,7 @@ def main
   stats = fusion_rss.process catalog
   raise 'No feeds fetched successfully; aborting build' if stats.feeds_succeeded.zero?
   raise 'No items produced; aborting build' if stats.items_output.zero?
+
   stats.summary.each { log "Summary #{it}" }
 
   fusion_rss.write OUTPUT_PATH
