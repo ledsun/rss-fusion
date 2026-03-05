@@ -6,7 +6,7 @@ require_relative '../lib/feed_source'
 require_relative '../lib/stats'
 require_relative '../lib/filter'
 
-class FusionRssTest < Minitest::Test
+module FusionRssTestSupport
   def make_entry(title:, url:, published_at:, feed_name: 'f')
     FusionRss::FeedEntry.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
   end
@@ -28,6 +28,10 @@ class FusionRssTest < Minitest::Test
     obj.define_singleton_method(:unstable_count) { 0 }
     obj
   end
+end
+
+class FusionRssFinalizeTest < Minitest::Test
+  include FusionRssTestSupport
 
   def test_finalize_updates_items_output_and_rss_order
     fusion = FusionRss.new(make_filter, 10)
@@ -125,6 +129,10 @@ class FusionRssTest < Minitest::Test
     rss = fusion.send(:to_rss)
     assert_includes rss, '<title>x</title>'
   end
+end
+
+class FusionRssProcessTest < Minitest::Test
+  include FusionRssTestSupport
 
   def test_process_entries_adds_valid_and_skips_blank_url
     fusion = FusionRss.new(make_filter, 10)
