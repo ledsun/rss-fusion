@@ -33,7 +33,7 @@ def main
 
   fusion_rss.write OUTPUT_PATH
 
-  stats.summary.each { |line| log "Summary #{line}" }
+  stats.summary.each { log "Summary #{it}" }
   log "Wrote #{OUTPUT_PATH}"
 rescue FeedCatalog::ConfigFormatError => e
   log "Feed config load failed: #{FEEDS_PATH} (#{e.class}: #{e.message})"
