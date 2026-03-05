@@ -1,28 +1,21 @@
 # frozen_string_literal: true
 
 require_relative 'test_helper'
+require 'tmpdir'
 
 module FusionRssTestSupport
   def make_entry(title:, url:, published_at:, feed_name: 'f')
     FusionRss::FeedEntry.new title:, url:, published_at:, feed_name:
   end
 
-  def make_filter(*prefixes)
-    obj = Object.new
-    obj.instance_variable_set :@prefixes, prefixes
-    obj.instance_variable_set :@bl_count, 0
-    obj.define_singleton_method :match? do
-      entry = it
-      if @prefixes.any? { entry.url.start_with? it }
-        @bl_count += 1
-        true
-      else
-        false
-      end
+  def make_fusion(max_feeds, *prefixes)
+    fusion = nil
+    Dir.mktmpdir 'fusion-rss-test-' do |dir|
+      path = File.join dir, 'blacklist.txt'
+      File.write path, prefixes.join("\n")
+      fusion = FusionRss.new max_feeds, path
     end
-    obj.define_singleton_method(:blacklisted_count) { @bl_count }
-    obj.define_singleton_method(:unstable_count) { 0 }
-    obj
+    fusion
   end
 end
 
@@ -30,7 +23,7 @@ class FusionRssFinalizeTest < Minitest::Test
   include FusionRssTestSupport
 
   def test_finalize_updates_items_output_and_rss_order
-    fusion = FusionRss.new make_filter, 10
+    fusion = make_fusion 10
 
     now = Time.now
     fusion.send :add, make_entry(title: 'old', url: 'https://a.example/', published_at: now - 60, feed_name: 'feedA')
@@ -51,7 +44,7 @@ class FusionRssFinalizeTest < Minitest::Test
   end
 
   def test_blacklist_and_duplicate_counting
-    fusion = FusionRss.new make_filter('https://spam.example/'), 10
+    fusion = make_fusion 10, 'https://spam.example/'
 
     now = Time.now
     # added item
@@ -76,7 +69,7 @@ class FusionRssFinalizeTest < Minitest::Test
   end
 
   def test_max_items_truncation
-    fusion = FusionRss.new make_filter, 2
+    fusion = make_fusion 2
 
     now = Time.now
     fusion.send :add, make_entry(title: 'one',   url: 'https://one.example/',   published_at: now - 30)
@@ -96,7 +89,7 @@ class FusionRssFinalizeTest < Minitest::Test
   end
 
   def test_adding_duplicates_across_calls
-    fusion = FusionRss.new make_filter, 10
+    fusion = make_fusion 10
 
     now = Time.now
     fusion.send :add, make_entry(title: 'first',  url: 'https://dup.example/',   published_at: now - 5)
@@ -114,7 +107,7 @@ class FusionRssFinalizeTest < Minitest::Test
   end
 
   def test_to_rss_requires_finalize_first
-    fusion = FusionRss.new make_filter, 10
+    fusion = make_fusion 10
     now = Time.now
     fusion.send :add, make_entry(title: 'x', url: 'https://x.example/', published_at: now)
 
@@ -140,7 +133,7 @@ class FusionRssProcessTest < Minitest::Test
   end
 
   def test_process_entries_adds_valid_and_skips_blank_url
-    fusion = FusionRss.new make_filter, 10
+    fusion = make_fusion 10
     now = Time.now
 
     entries = [
@@ -161,7 +154,7 @@ class FusionRssProcessTest < Minitest::Test
   end
 
   def test_process_feed_on_success_increments_feed_succeeded
-    fusion = FusionRss.new make_filter, 10
+    fusion = make_fusion 10
     now = Time.now
     entries = [
       make_feed_entry(title: 'item', url: 'https://good.example/1', published_at: now, feed_name: 'src')
@@ -181,7 +174,7 @@ class FusionRssProcessTest < Minitest::Test
   end
 
   def test_process_feed_on_failure_increments_feed_failed
-    fusion = FusionRss.new make_filter, 10
+    fusion = make_fusion 10
 
     feed_source = Object.new
     feed_source.define_singleton_method(:name) { 'broken' }
@@ -197,7 +190,7 @@ class FusionRssProcessTest < Minitest::Test
   end
 
   def test_process_initializes_stats_and_finalizes
-    fusion = FusionRss.new make_filter, 10
+    fusion = make_fusion 10
     now = Time.now
     entries = [
       make_feed_entry(title: 'item', url: 'https://good.example/1', published_at: now, feed_name: 'src')

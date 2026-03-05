@@ -19,11 +19,7 @@ def log(msg)
 end
 
 def main
-  blacklist = Filter::BlackList.read_from BLACKLIST_PATH
-  log "Loaded #{blacklist.length} blacklist rules"
-
-  filter = Filter.new blacklist
-  fusion_rss = FusionRss.new filter, MAX_ITEMS
+  fusion_rss = FusionRss.new MAX_ITEMS, BLACKLIST_PATH
 
   catalog = FeedCatalog.read_from FEEDS_PATH
   log "Loaded #{catalog.length} feeds"

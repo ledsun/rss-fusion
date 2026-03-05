@@ -5,10 +5,10 @@ require 'fileutils'
 
 # FusionRss collects entries and builds the final merged RSS payload.
 class FusionRss
-  def initialize(filter, max_feeds)
-    @filter    = filter
+  def initialize(max_feeds, blacklist_path)
     @max_feeds = max_feeds
     @feeds     = []
+    @filter    = build_filter blacklist_path
   end
 
   def process(feed_catalog)
@@ -68,6 +68,12 @@ class FusionRss
 
   def log(msg)
     puts "[rss_fusion] #{msg}"
+  end
+
+  def build_filter(blacklist_path)
+    blacklist = Filter::BlackList.read_from blacklist_path
+    log "Loaded #{blacklist.length} blacklist rules"
+    Filter.new blacklist
   end
 
   def to_rss

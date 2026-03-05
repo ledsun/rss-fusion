@@ -1,22 +1,25 @@
 # frozen_string_literal: true
 
 require_relative 'test_helper'
+require 'tmpdir'
 
 class FusionRssBatchDuplicateTest < Minitest::Test
   def make_entry(title:, url:, published_at:, feed_name: 'f')
     FusionRss::FeedEntry.new title:, url:, published_at:, feed_name:
   end
 
-  def make_filter
-    obj = Object.new
-    obj.define_singleton_method(:match?) { |_entry| false }
-    obj.define_singleton_method(:blacklisted_count) { 0 }
-    obj.define_singleton_method(:unstable_count) { 0 }
-    obj
+  def make_fusion(max_feeds, *prefixes)
+    fusion = nil
+    Dir.mktmpdir 'fusion-rss-test-' do |dir|
+      path = File.join dir, 'blacklist.txt'
+      File.write path, prefixes.join("\n")
+      fusion = FusionRss.new max_feeds, path
+    end
+    fusion
   end
 
   def test_adding_duplicates_within_same_batch
-    fusion = FusionRss.new make_filter, 10
+    fusion = make_fusion 10
 
     now = Time.now
     fusion.send :add,
