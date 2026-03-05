@@ -8,7 +8,7 @@ BLACKLIST_PATH = 'blacklist.txt'
 OUTPUT_DIR = 'public'
 OUTPUT_PATH = File.join(OUTPUT_DIR, 'merged.xml')
 
-MAX_ITEMS = 50
+MAX_ITEMS = 30
 
 require_relative '../lib/stats'
 require_relative '../lib/fusion_rss'
