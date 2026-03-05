@@ -20,26 +20,6 @@ def log(msg)
   puts "[main] #{msg}"
 end
 
-def process_entries(entries, fusion_rss, stats)
-  valid, skipped = entries.partition { |e| !e.url_blank? }
-
-  stats.item_fetched(entries.size)
-  stats.item_skipped_no_url(skipped.size)
-
-  fusion_rss.add(*valid.map(&:to_fusion_entry))
-end
-
-def process_feed(feed_source, fusion_rss, stats)
-  entries = feed_source.fetch_entries
-  stats.feed_succeeded
-
-  log "Fetched #{feed_source.name} (#{feed_source.url}) entries=#{entries.length}"
-  process_entries(entries, fusion_rss, stats)
-rescue StandardError => e
-  stats.feed_failed
-  log "Feed fetch/parse failed: #{feed_source.name} #{feed_source.url} (#{e.class}: #{e.message})"
-end
-
 def main
   feed_catalog = FeedCatalog.new(FEEDS_PATH)
   blacklist = Filter::BlackList.new(BLACKLIST_PATH)
@@ -51,7 +31,7 @@ def main
   fusion_rss = FusionRss.new(Filter.new(blacklist), MAX_ITEMS)
 
   feed_catalog.each do |feed_source|
-    process_feed(feed_source, fusion_rss, stats)
+    fusion_rss.process_feed(feed_source, stats)
   end
 
   fusion_rss.finalize(stats)
