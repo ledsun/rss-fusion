@@ -22,3 +22,6 @@ Metrics/PerceivedComplexity:
 Naming/MethodName:
   Exclude:
     - 'test/feed_test.rb'
+
+Style/ItBlockParameter:
+  EnforcedStyle: always

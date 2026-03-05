@@ -13,7 +13,7 @@ class FeedCatalog
     feeds = data.is_a?(Hash) ? data['feeds'] : nil
     raise ConfigFormatError, 'Invalid feeds.yml: top-level \'feeds\' array is required' unless feeds.is_a?(Array)
 
-    @items = feeds.filter_map { |row| build_item(row) }
+    @items = feeds.filter_map { build_item(it) }
   rescue Psych::SyntaxError => e
     raise ConfigFormatError, "Invalid feeds.yml YAML syntax: #{e.message}"
   end

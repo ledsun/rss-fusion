@@ -16,7 +16,10 @@ class FilterTest < Minitest::Test
 
   def make_blacklist(*prefixes)
     obj = Object.new
-    obj.define_singleton_method(:match?) { |url| prefixes.any? { |p| url.start_with?(p) } }
+    obj.define_singleton_method(:match?) do
+      url = it
+      prefixes.any? { url.start_with?(it) }
+    end
     obj
   end
 

@@ -14,8 +14,9 @@ class FusionRssTest < Minitest::Test
     obj = Object.new
     obj.instance_variable_set(:@prefixes, prefixes)
     obj.instance_variable_set(:@bl_count, 0)
-    obj.define_singleton_method(:match?) do |entry|
-      if @prefixes.any? { |p| entry.url.start_with?(p) }
+    obj.define_singleton_method(:match?) do
+      entry = it
+      if @prefixes.any? { entry.url.start_with?(it) }
         @bl_count += 1
         true
       else

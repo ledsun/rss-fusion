@@ -12,7 +12,7 @@ class Filter
     end
 
     def match?(url)
-      @rules.any? { |rule| url.start_with?(rule) }
+      @rules.any? { url.start_with?(it) }
     end
 
     private
@@ -20,8 +20,8 @@ class Filter
     def load_blacklist(path)
       return [] unless File.exist?(path)
 
-      File.readlines(path, chomp: true).filter_map do |line|
-        rule = line.strip
+      File.readlines(path, chomp: true).filter_map do
+        rule = it.strip
         next if rule.empty? || rule.start_with?('#')
 
         rule
