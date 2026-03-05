@@ -17,9 +17,9 @@ class BlackListTest < Minitest::Test
       black_list = Filter::BlackList.read_from it
 
       assert_equal 2, black_list.length
-      assert black_list.match?('https://spam.example/post')
-      assert black_list.match?('https://ads.example/banner')
-      refute black_list.match?('https://good.example/')
+      assert_operator black_list, :match?, 'https://spam.example/post'
+      assert_operator black_list, :match?, 'https://ads.example/banner'
+      refute_operator black_list, :match?, 'https://good.example/'
     end
   end
 end

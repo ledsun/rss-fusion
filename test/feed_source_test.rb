@@ -30,13 +30,13 @@ class FeedSourceTest < Minitest::Test
   end
 
   def test_feed_entry_url_blank_is_true_for_nil_or_blank_like_values
-    assert_equal true, build_feed_entry(url: nil).url_blank?
-    assert_equal true, build_feed_entry(url: '').url_blank?
-    assert_equal true, build_feed_entry(url: '   ').url_blank?
+    assert build_feed_entry(url: nil).url_blank?
+    assert build_feed_entry(url: '').url_blank?
+    assert build_feed_entry(url: '   ').url_blank?
   end
 
   def test_feed_entry_url_blank_is_false_for_non_blank_url
-    assert_equal false, build_feed_entry(url: 'https://example.com/post').url_blank?
+    refute build_feed_entry(url: 'https://example.com/post').url_blank?
   end
 
   private
@@ -57,9 +57,9 @@ class FeedSourceTest < Minitest::Test
   end
 
   def assert_probe(probe)
-    assert_equal true, probe[:called]
+    assert probe[:called]
     assert_equal 'https://example.com/feed', probe[:url]
-    assert_equal true, probe[:has_block]
+    assert probe[:has_block]
     assert_equal 'rss-merge-bot/0.1', probe[:options]['User-Agent']
     assert_equal 'no-cache', probe[:options]['Cache-Control']
     assert_equal 'no-cache', probe[:options]['Pragma']

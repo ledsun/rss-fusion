@@ -52,7 +52,7 @@ class FeedTest < Minitest::Test
     assert_equal 'hello', entry.title
     assert_equal 'https://example.com/post', entry.link
     assert_equal 'https://example.com/post', entry.guid.content
-    assert_equal true, entry.guid.isPermaLink
+    assert entry.guid.isPermaLink
     assert_equal published_at, entry.pubDate
   end
 
@@ -71,7 +71,7 @@ class FeedTest < Minitest::Test
     assert_equal 'hello', maker.items.entry.title
     assert_equal 'https://example.com/post', maker.items.entry.link
     assert_equal 'https://example.com/post', maker.items.entry.guid.content
-    assert_equal true, maker.items.entry.guid.isPermaLink
+    assert maker.items.entry.guid.isPermaLink
     assert_equal published_at, maker.items.entry.pubDate
   end
 end

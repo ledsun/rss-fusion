@@ -24,27 +24,27 @@ class FilterTest < Minitest::Test
 
   def test_non_matching_url_returns_false
     filter = Filter.new make_blacklist
-    refute filter.match?(make_entry('https://example.com/some/page'))
+    refute_operator filter, :match?, make_entry('https://example.com/some/page')
   end
 
   def test_stable_github_release_url_returns_false
     filter = Filter.new make_blacklist
-    refute filter.match?(make_entry(STABLE_URL))
+    refute_operator filter, :match?, make_entry(STABLE_URL)
   end
 
   def test_blacklisted_url_returns_true
     filter = Filter.new make_blacklist('https://spam.example/')
-    assert filter.match?(make_entry('https://spam.example/post'))
+    assert_operator filter, :match?, make_entry('https://spam.example/post')
   end
 
   def test_unstable_github_release_url_returns_true
     filter = Filter.new make_blacklist
-    assert filter.match?(make_entry(UNSTABLE_URL))
+    assert_operator filter, :match?, make_entry(UNSTABLE_URL)
   end
 
   def test_nightly_github_release_url_returns_true
     filter = Filter.new make_blacklist
-    assert filter.match?(make_entry(NIGHTLY_URL))
+    assert_operator filter, :match?, make_entry(NIGHTLY_URL)
   end
 
   def test_blacklisted_increments_blacklisted_count
@@ -73,7 +73,7 @@ class FilterTest < Minitest::Test
     # A blacklisted URL that also looks unstable should be counted as blacklisted
     url = 'https://spam.example/releases/tag/nightly'
     filter = Filter.new make_blacklist('https://spam.example/')
-    assert filter.match?(make_entry(url))
+    assert_operator filter, :match?, make_entry(url)
     assert_equal 1, filter.blacklisted_count
     assert_equal 0, filter.unstable_count
   end
@@ -87,24 +87,24 @@ class FilterTest < Minitest::Test
   def test_gihyo_entry_without_keyword_is_filtered
     filter = Filter.new make_blacklist
     entry = make_entry 'https://gihyo.jp/article/123', title: 'Rubyの新機能', summary: 'Rubyについての記事'
-    assert filter.match?(entry)
+    assert_operator filter, :match?, entry
   end
 
   def test_gihyo_entry_with_keyword_in_title_passes
     filter = Filter.new make_blacklist
     entry = make_entry 'https://gihyo.jp/article/456', title: 'Claude 3の使い方', summary: 'AI記事'
-    refute filter.match?(entry)
+    refute_operator filter, :match?, entry
   end
 
   def test_gihyo_entry_with_keyword_in_summary_passes
     filter = Filter.new make_blacklist
     entry = make_entry 'https://gihyo.jp/article/789', title: '最新AI情報', summary: 'ChatGPTの活用事例'
-    refute filter.match?(entry)
+    refute_operator filter, :match?, entry
   end
 
   def test_non_gihyo_entry_without_keyword_passes
     filter = Filter.new make_blacklist
     entry = make_entry 'https://example.com/article', title: 'Some Article', summary: 'Some content'
-    refute filter.match?(entry)
+    refute_operator filter, :match?, entry
   end
 end
