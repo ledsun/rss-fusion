@@ -14,15 +14,13 @@ class FusionRss
   def process(feed_catalog)
     stats = Stats.new feeds_total: feed_catalog.length
 
-    feed_catalog.each do |feed_source|
-      process_feed feed_source, stats
-    end
+    feed_catalog.sources.each { process_feed it, stats }
 
     finalize stats
     stats
   end
 
-  def write(path)
+  def write_to(path)
     tmp_path = "#{path}.tmp"
     FileUtils.mkdir_p File.dirname(path)
     File.write tmp_path, to_rss

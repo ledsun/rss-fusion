@@ -12,7 +12,7 @@ class FeedCatalogTest < Minitest::Test
     end
   end
 
-  def test_loads_feeds_and_exposes_each_and_length
+  def test_loads_feeds_and_exposes_sources_and_length
     yaml = <<~YAML
       feeds:
         - name: Zenn
@@ -25,10 +25,10 @@ class FeedCatalogTest < Minitest::Test
       feed_catalog = FeedCatalog.new it
 
       assert_equal 2, feed_catalog.length
-      assert_equal 'Zenn',                                feed_catalog.to_a[0].name
-      assert_equal 'https://zenn.dev/topics/codex/feed',  feed_catalog.to_a[0].url
-      assert_equal 'Qiita',                               feed_catalog.to_a[1].name
-      assert_equal 'https://qiita.com/tags/codex/feed',   feed_catalog.to_a[1].url
+      assert_equal 'Zenn',                                feed_catalog.sources[0].name
+      assert_equal 'https://zenn.dev/topics/codex/feed',  feed_catalog.sources[0].url
+      assert_equal 'Qiita',                               feed_catalog.sources[1].name
+      assert_equal 'https://qiita.com/tags/codex/feed',   feed_catalog.sources[1].url
     end
   end
 
@@ -43,7 +43,7 @@ class FeedCatalogTest < Minitest::Test
       feed_catalog = FeedCatalog.read_from it
 
       assert_equal 1, feed_catalog.length
-      assert_equal 'Zenn', feed_catalog.to_a[0].name
+      assert_equal 'Zenn', feed_catalog.sources[0].name
     end
   end
 

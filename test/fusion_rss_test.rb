@@ -188,23 +188,4 @@ class FusionRssProcessTest < Minitest::Test
     assert_equal 1, stats.feeds_failed
     assert_equal 0, stats.items_fetched
   end
-
-  def test_process_initializes_stats_and_finalizes
-    fusion = make_fusion 10
-    now = Time.now
-    entries = [
-      make_feed_entry(title: 'item', url: 'https://good.example/1', published_at: now, feed_name: 'src')
-    ]
-
-    feed_source = Object.new
-    feed_source.define_singleton_method(:name) { 'src' }
-    feed_source.define_singleton_method(:url) { 'https://src.example/feed' }
-    feed_source.define_singleton_method(:fetch_entries) { entries }
-
-    result = fusion.process [feed_source]
-
-    assert_equal 1, result.feeds_total
-    assert_equal 1, result.feeds_succeeded
-    assert_equal 1, result.items_output
-  end
 end

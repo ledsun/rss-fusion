@@ -5,10 +5,11 @@ require 'forwardable'
 
 # FeedCatalog reads and validates feeds.yml and exposes feed rows via Enumerable.
 class FeedCatalog
-  include Enumerable
   extend Forwardable
 
-  def_delegators :@items, :each, :length
+  attr_reader :sources
+
+  def_delegator :@sources, :length
 
   def self.read_from(path)
     new path
@@ -19,7 +20,7 @@ class FeedCatalog
     feeds = data.is_a?(Hash) ? data['feeds'] : nil
     raise ConfigFormatError, 'Invalid feeds.yml: top-level \'feeds\' array is required' unless feeds.is_a? Array
 
-    @items = feeds.filter_map { build_item it }
+    @sources = feeds.filter_map { build_item it }
   rescue Psych::SyntaxError => e
     raise ConfigFormatError, "Invalid feeds.yml YAML syntax: #{e.message}"
   end
