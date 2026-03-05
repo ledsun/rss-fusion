@@ -19,13 +19,13 @@ class FusionRssBatchDuplicateTest < Minitest::Test
     fusion = FusionRss.new make_filter, 10
 
     now = Time.now
-    fusion.add \
+    fusion.send :add, \
       make_entry(title: 'first',  url: 'https://dup.example/',   published_at: now - 5),
       make_entry(title: 'second', url: 'https://dup.example/',   published_at: now),
       make_entry(title: 'third',  url: 'https://other.example/', published_at: now + 5)
 
     stats = Stats.new feeds_total: 1
-    fusion.finalize stats
+    fusion.send :finalize, stats
 
     assert_equal 1, stats.items_skipped_duplicate
     assert_equal 2, stats.items_output

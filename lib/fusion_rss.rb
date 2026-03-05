@@ -11,6 +11,26 @@ class FusionRss
     @feeds     = []
   end
 
+  def process(feed_catalog)
+    stats = Stats.new feeds_total: feed_catalog.length
+
+    feed_catalog.each do |feed_source|
+      process_feed feed_source, stats
+    end
+
+    finalize stats
+    stats
+  end
+
+  def write(path)
+    tmp_path = "#{path}.tmp"
+    FileUtils.mkdir_p File.dirname(path)
+    File.write tmp_path, to_rss
+    File.rename tmp_path, path
+  end
+
+  private
+
   def add(*feed_entries)
     @feeds.concat(feed_entries.reject { @filter.match?(it) })
   end
@@ -37,17 +57,6 @@ class FusionRss
     log "Feed fetch/parse failed: #{feed_source.name} #{feed_source.url} (#{e.class}: #{e.message})"
   end
 
-  def process(feed_catalog)
-    stats = Stats.new feeds_total: feed_catalog.length
-
-    feed_catalog.each do |feed_source|
-      process_feed feed_source, stats
-    end
-
-    finalize stats
-    stats
-  end
-
   def process_entries(entries, stats)
     valid, skipped = entries.partition { !it.url_blank? }
 
@@ -56,15 +65,6 @@ class FusionRss
 
     add(*valid.map(&:to_fusion_entry))
   end
-
-  def write(path)
-    tmp_path = "#{path}.tmp"
-    FileUtils.mkdir_p File.dirname(path)
-    File.write tmp_path, to_rss
-    File.rename tmp_path, path
-  end
-
-  private
 
   def log(msg)
     puts "[rss_fusion] #{msg}"
