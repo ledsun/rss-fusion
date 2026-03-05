@@ -1,0 +1,4 @@
+interface:
+  display_name: "RSS Fusion GitHub Filter"
+  short_description: "Maintain GitHub release unstable filters"
+  default_prompt: "Update rss-fusion GitHub release unstable filter keywords, align tests, run focused checks, and commit/push if requested."
