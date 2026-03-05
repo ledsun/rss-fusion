@@ -29,19 +29,10 @@ class FusionRss
 
   private
 
-  def add(*feed_entries)
-    @feeds.concat(feed_entries.reject { @filter.match?(it) })
-  end
-
-  def finalize(stats)
-    unique_feeds = @feeds.uniq(&:url)
-    duplicate = @feeds.length - unique_feeds.length
-
-    sorted_feeds = unique_feeds.sort_by { it.published_at || Time.at(0) }.reverse
-    @finalized_feeds = sorted_feeds.first @max_feeds
-    stats.finalize output: @finalized_feeds.length, blacklisted: @filter.blacklisted_count,
-                   duplicate:, unstable: @filter.unstable_count
-    @finalized_feeds
+  def build_filter(blacklist_path)
+    blacklist = Filter::BlackList.read_from blacklist_path
+    log "Loaded #{blacklist.length} blacklist rules"
+    Filter.new blacklist
   end
 
   def fetch_from(feed_source, stats)
@@ -68,10 +59,19 @@ class FusionRss
     puts "[rss_fusion] #{msg}"
   end
 
-  def build_filter(blacklist_path)
-    blacklist = Filter::BlackList.read_from blacklist_path
-    log "Loaded #{blacklist.length} blacklist rules"
-    Filter.new blacklist
+  def add(*feed_entries)
+    @feeds.concat(feed_entries.reject { @filter.match?(it) })
+  end
+
+  def finalize(stats)
+    unique_feeds = @feeds.uniq(&:url)
+    duplicate = @feeds.length - unique_feeds.length
+
+    sorted_feeds = unique_feeds.sort_by { it.published_at || Time.at(0) }.reverse
+    @finalized_feeds = sorted_feeds.first @max_feeds
+    stats.finalize output: @finalized_feeds.length, blacklisted: @filter.blacklisted_count,
+                   duplicate:, unstable: @filter.unstable_count
+    @finalized_feeds
   end
 
   def to_rss
