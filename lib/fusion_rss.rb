@@ -55,10 +55,6 @@ class FusionRss
     add(*valid.map(&:to_fusion_entry))
   end
 
-  def log(msg)
-    puts "[rss_fusion] #{msg}"
-  end
-
   def add(*feed_entries)
     @feeds.concat(feed_entries.reject { @filter.match?(it) })
   end
@@ -84,4 +80,6 @@ class FusionRss
       @finalized_feeds.each { it.to_rss_entry maker }
     end.to_s
   end
+
+  def log(msg) = puts "[rss_fusion] #{msg}"
 end
