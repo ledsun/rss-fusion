@@ -128,8 +128,8 @@ class FusionRssProcessTest < Minitest::Test
   def make_feed_entry(title:, url:, published_at:, feed_name:)
     FeedSource::FeedEntry.new \
       FakeRawEntry.new(title, url, published_at),
-      feed_name:,
-      fetched_at: published_at
+      feed_name,
+      published_at
   end
 
   def test_process_entries_adds_valid_and_skips_blank_url

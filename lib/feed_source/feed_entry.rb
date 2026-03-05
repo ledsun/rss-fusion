@@ -5,7 +5,7 @@ class FeedSource
   class FeedEntry
     attr_reader :title, :url, :published_at, :feed_name, :summary
 
-    def initialize(entry, feed_name:, fetched_at:)
+    def initialize(entry, feed_name, fetched_at)
       @title = entry.respond_to?(:title) ? entry.title : nil
       @url = extract_url entry
       @published_at = extract_published_at entry, fetched_at
