@@ -26,6 +26,26 @@ class FusionRss
     @finalized_feeds
   end
 
+  def process_feed(feed_source, stats)
+    entries = feed_source.fetch_entries
+    stats.feed_succeeded
+
+    log "Fetched #{feed_source.name} (#{feed_source.url}) entries=#{entries.size}"
+    process_entries(entries, stats)
+  rescue StandardError => e
+    stats.feed_failed
+    log "Feed fetch/parse failed: #{feed_source.name} #{feed_source.url} (#{e.class}: #{e.message})"
+  end
+
+  def process_entries(entries, stats)
+    valid, skipped = entries.partition { !it.url_blank? }
+
+    stats.item_fetched(entries.size)
+    stats.item_skipped_no_url(skipped.size)
+
+    add(*valid.map(&:to_fusion_entry))
+  end
+
   def write(path)
     tmp_path = "#{path}.tmp"
     FileUtils.mkdir_p(File.dirname(path))
@@ -34,6 +54,10 @@ class FusionRss
   end
 
   private
+
+  def log(msg)
+    puts "[rss_fusion] #{msg}"
+  end
 
   def to_rss
     RSS::Maker.make('2.0') do

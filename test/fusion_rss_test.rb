@@ -2,6 +2,7 @@
 
 require 'minitest/autorun'
 require_relative '../lib/fusion_rss'
+require_relative '../lib/feed_source'
 require_relative '../lib/stats'
 require_relative '../lib/filter'
 
@@ -123,5 +124,62 @@ class FusionRssTest < Minitest::Test
     # should not raise and should produce rss containing item title
     rss = fusion.send(:to_rss)
     assert_includes rss, '<title>x</title>'
+  end
+
+  def test_process_entries_adds_valid_and_skips_blank_url
+    fusion = FusionRss.new(make_filter, 10)
+    now = Time.now
+
+    entries = [
+      FeedSource::FeedEntry.new(title: 'valid', url: 'https://good.example/1', published_at: now, feed_name: 'f'),
+      FeedSource::FeedEntry.new(title: 'no url', url: nil, published_at: now, feed_name: 'f'),
+      FeedSource::FeedEntry.new(title: 'blank url', url: '  ', published_at: now, feed_name: 'f')
+    ]
+
+    stats = Stats.new(feeds_total: 1)
+    fusion.process_entries(entries, stats)
+
+    assert_equal 3, stats.items_fetched
+    assert_equal 2, stats.items_skipped_no_url
+
+    stats.feed_succeeded
+    fusion.finalize(stats)
+    assert_equal 1, stats.items_output
+  end
+
+  def test_process_feed_on_success_increments_feed_succeeded
+    fusion = FusionRss.new(make_filter, 10)
+    now = Time.now
+    entries = [
+      FeedSource::FeedEntry.new(title: 'item', url: 'https://good.example/1', published_at: now, feed_name: 'src')
+    ]
+
+    feed_source = Object.new
+    feed_source.define_singleton_method(:name) { 'src' }
+    feed_source.define_singleton_method(:url) { 'https://src.example/feed' }
+    feed_source.define_singleton_method(:fetch_entries) { entries }
+
+    stats = Stats.new(feeds_total: 1)
+    fusion.process_feed(feed_source, stats)
+
+    assert_equal 1, stats.feeds_succeeded
+    assert_equal 0, stats.feeds_failed
+    assert_equal 1, stats.items_fetched
+  end
+
+  def test_process_feed_on_failure_increments_feed_failed
+    fusion = FusionRss.new(make_filter, 10)
+
+    feed_source = Object.new
+    feed_source.define_singleton_method(:name) { 'broken' }
+    feed_source.define_singleton_method(:url) { 'https://broken.example/feed' }
+    feed_source.define_singleton_method(:fetch_entries) { raise 'network error' }
+
+    stats = Stats.new(feeds_total: 1)
+    fusion.process_feed(feed_source, stats)
+
+    assert_equal 0, stats.feeds_succeeded
+    assert_equal 1, stats.feeds_failed
+    assert_equal 0, stats.items_fetched
   end
 end
