@@ -4,7 +4,7 @@ require_relative 'test_helper'
 
 class StatsTest < Minitest::Test
   def setup
-    @stats = Stats.new feeds_total: 5
+    @stats = Stats.new 5
   end
 
   def test_initial_values

@@ -6,7 +6,7 @@ class Stats
               :items_fetched, :items_skipped_no_url, :items_skipped_blacklist,
               :items_skipped_duplicate, :items_skipped_unstable, :items_output
 
-  def initialize(feeds_total:)
+  def initialize(feeds_total)
     @feeds_total              = feeds_total
     @feeds_succeeded          = 0
     @feeds_failed             = 0

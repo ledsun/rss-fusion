@@ -12,7 +12,7 @@ class FusionRss
   end
 
   def process(feed_catalog)
-    stats = Stats.new feeds_total: feed_catalog.length
+    stats = Stats.new feed_catalog.length
 
     feed_catalog.sources.each { process_feed it, stats }
 

@@ -28,7 +28,7 @@ class FusionRssUnstableFilterTest < Minitest::Test
     fusion.send :add, make_entry(title: 'nightly', url: "#{base}nightly",        published_at: now - 10)
     fusion.send :add, make_entry(title: 'pre',     url: "#{base}v1.1.0-pre",     published_at: now)
 
-    stats = Stats.new feeds_total: 1
+    stats = Stats.new 1
     fusion.send :finalize, stats
 
     assert_equal 1, stats.items_output

@@ -29,7 +29,7 @@ class FusionRssFinalizeTest < Minitest::Test
     fusion.send :add, make_entry(title: 'old', url: 'https://a.example/', published_at: now - 60, feed_name: 'feedA')
     fusion.send :add, make_entry(title: 'new', url: 'https://b.example/', published_at: now, feed_name: 'feedB')
 
-    stats = Stats.new feeds_total: 1
+    stats = Stats.new 1
     fusion.send :finalize, stats
 
     assert_equal 2, stats.items_output
@@ -54,7 +54,7 @@ class FusionRssFinalizeTest < Minitest::Test
     # blacklisted
     fusion.send :add, make_entry(title: 'spam', url: 'https://spam.example/1', published_at: now - 10)
 
-    stats = Stats.new feeds_total: 1
+    stats = Stats.new 1
     fusion.send :finalize, stats
 
     assert_equal 1, stats.items_skipped_blacklist
@@ -76,7 +76,7 @@ class FusionRssFinalizeTest < Minitest::Test
     fusion.send :add, make_entry(title: 'two',   url: 'https://two.example/',   published_at: now - 20)
     fusion.send :add, make_entry(title: 'three', url: 'https://three.example/', published_at: now - 10)
 
-    stats = Stats.new feeds_total: 1
+    stats = Stats.new 1
     fusion.send :finalize, stats
 
     # should be truncated to 2 items
@@ -96,7 +96,7 @@ class FusionRssFinalizeTest < Minitest::Test
     fusion.send :add, make_entry(title: 'second', url: 'https://dup.example/',   published_at: now)
     fusion.send :add, make_entry(title: 'third',  url: 'https://other.example/', published_at: now + 5)
 
-    stats = Stats.new feeds_total: 1
+    stats = Stats.new 1
     fusion.send :finalize, stats
 
     assert_equal 1, stats.items_skipped_duplicate
@@ -111,7 +111,7 @@ class FusionRssFinalizeTest < Minitest::Test
     now = Time.now
     fusion.send :add, make_entry(title: 'x', url: 'https://x.example/', published_at: now)
 
-    stats = Stats.new feeds_total: 1
+    stats = Stats.new 1
     fusion.send :finalize, stats
 
     # should not raise and should produce rss containing item title
@@ -142,7 +142,7 @@ class FusionRssProcessTest < Minitest::Test
       make_feed_entry(title: 'blank url', url: '  ', published_at: now, feed_name: 'f')
     ]
 
-    stats = Stats.new feeds_total: 1
+    stats = Stats.new 1
     fusion.send :process_entries, entries, stats
 
     assert_equal 3, stats.items_fetched
@@ -165,7 +165,7 @@ class FusionRssProcessTest < Minitest::Test
     feed_source.define_singleton_method(:url) { 'https://src.example/feed' }
     feed_source.define_singleton_method(:fetch_entries) { entries }
 
-    stats = Stats.new feeds_total: 1
+    stats = Stats.new 1
     fusion.send :process_feed, feed_source, stats
 
     assert_equal 1, stats.feeds_succeeded
@@ -181,7 +181,7 @@ class FusionRssProcessTest < Minitest::Test
     feed_source.define_singleton_method(:url) { 'https://broken.example/feed' }
     feed_source.define_singleton_method(:fetch_entries) { raise 'network error' }
 
-    stats = Stats.new feeds_total: 1
+    stats = Stats.new 1
     fusion.send :process_feed, feed_source, stats
 
     assert_equal 0, stats.feeds_succeeded
