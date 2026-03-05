@@ -11,9 +11,7 @@ class FeedCatalog
 
   def_delegator :@sources, :length
 
-  def self.read_from(path)
-    new path
-  end
+  def self.read_from(path) = new path
 
   def initialize(path)
     data = YAML.load_file path
