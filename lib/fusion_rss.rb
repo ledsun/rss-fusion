@@ -40,13 +40,13 @@ class FusionRss
     stats.feed_succeeded
     log "Fetched #{feed_source.name} (#{feed_source.url}) entries=#{entries.size}"
 
-    process_entries entries, stats
+    ingest entries, stats
   rescue StandardError => e
     stats.feed_failed
     log "Feed fetch/parse failed: #{feed_source.name} #{feed_source.url} (#{e.class}: #{e.message})"
   end
 
-  def process_entries(entries, stats)
+  def ingest(entries, stats)
     valid, skipped = entries.partition { !it.url_blank? }
 
     stats.item_fetched entries.size

@@ -27,7 +27,7 @@ class FusionRssProcessTest < Minitest::Test
       published_at
   end
 
-  def test_process_entries_adds_valid_and_skips_blank_url
+  def test_ingest_adds_valid_and_skips_blank_url
     fusion = make_fusion 10
     now = Time.now
 
@@ -38,7 +38,7 @@ class FusionRssProcessTest < Minitest::Test
     ]
 
     stats = Stats.new 1
-    fusion.send :process_entries, entries, stats
+    fusion.send :ingest, entries, stats
 
     assert_equal 3, stats.items_fetched
     assert_equal 2, stats.items_skipped_no_url
