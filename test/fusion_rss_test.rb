@@ -130,14 +130,23 @@ end
 class FusionRssProcessTest < Minitest::Test
   include FusionRssTestSupport
 
+  FakeRawEntry = Struct.new :title, :url, :published
+
+  def make_feed_entry(title:, url:, published_at:, feed_name:)
+    FeedSource::FeedEntry.new \
+      FakeRawEntry.new(title, url, published_at),
+      feed_name: feed_name,
+      fetched_at: published_at
+  end
+
   def test_process_entries_adds_valid_and_skips_blank_url
     fusion = FusionRss.new make_filter, 10
     now = Time.now
 
     entries = [
-      FeedSource::FeedEntry.new(title: 'valid', url: 'https://good.example/1', published_at: now, feed_name: 'f'),
-      FeedSource::FeedEntry.new(title: 'no url', url: nil, published_at: now, feed_name: 'f'),
-      FeedSource::FeedEntry.new(title: 'blank url', url: '  ', published_at: now, feed_name: 'f')
+      make_feed_entry(title: 'valid', url: 'https://good.example/1', published_at: now, feed_name: 'f'),
+      make_feed_entry(title: 'no url', url: nil, published_at: now, feed_name: 'f'),
+      make_feed_entry(title: 'blank url', url: '  ', published_at: now, feed_name: 'f')
     ]
 
     stats = Stats.new feeds_total: 1
@@ -155,7 +164,7 @@ class FusionRssProcessTest < Minitest::Test
     fusion = FusionRss.new make_filter, 10
     now = Time.now
     entries = [
-      FeedSource::FeedEntry.new(title: 'item', url: 'https://good.example/1', published_at: now, feed_name: 'src')
+      make_feed_entry(title: 'item', url: 'https://good.example/1', published_at: now, feed_name: 'src')
     ]
 
     feed_source = Object.new
@@ -191,7 +200,7 @@ class FusionRssProcessTest < Minitest::Test
     fusion = FusionRss.new make_filter, 10
     now = Time.now
     entries = [
-      FeedSource::FeedEntry.new(title: 'item', url: 'https://good.example/1', published_at: now, feed_name: 'src')
+      make_feed_entry(title: 'item', url: 'https://good.example/1', published_at: now, feed_name: 'src')
     ]
 
     feed_source = Object.new
