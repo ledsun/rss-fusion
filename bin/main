@@ -22,13 +22,12 @@ end
 def main
   feed_catalog = FeedCatalog.new(FEEDS_PATH)
   blacklist = Filter::BlackList.new(BLACKLIST_PATH)
-  stats = Stats.new(feeds_total: feed_catalog.length)
 
   log "Loaded #{feed_catalog.length} feeds"
   log "Loaded #{blacklist.length} blacklist rules"
 
   fusion_rss = FusionRss.new(Filter.new(blacklist), MAX_ITEMS)
-  stats = fusion_rss.process_feed_catalog(feed_catalog, stats)
+  stats = fusion_rss.process_feed_catalog(feed_catalog)
   raise 'No feeds fetched successfully; aborting build' if stats.feeds_succeeded.zero?
   raise 'No items produced; aborting build' if stats.items_output.zero?
 

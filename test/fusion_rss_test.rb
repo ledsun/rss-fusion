@@ -187,7 +187,7 @@ class FusionRssProcessTest < Minitest::Test
     assert_equal 0, stats.items_fetched
   end
 
-  def test_process_feed_catalog_returns_stats_and_finalizes
+  def test_process_feed_catalog_initializes_stats_and_finalizes
     fusion = FusionRss.new(make_filter, 10)
     now = Time.now
     entries = [
@@ -199,10 +199,9 @@ class FusionRssProcessTest < Minitest::Test
     feed_source.define_singleton_method(:url) { 'https://src.example/feed' }
     feed_source.define_singleton_method(:fetch_entries) { entries }
 
-    stats = Stats.new(feeds_total: 1)
-    result = fusion.process_feed_catalog([feed_source], stats)
+    result = fusion.process_feed_catalog([feed_source])
 
-    assert_same stats, result
+    assert_equal 1, result.feeds_total
     assert_equal 1, result.feeds_succeeded
     assert_equal 1, result.items_output
   end

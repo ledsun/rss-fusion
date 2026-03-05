@@ -37,7 +37,9 @@ class FusionRss
     log "Feed fetch/parse failed: #{feed_source.name} #{feed_source.url} (#{e.class}: #{e.message})"
   end
 
-  def process_feed_catalog(feed_catalog, stats)
+  def process_feed_catalog(feed_catalog)
+    stats = Stats.new(feeds_total: feed_catalog.length)
+
     feed_catalog.each do |feed_source|
       process_feed(feed_source, stats)
     end
