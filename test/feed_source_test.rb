@@ -42,11 +42,11 @@ class FeedSourceTest < Minitest::Test
   private
 
   def build_feed_entry(url:)
+    raw = Struct.new(:url, :published).new url, Time.utc(2026, 2, 28, 0, 0, 0)
     FeedSource::FeedEntry.new \
-      title: 'Title',
-      url: url,
-      published_at: Time.utc(2026, 2, 28, 0, 0, 0),
-      feed_name: 'Sample'
+      raw,
+      feed_name: 'Sample',
+      fetched_at: Time.utc(2026, 2, 28, 0, 0, 0)
   end
 
   def assert_entry(entry)
