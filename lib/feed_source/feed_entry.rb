@@ -31,25 +31,23 @@ class FeedSource
     private
 
     def extract_url(entry)
-      candidates = []
-      candidates << entry.url if entry.respond_to? :url
-      candidates << entry.link if entry.respond_to? :link
-      candidates << entry.links&.first if entry.respond_to? :links
+      %i[url link links].find do |method_name|
+        next unless entry.respond_to? method_name
 
-      candidates.map { it.to_s.strip }.find { !it.empty? }
+        candidate = entry.public_send method_name
+        candidate = candidate&.first if method_name == :links
+        candidate = candidate.to_s.strip
+        break candidate unless candidate.empty?
+      end
     end
 
     def extract_published_at(entry, fallback_time)
-      value =
-        if entry.respond_to?(:published) && entry.published
-          entry.published
-        elsif entry.respond_to?(:updated) && entry.updated
-          entry.updated
-        elsif entry.respond_to?(:last_modified) && entry.last_modified
-          entry.last_modified
-        elsif entry.respond_to?(:published_at) && entry.published_at
-          entry.published_at
-        end
+      value = %i[published updated last_modified published_at].find do |method_name|
+        next unless entry.respond_to? method_name
+
+        candidate = entry.public_send method_name
+        break candidate if candidate
+      end
 
       return fallback_time if value.nil?
       return value if value.is_a? Time
