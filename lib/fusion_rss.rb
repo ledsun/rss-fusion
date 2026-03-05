@@ -52,11 +52,9 @@ class FusionRss
     stats.item_fetched entries.size
     stats.item_skipped_no_url skipped.size
 
-    add(*valid.map(&:to_fusion_entry))
-  end
-
-  def add(*feed_entries)
-    @feeds.concat(feed_entries.reject { @filter.match? it })
+    feed_entries = valid.map(&:to_fusion_entry)
+    feed_entries.reject! { @filter.match? it }
+    @feeds.concat feed_entries
   end
 
   def finalize(stats)
