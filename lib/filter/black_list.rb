@@ -1,18 +1,20 @@
 # frozen_string_literal: true
 
+require 'forwardable'
+
 class Filter
   # Loads URL prefix rules from a file and checks URLs against them.
   class BlackList
+    extend Forwardable
+
+    def_delegator :@rules, :length
+
     def self.read_from(path)
       new path
     end
 
     def initialize(path)
       @rules = load_blacklist path
-    end
-
-    def length
-      @rules.length
     end
 
     def match?(url)
