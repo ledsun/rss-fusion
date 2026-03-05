@@ -75,8 +75,7 @@ class FusionRss
   end
 
   def to_rss
-    RSS::Maker.make('2.0') do
-      maker = it
+    RSS::Maker.make('2.0') do |maker|
       maker.channel.title = 'RSS Fusion'
       maker.channel.description = 'Merged RSS feed generated from multiple sources'
       maker.channel.link = 'https://example.invalid/merged.xml'
