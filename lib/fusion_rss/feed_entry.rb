@@ -13,11 +13,7 @@ class FusionRss
       @summary = summary
     end
 
-    def to_rss_entry(maker)
-      maker.items.new_item do
-        populate_entry it
-      end
-    end
+    def to_rss_entry(maker) = maker.items.new_item { populate_entry it }
 
     def populate_entry(entry)
       entry.title = title

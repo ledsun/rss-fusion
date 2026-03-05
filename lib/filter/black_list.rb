@@ -17,9 +17,7 @@ class Filter
       @rules = load_blacklist path
     end
 
-    def match?(url)
-      @rules.any? { url.start_with? it }
-    end
+    def match?(url) = @rules.any? { url.start_with? it }
 
     private
 

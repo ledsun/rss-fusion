@@ -24,9 +24,7 @@ class FeedSource
         summary:
     end
 
-    def url_blank?
-      url.nil?
-    end
+    def url_blank? = url.nil?
 
     private
 
