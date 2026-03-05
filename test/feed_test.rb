@@ -28,7 +28,7 @@ class FeedTest < Minitest::Test
     feed = FusionRss::FeedEntry.new \
       title: 'hello',
       url: 'https://example.com/post',
-      published_at: published_at,
+      published_at:,
       feed_name: 'Example'
 
     assert_equal 'hello', feed.title
@@ -42,7 +42,7 @@ class FeedTest < Minitest::Test
     feed = FusionRss::FeedEntry.new \
       title: 'hello',
       url: 'https://example.com/post',
-      published_at: published_at,
+      published_at:,
       feed_name: 'Example'
 
     entry = FakeEntry.new nil, nil, FakeGuid.new(nil, nil), nil
@@ -61,7 +61,7 @@ class FeedTest < Minitest::Test
     feed = FusionRss::FeedEntry.new \
       title: 'hello',
       url: 'https://example.com/post',
-      published_at: published_at,
+      published_at:,
       feed_name: 'Example'
 
     maker = FakeMaker.new

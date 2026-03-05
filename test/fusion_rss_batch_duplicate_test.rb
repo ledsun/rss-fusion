@@ -4,7 +4,7 @@ require_relative 'test_helper'
 
 class FusionRssBatchDuplicateTest < Minitest::Test
   def make_entry(title:, url:, published_at:, feed_name: 'f')
-    FusionRss::FeedEntry.new title: title, url: url, published_at: published_at, feed_name: feed_name
+    FusionRss::FeedEntry.new title:, url:, published_at:, feed_name:
   end
 
   def make_filter

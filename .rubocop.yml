@@ -32,3 +32,6 @@ Style/ItBlockParameter:
 Style/MethodCallWithArgsParentheses:
   Enabled: true
   EnforcedStyle: omit_parentheses
+
+Style/HashSyntax:
+  EnforcedShorthandSyntax: always

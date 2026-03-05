@@ -4,7 +4,7 @@ require_relative 'test_helper'
 
 module FusionRssTestSupport
   def make_entry(title:, url:, published_at:, feed_name: 'f')
-    FusionRss::FeedEntry.new title: title, url: url, published_at: published_at, feed_name: feed_name
+    FusionRss::FeedEntry.new title:, url:, published_at:, feed_name:
   end
 
   def make_filter(*prefixes)
@@ -135,7 +135,7 @@ class FusionRssProcessTest < Minitest::Test
   def make_feed_entry(title:, url:, published_at:, feed_name:)
     FeedSource::FeedEntry.new \
       FakeRawEntry.new(title, url, published_at),
-      feed_name: feed_name,
+      feed_name:,
       fetched_at: published_at
   end
 

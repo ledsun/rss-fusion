@@ -18,10 +18,10 @@ class FeedSource
       base = '(no title)' if base.empty?
       FusionRss::FeedEntry.new \
         title: "[#{feed_name}] #{base}",
-        url: url,
-        published_at: published_at,
-        feed_name: feed_name,
-        summary: summary
+        url:,
+        published_at:,
+        feed_name:,
+        summary:
     end
 
     def url_blank?
