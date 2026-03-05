@@ -38,8 +38,8 @@ class FusionRss
   def fetch_from(feed_source, stats)
     entries = feed_source.fetch_entries
     stats.feed_succeeded
-
     log "Fetched #{feed_source.name} (#{feed_source.url}) entries=#{entries.size}"
+
     process_entries entries, stats
   rescue StandardError => e
     stats.feed_failed
