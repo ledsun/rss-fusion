@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require 'forwardable'
 
 # FeedCatalog reads and validates feeds.yml and exposes feed rows via Enumerable.
 class FeedCatalog
   include Enumerable
+  extend Forwardable
+
+  def_delegators :@items, :each, :length
 
   def self.read_from(path)
     new path
@@ -19,15 +23,6 @@ class FeedCatalog
   rescue Psych::SyntaxError => e
     raise ConfigFormatError, "Invalid feeds.yml YAML syntax: #{e.message}"
   end
-
-  def each(&block)
-    @items.each(&block)
-  end
-
-  def length
-    @items.length
-  end
-  alias size length
 
   private
 
