@@ -20,9 +20,9 @@ class FusionRss
     duplicate = @feeds.length - unique_feeds.length
 
     sorted_feeds = unique_feeds.sort_by { it.published_at || Time.at(0) }.reverse
-    @finalized_feeds = sorted_feeds.first(@max_feeds)
-    stats.finalize(output: @finalized_feeds.length, blacklisted: @filter.blacklisted_count,
-                   duplicate:, unstable: @filter.unstable_count)
+    @finalized_feeds = sorted_feeds.first @max_feeds
+    stats.finalize output: @finalized_feeds.length, blacklisted: @filter.blacklisted_count,
+                   duplicate:, unstable: @filter.unstable_count
     @finalized_feeds
   end
 
@@ -31,37 +31,37 @@ class FusionRss
     stats.feed_succeeded
 
     log "Fetched #{feed_source.name} (#{feed_source.url}) entries=#{entries.size}"
-    process_entries(entries, stats)
+    process_entries entries, stats
   rescue StandardError => e
     stats.feed_failed
     log "Feed fetch/parse failed: #{feed_source.name} #{feed_source.url} (#{e.class}: #{e.message})"
   end
 
   def process_feed_catalog(feed_catalog)
-    stats = Stats.new(feeds_total: feed_catalog.length)
+    stats = Stats.new feeds_total: feed_catalog.length
 
     feed_catalog.each do |feed_source|
-      process_feed(feed_source, stats)
+      process_feed feed_source, stats
     end
 
-    finalize(stats)
+    finalize stats
     stats
   end
 
   def process_entries(entries, stats)
     valid, skipped = entries.partition { !it.url_blank? }
 
-    stats.item_fetched(entries.size)
-    stats.item_skipped_no_url(skipped.size)
+    stats.item_fetched entries.size
+    stats.item_skipped_no_url skipped.size
 
     add(*valid.map(&:to_fusion_entry))
   end
 
   def write(path)
     tmp_path = "#{path}.tmp"
-    FileUtils.mkdir_p(File.dirname(path))
-    File.write(tmp_path, to_rss)
-    File.rename(tmp_path, path)
+    FileUtils.mkdir_p File.dirname(path)
+    File.write tmp_path, to_rss
+    File.rename tmp_path, path
   end
 
   private
@@ -78,7 +78,7 @@ class FusionRss
       maker.channel.link = 'https://example.invalid/merged.xml'
       maker.channel.updated = Time.now
 
-      @finalized_feeds.each { it.to_rss_entry(maker) }
+      @finalized_feeds.each { it.to_rss_entry maker }
     end.to_s
   end
 end

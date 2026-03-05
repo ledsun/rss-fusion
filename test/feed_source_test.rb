@@ -21,11 +21,11 @@ class FeedSourceTest < Minitest::Test
   end
 
   def test_fetch_entries_reads_response_and_parses_fields
-    rss = FeedSource.new(name: 'Sample', url: 'https://example.com/feed')
-    with_stubbed_uri_open(sample_xml) do
+    rss = FeedSource.new name: 'Sample', url: 'https://example.com/feed'
+    with_stubbed_uri_open sample_xml do
       entries = rss.fetch_entries
-      assert_entry(entries[0])
-      assert_probe(it)
+      assert_entry entries[0]
+      assert_probe it
     end
   end
 
@@ -42,12 +42,11 @@ class FeedSourceTest < Minitest::Test
   private
 
   def build_feed_entry(url:)
-    FeedSource::FeedEntry.new(
+    FeedSource::FeedEntry.new \
       title: 'Title',
       url: url,
       published_at: Time.utc(2026, 2, 28, 0, 0, 0),
       feed_name: 'Sample'
-    )
   end
 
   def assert_entry(entry)
@@ -67,19 +66,19 @@ class FeedSourceTest < Minitest::Test
   end
 
   def with_stubbed_uri_open(xml)
-    original_open = URI.method(:open)
+    original_open = URI.method :open
     probe = { called: false, url: nil, has_block: false, options: {} }
 
-    URI.define_singleton_method(:open) do |*args, &block|
+    URI.define_singleton_method :open do |*args, &block|
       probe[:called] = true
       probe[:url] = args[0]
       probe[:has_block] = !block.nil?
       probe[:options] = args.drop(1).select { it.is_a?(Hash) }.reduce({}) { |acc, h| acc.merge(h) }
-      block.call(StringIO.new(xml))
+      block.call StringIO.new(xml)
     end
 
     yield probe
   ensure
-    URI.define_singleton_method(:open, original_open)
+    URI.define_singleton_method :open, original_open
   end
 end

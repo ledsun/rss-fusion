@@ -10,9 +10,9 @@ class Filter
 
     def unstable?(url)
       str = url.to_s
-      return false unless str.start_with?(GITHUB_URL_PREFIX)
+      return false unless str.start_with? GITHUB_URL_PREFIX
 
-      UNSTABLE_PATTERN.match?(str)
+      UNSTABLE_PATTERN.match? str
     end
   end
 end

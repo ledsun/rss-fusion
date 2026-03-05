@@ -4,7 +4,7 @@ require_relative 'test_helper'
 
 class FusionRssBatchDuplicateTest < Minitest::Test
   def make_entry(title:, url:, published_at:, feed_name: 'f')
-    FusionRss::FeedEntry.new(title: title, url: url, published_at: published_at, feed_name: feed_name)
+    FusionRss::FeedEntry.new title: title, url: url, published_at: published_at, feed_name: feed_name
   end
 
   def make_filter
@@ -16,21 +16,20 @@ class FusionRssBatchDuplicateTest < Minitest::Test
   end
 
   def test_adding_duplicates_within_same_batch
-    fusion = FusionRss.new(make_filter, 10)
+    fusion = FusionRss.new make_filter, 10
 
     now = Time.now
-    fusion.add(
+    fusion.add \
       make_entry(title: 'first',  url: 'https://dup.example/',   published_at: now - 5),
       make_entry(title: 'second', url: 'https://dup.example/',   published_at: now),
       make_entry(title: 'third',  url: 'https://other.example/', published_at: now + 5)
-    )
 
-    stats = Stats.new(feeds_total: 1)
-    fusion.finalize(stats)
+    stats = Stats.new feeds_total: 1
+    fusion.finalize stats
 
     assert_equal 1, stats.items_skipped_duplicate
     assert_equal 2, stats.items_output
-    rss = fusion.send(:to_rss)
+    rss = fusion.send :to_rss
     assert_includes rss, '<title>third</title>'
     assert_includes rss, '<title>first</title>'
   end

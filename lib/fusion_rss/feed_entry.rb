@@ -15,7 +15,7 @@ class FusionRss
 
     def to_rss_entry(maker)
       maker.items.new_item do
-        populate_entry(it)
+        populate_entry it
       end
     end
 

@@ -5,13 +5,13 @@ require 'time'
 require 'zeitwerk'
 
 loader = Zeitwerk::Loader.new
-loader.push_dir(File.join(__dir__, '..', 'lib'))
+loader.push_dir File.join(__dir__, '..', 'lib')
 loader.setup
 
 FEEDS_PATH = 'feeds.yml'
 BLACKLIST_PATH = 'blacklist.txt'
 OUTPUT_DIR = 'public'
-OUTPUT_PATH = File.join(OUTPUT_DIR, 'merged.xml')
+OUTPUT_PATH = File.join OUTPUT_DIR, 'merged.xml'
 
 MAX_ITEMS = 30
 
@@ -20,18 +20,18 @@ def log(msg)
 end
 
 def main
-  feed_catalog = FeedCatalog.new(FEEDS_PATH)
+  feed_catalog = FeedCatalog.new FEEDS_PATH
   log "Loaded #{feed_catalog.length} feeds"
 
-  blacklist = Filter::BlackList.new(BLACKLIST_PATH)
+  blacklist = Filter::BlackList.new BLACKLIST_PATH
   log "Loaded #{blacklist.length} blacklist rules"
 
-  fusion_rss = FusionRss.new(Filter.new(blacklist), MAX_ITEMS)
-  stats = fusion_rss.process_feed_catalog(feed_catalog)
+  fusion_rss = FusionRss.new Filter.new(blacklist), MAX_ITEMS
+  stats = fusion_rss.process_feed_catalog feed_catalog
   raise 'No feeds fetched successfully; aborting build' if stats.feeds_succeeded.zero?
   raise 'No items produced; aborting build' if stats.items_output.zero?
 
-  fusion_rss.write(OUTPUT_PATH)
+  fusion_rss.write OUTPUT_PATH
 
   stats.summary.each { |line| log "Summary #{line}" }
   log "Wrote #{OUTPUT_PATH}"

@@ -16,13 +16,13 @@ class Filter
 
   def match?(entry)
     url = entry.url.to_s
-    if @blacklist.match?(url)
+    if @blacklist.match? url
       @blacklisted_count += 1
       true
-    elsif @github_release_filter.unstable?(url)
+    elsif @github_release_filter.unstable? url
       @unstable_count += 1
       true
-    elsif @gihyo_filter.reject?(entry)
+    elsif @gihyo_filter.reject? entry
       true
     else
       false

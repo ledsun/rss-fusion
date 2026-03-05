@@ -25,3 +25,7 @@ Naming/MethodName:
 
 Style/ItBlockParameter:
   EnforcedStyle: always
+
+Style/MethodCallWithArgsParentheses:
+  Enabled: true
+  EnforcedStyle: omit_parentheses

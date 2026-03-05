@@ -20,7 +20,7 @@ class FeedSource
 
   def fetch_entries
     fetched_at = Time.now
-    parsed = Feedjira.parse(http_get)
+    parsed = Feedjira.parse http_get
     raw = parsed.respond_to?(:entries) ? parsed.entries : nil
     (raw.is_a?(Array) ? raw : []).map do
       FeedEntry.new(
@@ -52,9 +52,9 @@ class FeedSource
 
   def extract_url(entry)
     candidates = []
-    candidates << entry.url if entry.respond_to?(:url)
-    candidates << entry.link if entry.respond_to?(:link)
-    candidates << entry.links&.first if entry.respond_to?(:links)
+    candidates << entry.url if entry.respond_to? :url
+    candidates << entry.link if entry.respond_to? :link
+    candidates << entry.links&.first if entry.respond_to? :links
 
     candidates.map { it.to_s.strip }.find { !it.empty? }
   end
@@ -72,9 +72,9 @@ class FeedSource
       end
 
     return fallback_time if value.nil?
-    return value if value.is_a?(Time)
+    return value if value.is_a? Time
 
-    Time.parse(value.to_s)
+    Time.parse value.to_s
   rescue StandardError
     fallback_time
   end

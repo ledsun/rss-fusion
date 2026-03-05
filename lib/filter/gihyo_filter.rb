@@ -9,7 +9,7 @@ class Filter
 
     # Returns true if the entry should be excluded.
     def reject?(entry)
-      return false unless entry.url.to_s.start_with?(GIHYO_URL_PREFIX)
+      return false unless entry.url.to_s.start_with? GIHYO_URL_PREFIX
 
       !KEYWORDS.match?(entry.title.to_s) && !KEYWORDS.match?(entry.summary.to_s)
     end
