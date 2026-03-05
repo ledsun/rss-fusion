@@ -33,11 +33,11 @@ class FusionRssFinalizeTest < Minitest::Test
     fusion = FusionRss.new make_filter, 10
 
     now = Time.now
-    fusion.add make_entry(title: 'old', url: 'https://a.example/', published_at: now - 60, feed_name: 'feedA')
-    fusion.add make_entry(title: 'new', url: 'https://b.example/', published_at: now, feed_name: 'feedB')
+    fusion.send :add, make_entry(title: 'old', url: 'https://a.example/', published_at: now - 60, feed_name: 'feedA')
+    fusion.send :add, make_entry(title: 'new', url: 'https://b.example/', published_at: now, feed_name: 'feedB')
 
     stats = Stats.new feeds_total: 1
-    fusion.finalize stats
+    fusion.send :finalize, stats
 
     assert_equal 2, stats.items_output
 
@@ -55,14 +55,14 @@ class FusionRssFinalizeTest < Minitest::Test
 
     now = Time.now
     # added item
-    fusion.add make_entry(title: 'ok', url: 'https://good.example/1', published_at: now - 30)
+    fusion.send :add, make_entry(title: 'ok', url: 'https://good.example/1', published_at: now - 30)
     # duplicate of the first
-    fusion.add make_entry(title: 'dup', url: 'https://good.example/1', published_at: now - 20)
+    fusion.send :add, make_entry(title: 'dup', url: 'https://good.example/1', published_at: now - 20)
     # blacklisted
-    fusion.add make_entry(title: 'spam', url: 'https://spam.example/1', published_at: now - 10)
+    fusion.send :add, make_entry(title: 'spam', url: 'https://spam.example/1', published_at: now - 10)
 
     stats = Stats.new feeds_total: 1
-    fusion.finalize stats
+    fusion.send :finalize, stats
 
     assert_equal 1, stats.items_skipped_blacklist
     assert_equal 1, stats.items_skipped_duplicate
@@ -79,12 +79,12 @@ class FusionRssFinalizeTest < Minitest::Test
     fusion = FusionRss.new make_filter, 2
 
     now = Time.now
-    fusion.add make_entry(title: 'one',   url: 'https://one.example/',   published_at: now - 30)
-    fusion.add make_entry(title: 'two',   url: 'https://two.example/',   published_at: now - 20)
-    fusion.add make_entry(title: 'three', url: 'https://three.example/', published_at: now - 10)
+    fusion.send :add, make_entry(title: 'one',   url: 'https://one.example/',   published_at: now - 30)
+    fusion.send :add, make_entry(title: 'two',   url: 'https://two.example/',   published_at: now - 20)
+    fusion.send :add, make_entry(title: 'three', url: 'https://three.example/', published_at: now - 10)
 
     stats = Stats.new feeds_total: 1
-    fusion.finalize stats
+    fusion.send :finalize, stats
 
     # should be truncated to 2 items
     assert_equal 2, stats.items_output
@@ -99,12 +99,12 @@ class FusionRssFinalizeTest < Minitest::Test
     fusion = FusionRss.new make_filter, 10
 
     now = Time.now
-    fusion.add make_entry(title: 'first',  url: 'https://dup.example/',   published_at: now - 5)
-    fusion.add make_entry(title: 'second', url: 'https://dup.example/',   published_at: now)
-    fusion.add make_entry(title: 'third',  url: 'https://other.example/', published_at: now + 5)
+    fusion.send :add, make_entry(title: 'first',  url: 'https://dup.example/',   published_at: now - 5)
+    fusion.send :add, make_entry(title: 'second', url: 'https://dup.example/',   published_at: now)
+    fusion.send :add, make_entry(title: 'third',  url: 'https://other.example/', published_at: now + 5)
 
     stats = Stats.new feeds_total: 1
-    fusion.finalize stats
+    fusion.send :finalize, stats
 
     assert_equal 1, stats.items_skipped_duplicate
     assert_equal 2, stats.items_output
@@ -116,10 +116,10 @@ class FusionRssFinalizeTest < Minitest::Test
   def test_to_rss_requires_finalize_first
     fusion = FusionRss.new make_filter, 10
     now = Time.now
-    fusion.add make_entry(title: 'x', url: 'https://x.example/', published_at: now)
+    fusion.send :add, make_entry(title: 'x', url: 'https://x.example/', published_at: now)
 
     stats = Stats.new feeds_total: 1
-    fusion.finalize stats
+    fusion.send :finalize, stats
 
     # should not raise and should produce rss containing item title
     rss = fusion.send :to_rss
@@ -150,13 +150,13 @@ class FusionRssProcessTest < Minitest::Test
     ]
 
     stats = Stats.new feeds_total: 1
-    fusion.process_entries entries, stats
+    fusion.send :process_entries, entries, stats
 
     assert_equal 3, stats.items_fetched
     assert_equal 2, stats.items_skipped_no_url
 
     stats.feed_succeeded
-    fusion.finalize stats
+    fusion.send :finalize, stats
     assert_equal 1, stats.items_output
   end
 
@@ -173,7 +173,7 @@ class FusionRssProcessTest < Minitest::Test
     feed_source.define_singleton_method(:fetch_entries) { entries }
 
     stats = Stats.new feeds_total: 1
-    fusion.process_feed feed_source, stats
+    fusion.send :process_feed, feed_source, stats
 
     assert_equal 1, stats.feeds_succeeded
     assert_equal 0, stats.feeds_failed
@@ -189,7 +189,7 @@ class FusionRssProcessTest < Minitest::Test
     feed_source.define_singleton_method(:fetch_entries) { raise 'network error' }
 
     stats = Stats.new feeds_total: 1
-    fusion.process_feed feed_source, stats
+    fusion.send :process_feed, feed_source, stats
 
     assert_equal 0, stats.feeds_succeeded
     assert_equal 1, stats.feeds_failed
