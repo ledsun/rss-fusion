@@ -34,6 +34,9 @@ class FeedSourceTest < Minitest::Test
       assert_equal true, it[:called]
       assert_equal 'https://example.com/feed', it[:url]
       assert_equal true, it[:has_block]
+      assert_equal 'rss-merge-bot/0.1', it[:options]['User-Agent']
+      assert_equal 'no-cache', it[:options]['Cache-Control']
+      assert_equal 'no-cache', it[:options]['Pragma']
     end
   end
 
@@ -60,12 +63,13 @@ class FeedSourceTest < Minitest::Test
 
   def with_stubbed_uri_open(xml)
     original_open = URI.method(:open)
-    probe = { called: false, url: nil, has_block: false }
+    probe = { called: false, url: nil, has_block: false, options: {} }
 
     URI.define_singleton_method(:open) do |*args, &block|
       probe[:called] = true
       probe[:url] = args[0]
       probe[:has_block] = !block.nil?
+      probe[:options] = args.drop(1).select { it.is_a?(Hash) }.reduce({}) { |acc, h| acc.merge(h) }
       block.call(StringIO.new(xml))
     end
 

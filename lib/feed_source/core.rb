@@ -9,6 +9,7 @@ class FeedSource
   USER_AGENT = 'rss-merge-bot/0.1'
   OPEN_TIMEOUT = 10
   READ_TIMEOUT = 20
+  CACHE_CONTROL = 'no-cache'
 
   attr_reader :name, :url
 
@@ -40,6 +41,8 @@ class FeedSource
     URI.open(
       url,
       'User-Agent' => USER_AGENT,
+      'Cache-Control' => CACHE_CONTROL,
+      'Pragma' => CACHE_CONTROL,
       open_timeout: OPEN_TIMEOUT,
       read_timeout: READ_TIMEOUT,
       &:read
