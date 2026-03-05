@@ -10,8 +10,7 @@ loader.setup
 
 FEEDS_PATH = 'feeds.yml'
 BLACKLIST_PATH = 'blacklist.txt'
-OUTPUT_DIR = 'public'
-OUTPUT_PATH = File.join OUTPUT_DIR, 'merged.xml'
+OUTPUT_PATH = File.join 'public', 'merged.xml'
 
 MAX_ITEMS = 30
 
