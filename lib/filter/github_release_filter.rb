@@ -3,10 +3,10 @@
 class Filter
   # Detects non-stable GitHub release URLs.
   # A release is considered unstable when its URL contains a pre-release
-  # identifier such as alpha, pre, nightly, or collab-.
+  # identifier such as alpha, pre, nightly, collab-, or rust-.
   class GithubReleaseFilter
     GITHUB_URL_PREFIX = 'https://github.com/'
-    UNSTABLE_PATTERN = /alpha|pre|nightly|collab-/i
+    UNSTABLE_PATTERN = /alpha|pre|nightly|collab-|rust-/i
 
     def unstable?(url)
       str = url.to_s

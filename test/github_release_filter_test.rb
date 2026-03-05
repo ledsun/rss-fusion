@@ -18,8 +18,8 @@ class GithubReleaseFilterTest < Minitest::Test
     refute @filter.unstable?('https://github.com/owner/repo/releases/tag/1.2.3')
   end
 
-  def test_stable_with_package_prefix_is_not_unstable
-    refute @filter.unstable?('https://github.com/owner/repo/releases/tag/rust-v1.2.3')
+  def test_rust_prefixed_tag_is_unstable
+    assert @filter.unstable?('https://github.com/owner/repo/releases/tag/rust-v1.2.3')
   end
 
   def test_non_github_url_is_not_unstable
