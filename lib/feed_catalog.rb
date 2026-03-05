@@ -6,6 +6,10 @@ require 'yaml'
 class FeedCatalog
   include Enumerable
 
+  def self.read_from(path)
+    new path
+  end
+
   def initialize(path)
     data = YAML.load_file path
     feeds = data.is_a?(Hash) ? data['feeds'] : nil

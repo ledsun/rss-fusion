@@ -20,13 +20,13 @@ def log(msg)
 end
 
 def main
-  catalog = FeedCatalog.new FEEDS_PATH
+  catalog = FeedCatalog.read_from FEEDS_PATH
   log "Loaded #{catalog.length} feeds"
 
   blacklist = Filter::BlackList.new BLACKLIST_PATH
   log "Loaded #{blacklist.length} blacklist rules"
 
-  filter = Filter.new(blacklist)
+  filter = Filter.new blacklist
   fusion_rss = FusionRss.new filter, MAX_ITEMS
   stats = fusion_rss.process catalog
   raise 'No feeds fetched successfully; aborting build' if stats.feeds_succeeded.zero?

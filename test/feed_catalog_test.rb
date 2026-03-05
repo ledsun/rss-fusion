@@ -33,6 +33,21 @@ class FeedCatalogTest < Minitest::Test
     end
   end
 
+  def test_read_from_builds_catalog
+    yaml = <<~YAML
+      feeds:
+        - name: Zenn
+          url: https://zenn.dev/topics/codex/feed
+    YAML
+
+    with_temp_feeds_file yaml do
+      feed_catalog = FeedCatalog.read_from it
+
+      assert_equal 1, feed_catalog.length
+      assert_equal 'Zenn', feed_catalog.to_a[0].name
+    end
+  end
+
   def test_raises_when_top_level_feeds_is_missing
     with_temp_feeds_file "not_feeds: []\n" do
       path = it
