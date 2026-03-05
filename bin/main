@@ -21,9 +21,9 @@ end
 
 def main
   feed_catalog = FeedCatalog.new(FEEDS_PATH)
-  blacklist = Filter::BlackList.new(BLACKLIST_PATH)
-
   log "Loaded #{feed_catalog.length} feeds"
+
+  blacklist = Filter::BlackList.new(BLACKLIST_PATH)
   log "Loaded #{blacklist.length} blacklist rules"
 
   fusion_rss = FusionRss.new(Filter.new(blacklist), MAX_ITEMS)
