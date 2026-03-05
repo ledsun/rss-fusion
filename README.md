@@ -3,7 +3,7 @@
 複数の RSS / Atom フィードを統合し、重複 URL とブラックリスト URL を除外した `merged.xml` を生成して GitHub Pages で公開するリポジトリです。
 
 - サーバ不要（静的ファイルのみ）
-- GitHub Actions で毎時更新
+- GitHub Actions で2時間毎に更新
 - GitHub Pages 公式アクション（artifact → deploy）で公開
 
 ## できること
@@ -11,7 +11,9 @@
 - 複数フィードを取得して統合
 - URL 完全一致で重複排除
 - `blacklist.txt` の prefix 一致で除外
-- 最新 50 件を RSS 2.0 (`public/merged.xml`) として出力
+- GitHub リリースのプレリリース（alpha/pre/nightly 等）を除外
+- gihyo.jp フィードをキーワードフィルタリング（AI/tech 関連のみ通過）
+- 最新 30 件を RSS 2.0 (`public/merged.xml`) として出力
 - タイトル先頭に `"[feed_name]"` を付与
 
 ## ファイル構成
@@ -20,10 +22,12 @@
 - `blacklist.txt`: 除外URL prefix一覧（1行1ルール）
 - `bin/main`: 統合RSS生成の実行エントリ
 - `lib/*.rb`: フィルタ/ローダ/統計などのライブラリ本体
-- `lib/fusion_rss/*`, `lib/feed_source/*`: ドメイン別の実装詳細
+- `lib/fusion_rss/*`, `lib/feed_source/*`, `lib/feed_catalog/*`: ドメイン別の実装詳細
+- `lib/filter/*`: BlackList / GithubReleaseFilter / GihyoFilter の実装
 - `public/merged.xml`: 生成される統合RSS
 - `public/index.html`: Pages 用案内ページ
-- `.github/workflows/build-and-deploy.yml`: 毎時実行 + Pages デプロイ
+- `.github/workflows/build-and-deploy.yml`: 2時間毎実行 + Pages デプロイ
+- `.github/workflows/tests-and-lint.yml`: テスト・RuboCop の CI
 
 ## 必要環境
 
@@ -61,8 +65,14 @@ bundle exec ruby -Itest test/all.rb
 ```bash
 bundle exec ruby -Itest test/feed_test.rb
 bundle exec ruby -Itest test/fusion_rss_test.rb
+bundle exec ruby -Itest test/fusion_rss_batch_duplicate_test.rb
+bundle exec ruby -Itest test/fusion_rss_unstable_filter_test.rb
 bundle exec ruby -Itest test/feed_catalog_test.rb
 bundle exec ruby -Itest test/feed_source_test.rb
+bundle exec ruby -Itest test/black_list_test.rb
+bundle exec ruby -Itest test/filter_test.rb
+bundle exec ruby -Itest test/github_release_filter_test.rb
+bundle exec ruby -Itest test/gihyo_filter_test.rb
 bundle exec ruby -Itest test/stats_test.rb
 ```
 
@@ -106,7 +116,7 @@ https://example.com/ads/
 
 - 出力先: `public/merged.xml`
 - 形式: RSS 2.0
-- 件数: 最大 50 件（新しい順）
+- 件数: 最大 30 件（新しい順）
 - `title`: `"[feed_name] {original_title}"`
 - `link`: 元記事 URL
 - `guid`: `link` と同じ URL
@@ -117,7 +127,7 @@ https://example.com/ads/
 ### トリガー
 
 - `push`（`main`）
-- `schedule`（毎時 `0 * * * *`）
+- `schedule`（2時間毎 `0 */2 * * *`）
 - `workflow_dispatch`（手動実行）
 
 ### 初回設定（重要）
