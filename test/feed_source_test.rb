@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require 'minitest/autorun'
+require_relative 'test_helper'
 require 'stringio'
-require_relative '../lib/feed_source'
 
 class FeedSourceTest < Minitest::Test
   def sample_xml

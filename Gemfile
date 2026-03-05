@@ -8,3 +8,4 @@ gem 'feedjira'
 gem 'minitest', group: :development
 gem 'rss'
 gem 'rubocop', require: false
+gem 'zeitwerk'

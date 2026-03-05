@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../fusion_rss/feed_entry'
-
 class FeedSource
   FeedEntry = Data.define(:title, :url, :published_at, :feed_name, :summary) do
     def initialize(title:, url:, published_at:, feed_name:, summary: nil)
