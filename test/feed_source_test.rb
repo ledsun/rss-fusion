@@ -23,7 +23,7 @@ class FeedSourceTest < Minitest::Test
 
   def test_fetch_entries_reads_response_and_parses_fields
     rss = FeedSource.new(name: 'Sample', url: 'https://example.com/feed')
-    with_stubbed_uri_open(sample_xml) do |probe|
+    with_stubbed_uri_open(sample_xml) do
       entries = rss.fetch_entries
       assert_equal 1, entries.length
       assert_equal 'Hello', entries[0].title
@@ -31,9 +31,9 @@ class FeedSourceTest < Minitest::Test
       assert_equal 'Sample', entries[0].feed_name
       assert_instance_of Time, entries[0].published_at
 
-      assert_equal true, probe[:called]
-      assert_equal 'https://example.com/feed', probe[:url]
-      assert_equal true, probe[:has_block]
+      assert_equal true, it[:called]
+      assert_equal 'https://example.com/feed', it[:url]
+      assert_equal true, it[:has_block]
     end
   end
 

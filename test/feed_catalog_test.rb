@@ -6,8 +6,8 @@ require_relative '../lib/feed_catalog'
 
 class FeedCatalogTest < Minitest::Test
   def with_temp_feeds_file(content)
-    Dir.mktmpdir('feed-catalog-test-') do |dir|
-      path = File.join(dir, 'feeds.yml')
+    Dir.mktmpdir('feed-catalog-test-') do
+      path = File.join(it, 'feeds.yml')
       File.write(path, content)
       yield path
     end
@@ -22,8 +22,8 @@ class FeedCatalogTest < Minitest::Test
           url: https://qiita.com/tags/codex/feed
     YAML
 
-    with_temp_feeds_file(yaml) do |path|
-      feed_catalog = FeedCatalog.new(path)
+    with_temp_feeds_file(yaml) do
+      feed_catalog = FeedCatalog.new(it)
 
       assert_equal 2, feed_catalog.length
       assert_equal 2, feed_catalog.size
@@ -35,7 +35,8 @@ class FeedCatalogTest < Minitest::Test
   end
 
   def test_raises_when_top_level_feeds_is_missing
-    with_temp_feeds_file("not_feeds: []\n") do |path|
+    with_temp_feeds_file("not_feeds: []\n") do
+      path = it
       error = assert_raises(FeedCatalog::ConfigFormatError) { FeedCatalog.new(path) }
       assert_includes error.message, "top-level 'feeds' array is required"
     end
@@ -47,7 +48,8 @@ class FeedCatalogTest < Minitest::Test
         - just-a-string
     YAML
 
-    with_temp_feeds_file(yaml) do |path|
+    with_temp_feeds_file(yaml) do
+      path = it
       error = assert_raises(FeedCatalog::ConfigFormatError) { FeedCatalog.new(path) }
       assert_includes error.message, 'expected mapping'
     end
@@ -59,7 +61,8 @@ class FeedCatalogTest < Minitest::Test
         - name: OnlyName
     YAML
 
-    with_temp_feeds_file(yaml) do |path|
+    with_temp_feeds_file(yaml) do
+      path = it
       error = assert_raises(FeedCatalog::ConfigFormatError) { FeedCatalog.new(path) }
       assert_includes error.message, 'name and url are required'
     end
@@ -73,7 +76,8 @@ class FeedCatalogTest < Minitest::Test
         - name: Oops: [bad
     YAML
 
-    with_temp_feeds_file(yaml) do |path|
+    with_temp_feeds_file(yaml) do
+      path = it
       error = assert_raises(FeedCatalog::ConfigFormatError) { FeedCatalog.new(path) }
       assert_includes error.message, 'YAML syntax'
     end
