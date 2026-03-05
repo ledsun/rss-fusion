@@ -14,7 +14,7 @@ class FusionRss
   def process(feed_catalog)
     stats = Stats.new feed_catalog.length
 
-    feed_catalog.sources.each { process_feed it, stats }
+    feed_catalog.sources.each { fetch_from it, stats }
 
     finalize stats
     stats
@@ -44,7 +44,7 @@ class FusionRss
     @finalized_feeds
   end
 
-  def process_feed(feed_source, stats)
+  def fetch_from(feed_source, stats)
     entries = feed_source.fetch_entries
     stats.feed_succeeded
 

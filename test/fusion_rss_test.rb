@@ -153,7 +153,7 @@ class FusionRssProcessTest < Minitest::Test
     assert_equal 1, stats.items_output
   end
 
-  def test_process_feed_on_success_increments_feed_succeeded
+  def test_fetch_from_on_success_increments_feed_succeeded
     fusion = make_fusion 10
     now = Time.now
     entries = [
@@ -166,14 +166,14 @@ class FusionRssProcessTest < Minitest::Test
     feed_source.define_singleton_method(:fetch_entries) { entries }
 
     stats = Stats.new 1
-    fusion.send :process_feed, feed_source, stats
+    fusion.send :fetch_from, feed_source, stats
 
     assert_equal 1, stats.feeds_succeeded
     assert_equal 0, stats.feeds_failed
     assert_equal 1, stats.items_fetched
   end
 
-  def test_process_feed_on_failure_increments_feed_failed
+  def test_fetch_from_on_failure_increments_feed_failed
     fusion = make_fusion 10
 
     feed_source = Object.new
@@ -182,7 +182,7 @@ class FusionRssProcessTest < Minitest::Test
     feed_source.define_singleton_method(:fetch_entries) { raise 'network error' }
 
     stats = Stats.new 1
-    fusion.send :process_feed, feed_source, stats
+    fusion.send :fetch_from, feed_source, stats
 
     assert_equal 0, stats.feeds_succeeded
     assert_equal 1, stats.feeds_failed
