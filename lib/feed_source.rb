@@ -23,7 +23,7 @@ class FeedSource
     parsed = Feedjira.parse http_get
     raw = parsed.respond_to?(:entries) ? parsed.entries : nil
     (raw.is_a?(Array) ? raw : []).map do
-      FeedEntry.new it, feed_name: name, fetched_at: fetched_at
+      FeedEntry.new it, feed_name: name, fetched_at:
     end
   end
 
