@@ -27,7 +27,7 @@ def main
   log "Loaded #{blacklist.length} blacklist rules"
 
   fusion_rss = FusionRss.new Filter.new(blacklist), MAX_ITEMS
-  stats = fusion_rss.process_feed_catalog feed_catalog
+  stats = fusion_rss.process feed_catalog
   raise 'No feeds fetched successfully; aborting build' if stats.feeds_succeeded.zero?
   raise 'No items produced; aborting build' if stats.items_output.zero?
 
