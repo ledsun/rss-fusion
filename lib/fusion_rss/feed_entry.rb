@@ -3,13 +3,14 @@
 class FusionRss
   # FeedEntry represents a single merged RSS item.
   class FeedEntry
-    attr_reader :title, :url, :published_at, :feed_name
+    attr_reader :title, :url, :published_at, :feed_name, :summary
 
-    def initialize(title:, url:, published_at:, feed_name:)
+    def initialize(title:, url:, published_at:, feed_name:, summary: nil)
       @title = title
       @url = url
       @published_at = published_at
       @feed_name = feed_name
+      @summary = summary
     end
 
     def to_rss_entry(maker)

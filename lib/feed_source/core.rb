@@ -26,7 +26,8 @@ class FeedSource
         title: it.respond_to?(:title) ? it.title : nil,
         url: extract_url(it),
         published_at: extract_published_at(it, fetched_at),
-        feed_name: name
+        feed_name: name,
+        summary: it.respond_to?(:summary) ? it.summary : nil
       )
     end
   end

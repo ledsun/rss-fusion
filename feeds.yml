@@ -31,3 +31,5 @@ feeds:
     url: https://zenn.dev/topics/githubcopilot/feed
   - name: Zenn OpenAI
     url: https://zenn.dev/topics/openai/feed
+  - name: gihyo.jp
+    url: https://gihyo.jp/feed/atom

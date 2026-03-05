@@ -12,7 +12,7 @@ class FusionRssBatchDuplicateTest < Minitest::Test
 
   def make_filter
     obj = Object.new
-    obj.define_singleton_method(:match?) { |_url| false }
+    obj.define_singleton_method(:match?) { |_entry| false }
     obj.define_singleton_method(:blacklisted_count) { 0 }
     obj.define_singleton_method(:unstable_count) { 0 }
     obj
