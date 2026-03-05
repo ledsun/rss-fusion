@@ -56,7 +56,7 @@ class FusionRss
   end
 
   def add(*feed_entries)
-    @feeds.concat(feed_entries.reject { @filter.match?(it) })
+    @feeds.concat(feed_entries.reject { @filter.match? it })
   end
 
   def finalize(stats)
