@@ -3,6 +3,10 @@
 class Filter
   # Loads URL prefix rules from a file and checks URLs against them.
   class BlackList
+    def self.read_from(path)
+      new path
+    end
+
     def initialize(path)
       @rules = load_blacklist path
     end

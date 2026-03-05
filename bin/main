@@ -20,10 +20,7 @@ def log(msg)
 end
 
 def main
-  catalog = FeedCatalog.read_from FEEDS_PATH
-  log "Loaded #{catalog.length} feeds"
-
-  blacklist = Filter::BlackList.new BLACKLIST_PATH
+  blacklist = Filter::BlackList.read_from BLACKLIST_PATH
   log "Loaded #{blacklist.length} blacklist rules"
 
   filter = Filter.new blacklist

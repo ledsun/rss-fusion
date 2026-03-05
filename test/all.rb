@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'test_helper'
+require_relative 'black_list_test'
 require_relative 'feed_test'
 require_relative 'feed_catalog_test'
 require_relative 'feed_source_test'
