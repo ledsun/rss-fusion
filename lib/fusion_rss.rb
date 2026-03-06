@@ -72,7 +72,7 @@ class FusionRss
     RSS::Maker.make('2.0') do |maker|
       maker.channel.title = 'RSS Fusion'
       maker.channel.description = 'Merged RSS feed generated from multiple sources'
-      maker.channel.link = 'https://example.invalid/merged.xml'
+      maker.channel.link = 'https://ledsun.github.io/rss-fusion/'
       maker.channel.updated = Time.now
 
       @finalized_feeds.each { it.to_rss_entry maker }
