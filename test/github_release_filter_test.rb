@@ -64,4 +64,10 @@ class GithubReleaseFilterTest < Minitest::Test
   def test_collab_tag_is_unstable
     assert @filter.unstable?('https://github.com/owner/repo/releases/tag/collab-feature-2026-02-28')
   end
+
+  # --- unstable: artifact-runtime- ---
+
+  def test_artifact_runtime_tag_is_unstable
+    assert @filter.unstable?('https://github.com/openai/codex/releases/tag/artifact-runtime-v2.4.0')
+  end
 end
