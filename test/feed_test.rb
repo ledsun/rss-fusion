@@ -4,7 +4,7 @@ require_relative 'test_helper'
 
 class FeedTest < Minitest::Test
   FakeGuid = Struct.new :content, :isPermaLink
-  FakeEntry = Struct.new :title, :link, :guid, :pubDate
+  FakeEntry = Struct.new :title, :link, :guid, :pubDate, :description
 
   class FakeItems
     attr_reader :entry
@@ -74,5 +74,36 @@ class FeedTest < Minitest::Test
     assert_equal 'https://example.com/post', maker.items.entry.guid.content
     assert maker.items.entry.guid.isPermaLink
     assert_equal published_at, maker.items.entry.pubDate
+  end
+
+  def test_populate_entry_sets_description_when_summary_present
+    published_at = Time.utc 2026, 2, 24, 5, 0, 0
+    feed = FusionRss::FeedEntry.new \
+      'hello',
+      'https://example.com/post',
+      published_at,
+      'Example',
+      summary: 'This is a summary.'
+
+    entry = FakeEntry.new nil, nil, FakeGuid.new(nil, nil), nil, nil
+
+    feed.populate_entry entry
+
+    assert_equal 'This is a summary.', entry.description
+  end
+
+  def test_populate_entry_does_not_set_description_when_summary_absent
+    published_at = Time.utc 2026, 2, 24, 5, 0, 0
+    feed = FusionRss::FeedEntry.new \
+      'hello',
+      'https://example.com/post',
+      published_at,
+      'Example'
+
+    entry = FakeEntry.new nil, nil, FakeGuid.new(nil, nil), nil, nil
+
+    feed.populate_entry entry
+
+    assert_nil entry.description
   end
 end

@@ -22,6 +22,7 @@ class FusionRss
       entry.guid.content = url
       entry.guid.isPermaLink = true
       entry.pubDate = published_at
+      entry.description = summary if summary
     end
   end
 end
