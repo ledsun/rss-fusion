@@ -10,7 +10,11 @@ class FeedSource
       @url = extract_url entry
       @published_at = extract_published_at entry, fetched_at
       @feed_name = feed_name
-      @summary = entry.respond_to?(:summary) ? entry.summary : nil
+      @summary = if entry.respond_to?(:summary) && entry.summary
+                   entry.summary
+                 elsif entry.respond_to?(:content) && entry.content
+                   entry.content
+                 end
       @categories = extract_categories entry
     end
 
