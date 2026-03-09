@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Filter combines BlackList, GithubReleaseFilter, and GihyoFilter into a single filter.
+# Filter combines BlackList, GithubReleaseFilter, GihyoFilter, and PublickeyFilter into a single filter.
 # FusionRss calls match? once per entry; counts for each category are
 # tracked internally and exposed via blacklisted_count / unstable_count.
 class Filter
@@ -10,6 +10,7 @@ class Filter
     @blacklist = blacklist
     @github_release_filter = GithubReleaseFilter.new
     @gihyo_filter = GihyoFilter.new
+    @publickey_filter = PublickeyFilter.new
     @blacklisted_count = 0
     @unstable_count = 0
   end
@@ -23,6 +24,8 @@ class Filter
       @unstable_count += 1
       true
     elsif @gihyo_filter.reject? entry
+      true
+    elsif @publickey_filter.reject? entry
       true
     else
       false

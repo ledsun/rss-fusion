@@ -3,7 +3,7 @@
 class FeedSource
   # FeedEntry parses and wraps a single raw entry from a feed source.
   class FeedEntry
-    attr_reader :title, :url, :published_at, :feed_name, :summary
+    attr_reader :title, :url, :published_at, :feed_name, :summary, :categories
 
     def initialize(entry, feed_name, fetched_at)
       @title = entry.respond_to?(:title) ? entry.title : nil
@@ -11,17 +11,19 @@ class FeedSource
       @published_at = extract_published_at entry, fetched_at
       @feed_name = feed_name
       @summary = entry.respond_to?(:summary) ? entry.summary : nil
+      @categories = extract_categories entry
     end
 
     def to_fusion_entry
       base = title.to_s.strip
       base = '(no title)' if base.empty?
       FusionRss::FeedEntry.new \
-        title: "[#{feed_name}] #{base}",
-        url:,
-        published_at:,
-        feed_name:,
-        summary:
+        "[#{feed_name}] #{base}",
+        url,
+        published_at,
+        feed_name,
+        summary:,
+        categories:
     end
 
     def url_blank? = url.nil?
@@ -53,6 +55,15 @@ class FeedSource
       Time.parse value.to_s
     rescue StandardError
       fallback_time
+    end
+
+    def extract_categories(entry)
+      return [] unless entry.respond_to? :categories
+
+      Array(entry.categories).filter_map do
+        category = it.to_s.strip
+        category unless category.empty?
+      end
     end
   end
 end

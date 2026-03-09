@@ -39,6 +39,20 @@ class FeedSourceTest < Minitest::Test
     refute build_feed_entry(url: 'https://example.com/post').url_blank?
   end
 
+  def test_feed_entry_extracts_categories_and_carries_them_to_fusion_entry
+    raw = Struct.new(:title, :url, :published, :categories).new \
+      'Hello',
+      'https://example.com/hello',
+      Time.utc(2026, 2, 28, 0, 0, 0),
+      ['機械学習・AI', '開発ツール']
+
+    entry = FeedSource::FeedEntry.new raw, 'Sample', Time.utc(2026, 2, 28, 0, 0, 0)
+    fusion_entry = entry.to_fusion_entry
+
+    assert_equal ['機械学習・AI', '開発ツール'], entry.categories
+    assert_equal ['機械学習・AI', '開発ツール'], fusion_entry.categories
+  end
+
   private
 
   def build_feed_entry(url:)
@@ -54,6 +68,7 @@ class FeedSourceTest < Minitest::Test
     assert_equal 'https://example.com/hello', entry.url
     assert_equal 'Sample', entry.feed_name
     assert_instance_of Time, entry.published_at
+    assert_equal [], entry.categories
   end
 
   def assert_probe(probe)

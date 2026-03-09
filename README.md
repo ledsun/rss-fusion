@@ -13,6 +13,7 @@
 - `blacklist.txt` の prefix 一致で除外
 - GitHub リリースのプレリリース（alpha/pre/nightly 等）を除外
 - gihyo.jp フィードをキーワードフィルタリング（AI/tech 関連のみ通過）
+- Publickey フィードを `機械学習・AI` カテゴリ付き記事のみにフィルタリング
 - 最新 30 件を RSS 2.0 (`public/merged.xml`) として出力
 - タイトル先頭に `"[feed_name]"` を付与
 
@@ -23,7 +24,7 @@
 - `bin/main`: 統合RSS生成の実行エントリ
 - `lib/*.rb`: フィルタ/ローダ/統計などのライブラリ本体
 - `lib/fusion_rss/*`, `lib/feed_source/*`, `lib/feed_catalog/*`: ドメイン別の実装詳細
-- `lib/filter/*`: BlackList / GithubReleaseFilter / GihyoFilter の実装
+- `lib/filter/*`: BlackList / GithubReleaseFilter / GihyoFilter / PublickeyFilter の実装
 - `public/merged.xml`: 生成される統合RSS
 - `public/index.html`: Pages 用案内ページ
 - `.github/workflows/build-and-deploy.yml`: 2時間毎実行 + Pages デプロイ
@@ -73,6 +74,7 @@ bundle exec ruby -Itest test/black_list_test.rb
 bundle exec ruby -Itest test/filter_test.rb
 bundle exec ruby -Itest test/github_release_filter_test.rb
 bundle exec ruby -Itest test/gihyo_filter_test.rb
+bundle exec ruby -Itest test/publickey_filter_test.rb
 bundle exec ruby -Itest test/stats_test.rb
 ```
 

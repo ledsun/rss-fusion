@@ -31,5 +31,7 @@ feeds:
     url: https://zenn.dev/topics/githubcopilot/feed
   - name: Zenn OpenAI
     url: https://zenn.dev/topics/openai/feed
+  - name: Publickey
+    url: https://www.publickey1.jp/atom.xml
   - name: gihyo.jp
     url: https://gihyo.jp/feed/atom

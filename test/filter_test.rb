@@ -3,14 +3,16 @@
 require_relative 'test_helper'
 
 class FilterTest < Minitest::Test
-  EntryStub = Struct.new :url, :title, :summary
+  EntryStub = Struct.new :url, :title, :summary, :categories
 
-  STABLE_URL   = 'https://github.com/owner/repo/releases/tag/v1.0.0'
-  UNSTABLE_URL = 'https://github.com/owner/repo/releases/tag/v1.0.0-alpha.1'
-  NIGHTLY_URL  = 'https://github.com/owner/repo/releases/tag/nightly'
+  STABLE_URL        = 'https://github.com/owner/repo/releases/tag/v1.0.0'
+  UNSTABLE_URL      = 'https://github.com/owner/repo/releases/tag/v1.0.0-alpha.1'
+  NIGHTLY_URL       = 'https://github.com/owner/repo/releases/tag/nightly'
+  PUBLICKEY_AI_URL  = 'https://www.publickey1.jp/blog/26/ai_article.html'
+  PUBLICKEY_WEB_URL = 'https://www.publickey1.jp/blog/26/web_article.html'
 
-  def make_entry(url, title: '', summary: nil)
-    EntryStub.new url, title, summary
+  def make_entry(url, title: '', summary: nil, categories: [])
+    EntryStub.new url, title, summary, categories
   end
 
   def make_blacklist(*prefixes)
@@ -105,6 +107,18 @@ class FilterTest < Minitest::Test
   def test_non_gihyo_entry_without_keyword_passes
     filter = Filter.new make_blacklist
     entry = make_entry 'https://example.com/article', title: 'Some Article', summary: 'Some content'
+    refute_operator filter, :match?, entry
+  end
+
+  def test_publickey_entry_without_ai_category_is_filtered
+    filter = Filter.new make_blacklist
+    entry = make_entry PUBLICKEY_WEB_URL, title: 'React Foundation', categories: %w[JavaScript Web技術]
+    assert_operator filter, :match?, entry
+  end
+
+  def test_publickey_entry_with_ai_category_passes
+    filter = Filter.new make_blacklist
+    entry = make_entry PUBLICKEY_AI_URL, title: 'Codex for Windows', categories: %w[Windows 機械学習・AI 開発ツール]
     refute_operator filter, :match?, entry
   end
 end
