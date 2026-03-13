@@ -29,6 +29,7 @@ https://qiita.com/synsun
 https://qiita.com/takao-shimizu
 https://qiita.com/taketsuyo
 https://qiita.com/tasohauska
+https://qiita.com/th19930828
 https://qiita.com/toarusyakaijin
 https://qiita.com/utsutaka
 https://qiita.com/ysshin
@@ -38,3 +39,4 @@ https://zenn.dev/koki_m
 https://zenn.dev/miyan
 https://zenn.dev/soshi1234
 https://zenn.dev/taketsuyo
+https://zenn.dev/th19930828
