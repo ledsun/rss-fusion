@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'test_helper'
+require 'rss'
 require 'tmpdir'
 
 module FusionRssTestSupport
@@ -19,6 +20,9 @@ class FusionRssProcessTest < Minitest::Test
   include FusionRssTestSupport
 
   FakeRawEntry = Struct.new :title, :url, :published
+  FakeCatalog = Struct.new :sources do
+    def length = sources.length
+  end
 
   def make_feed_entry(title:, url:, published_at:, feed_name:)
     FeedSource::FeedEntry.new \
@@ -82,5 +86,31 @@ class FusionRssProcessTest < Minitest::Test
     assert_equal 0, stats.feeds_succeeded
     assert_equal 1, stats.feeds_failed
     assert_equal 0, stats.items_fetched
+  end
+
+  def test_write_to_uses_custom_channel_metadata
+    now = Time.now
+    entries = [
+      make_feed_entry(title: 'item', url: 'https://good.example/1', published_at: now, feed_name: 'src')
+    ]
+
+    feed_source = Object.new
+    feed_source.define_singleton_method(:name) { 'src' }
+    feed_source.define_singleton_method(:url) { 'https://src.example/feed' }
+    feed_source.define_singleton_method(:fetch_entries) { entries }
+
+    Dir.mktmpdir 'fusion-rss-test-' do
+      blacklist_path = File.join it, 'blacklist.txt'
+      output_path = File.join it, 'news.xml'
+      File.write blacklist_path, ''
+
+      fusion = FusionRss.new 10, blacklist_path, 'RSS Fusion News', 'News-only feed'
+      fusion.process FakeCatalog.new([feed_source])
+      fusion.write_to output_path
+
+      rss = RSS::Parser.parse File.read(output_path)
+      assert_equal 'RSS Fusion News', rss.channel.title
+      assert_equal 'News-only feed', rss.channel.description
+    end
   end
 end

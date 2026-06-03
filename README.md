@@ -1,6 +1,6 @@
 # RSS Fusion
 
-複数の RSS / Atom フィードを統合し、重複 URL とブラックリスト URL を除外した `merged.xml` を生成して GitHub Pages で公開するリポジトリです。
+複数の RSS / Atom フィードを統合し、重複 URL とブラックリスト URL を除外した `merged.xml` と `news.xml` を生成して GitHub Pages で公開するリポジトリです。
 
 - サーバ不要（静的ファイルのみ）
 - GitHub Actions で2時間毎に更新
@@ -14,18 +14,20 @@
 - GitHub リリースのプレリリース（alpha/pre/nightly 等）を除外
 - gihyo.jp フィードをキーワードフィルタリング（AI/tech 関連のみ通過）
 - Publickey フィードを `機械学習・AI` カテゴリ付き記事のみにフィルタリング
-- 最新 30 件を RSS 2.0 (`public/merged.xml`) として出力
+- 最新 30 件を RSS 2.0 (`public/merged.xml`, `public/news.xml`) として出力
 - タイトル先頭に `"[feed_name]"` を付与
 
 ## ファイル構成
 
-- `feeds.yml`: フィード一覧（`name`, `url`）
+- `feeds.yml`: 総合版フィード一覧（`name`, `url`）
+- `feeds_news.yml`: Qiita / Zenn を除いたニュース版フィード一覧（`name`, `url`）
 - `blacklist.txt`: 除外URL prefix一覧（1行1ルール）
 - `bin/main`: 統合RSS生成の実行エントリ
 - `lib/*.rb`: フィルタ/ローダ/統計などのライブラリ本体
 - `lib/fusion_rss/*`, `lib/feed_source/*`, `lib/feed_catalog/*`: ドメイン別の実装詳細
 - `lib/filter/*`: BlackList / GithubReleaseFilter / GihyoFilter / PublickeyFilter の実装
 - `public/merged.xml`: 生成される統合RSS
+- `public/news.xml`: Qiita / Zenn を除いたニュース版RSS
 - `public/index.html`: Pages 用案内ページ
 - `.github/workflows/build-and-deploy.yml`: 2時間毎実行 + Pages デプロイ
 - `.github/workflows/tests-and-lint.yml`: テスト・RuboCop の CI
@@ -50,6 +52,7 @@ bundle exec ruby bin/main
 実行後に以下が生成・更新されます。
 
 - `public/merged.xml`
+- `public/news.xml`
 
 ## テスト
 
@@ -90,7 +93,7 @@ bundle exec rubocop
 
 ## 設定方法
 
-### `feeds.yml`
+### `feeds.yml` / `feeds_news.yml`
 
 ```yaml
 feeds:
@@ -116,7 +119,7 @@ https://example.com/ads/
 
 ## 出力仕様（MVP）
 
-- 出力先: `public/merged.xml`
+- 出力先: `public/merged.xml`, `public/news.xml`
 - 形式: RSS 2.0
 - 件数: 最大 30 件（新しい順）
 - `title`: `"[feed_name] {original_title}"`
@@ -146,11 +149,13 @@ https://example.com/ads/
 
 - サイト: `https://<USER>.github.io/<REPO>/`
 - RSS: `https://<USER>.github.io/<REPO>/merged.xml`
+- News RSS: `https://<USER>.github.io/<REPO>/news.xml`
 
 このリポジトリ（`ledsun/rss-fusion`）の例:
 
 - `https://ledsun.github.io/rss-fusion/`
 - `https://ledsun.github.io/rss-fusion/merged.xml`
+- `https://ledsun.github.io/rss-fusion/news.xml`
 
 ## トラブルシュート
 

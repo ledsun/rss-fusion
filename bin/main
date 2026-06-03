@@ -9,19 +9,35 @@ loader.push_dir File.join(__dir__, '..', 'lib')
 loader.setup
 
 FEEDS_PATH = 'feeds.yml'
+NEWS_FEEDS_PATH = 'feeds_news.yml'
 BLACKLIST_PATH = 'blacklist.txt'
 OUTPUT_PATH = File.join 'public', 'merged.xml'
+NEWS_OUTPUT_PATH = File.join 'public', 'news.xml'
 
 MAX_ITEMS = 30
+
+BUILD_TARGETS = [
+  [
+    FEEDS_PATH,
+    OUTPUT_PATH,
+    'RSS Fusion',
+    'Merged RSS feed generated from multiple sources'
+  ],
+  [
+    NEWS_FEEDS_PATH,
+    NEWS_OUTPUT_PATH,
+    'RSS Fusion News',
+    'Official announcements and news articles without Qiita and Zenn topic feeds'
+  ]
+].freeze
 
 def log(msg)
   puts "[main] #{msg}"
 end
 
-def main
-  fusion_rss = FusionRss.new MAX_ITEMS, BLACKLIST_PATH
-
-  catalog = FeedCatalog.read_from FEEDS_PATH
+def build_feed(feeds_path, output_path, title, description)
+  fusion_rss = FusionRss.new MAX_ITEMS, BLACKLIST_PATH, title, description
+  catalog = FeedCatalog.read_from feeds_path
   log "Loaded #{catalog.length} feeds"
 
   stats = fusion_rss.process catalog
@@ -30,11 +46,15 @@ def main
 
   stats.summary.each { log "Summary #{it}" }
 
-  fusion_rss.write_to OUTPUT_PATH
-  log "Wrote #{OUTPUT_PATH}"
+  fusion_rss.write_to output_path
+  log "Wrote #{output_path}"
 rescue FeedCatalog::ConfigFormatError => e
-  log "Feed config load failed: #{FEEDS_PATH} (#{e.class}: #{e.message})"
+  log "Feed config load failed: #{feeds_path} (#{e.class}: #{e.message})"
   raise
+end
+
+def main
+  BUILD_TARGETS.each { build_feed(*it) }
 end
 
 main

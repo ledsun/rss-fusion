@@ -5,10 +5,12 @@ require 'fileutils'
 
 # FusionRss collects entries and builds the final merged RSS payload.
 class FusionRss
-  def initialize(max_feeds, blacklist_path)
-    @max_feeds = max_feeds
-    @feeds     = []
-    @filter    = build_filter blacklist_path
+  def initialize(max_feeds, blacklist_path, title = 'RSS Fusion', description = nil)
+    @max_feeds    = max_feeds
+    @feeds        = []
+    @filter       = build_filter blacklist_path
+    @title        = title
+    @description  = description || 'Merged RSS feed generated from multiple sources'
   end
 
   def process(feed_catalog)
@@ -70,8 +72,8 @@ class FusionRss
 
   def to_rss
     RSS::Maker.make('2.0') do |maker|
-      maker.channel.title = 'RSS Fusion'
-      maker.channel.description = 'Merged RSS feed generated from multiple sources'
+      maker.channel.title = @title
+      maker.channel.description = @description
       maker.channel.link = 'https://ledsun.github.io/rss-fusion/'
       maker.channel.updated = Time.now
 

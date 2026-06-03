@@ -2,3 +2,4 @@ vendor/bundle/
 .bundle/
 .rubocop_cache/
 public/merged.xml
+public/news.xml
