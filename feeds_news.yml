@@ -9,3 +9,9 @@ feeds:
     url: https://www.publickey1.jp/atom.xml
   - name: gihyo.jp
     url: https://gihyo.jp/feed/atom
+  - name: oikon48
+    url: https://oikon48.dev/ja/rss.xml
+  - name: OpenAI News
+    url: https://openai.com/news/rss.xml
+  - name: GitHub Changelog
+    url: https://github.blog/changelog/feed/
